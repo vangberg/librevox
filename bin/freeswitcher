@@ -5,7 +5,7 @@ require 'eventmachine'
 require 'pp'
 
 module FreeSwitcher
-  class Response
+  class Event
     def self.from(data)
       instance = new
 
@@ -46,7 +46,7 @@ module FreeSwitcher
     end
 
     def receive_data(data)
-      pp Response.from(data)
+      pp Event.from(data)
     end
 
     def say(line)
