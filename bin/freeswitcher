@@ -1,0 +1,60 @@
+#!/usr/bin/env ruby
+
+require 'rubygems'
+require 'eventmachine'
+require 'pp'
+
+module FreeSwitcher
+  class Response
+    def self.from(data)
+      instance = new
+
+      capture = header = {}
+      body = {}
+
+      data.each_line do |line|
+        line.strip!
+
+        case line
+        when ''
+          capture = body
+        when /([a-zA-Z0-9-]+):\s*(.*)/
+          capture[$1] = $2
+        end
+      end
+
+      instance.header.merge!(header)
+      instance.body.merge!(body)
+      instance
+    end
+
+    attr_reader :header, :body
+
+    def initialize(header = {}, body = {})
+      @header, @body = header, body
+    end
+
+    def [](key)
+      @header.merge(@body)[key]
+    end
+  end
+
+  module Client
+    def post_init
+      say('auth ClueCon')
+      say('event plain ALL')
+    end
+
+    def receive_data(data)
+      pp Response.from(data)
+    end
+
+    def say(line)
+      send_data("#{line}\n\n")
+    end
+  end
+end
+
+EM.run do
+  EM.connect('127.0.0.1', 8021, FreeSwitcher::Client)
+end
