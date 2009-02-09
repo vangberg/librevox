@@ -53,8 +53,49 @@ module FreeSwitcher
       send_data("#{line}\n\n")
     end
   end
+
+  module Server
+    def receive_data(data)
+      send_data "Sending #{data}"
+      $CONTROLLER.send_client_data(data)  # Not a fan of this global
+    end
+  end
+
 end
 
-EM.run do
-  EM.connect('127.0.0.1', 8021, FreeSwitcher::Client)
+class Controller
+ 
+  def initialize
+    # I hate to define this global, have any other ideas?
+    
+    $CONTROLLER = self 
+  end
+
+  def run!
+    
+    puts "Connecting...."
+     begin
+      @connections = Thread.new do
+        EventMachine::run {
+          Thread.current[:client]     = EventMachine::connect "localhost", 8021, FreeSwitcher::Client
+          Thread.current[:controller] = EventMachine::start_server "localhost", 9000, FreeSwitcher::Server
+          puts "Connected!"
+        }
+      end
+      @connections.join
+     rescue
+       puts "Unable to connect"
+    end
+  end
+
+  def send_client_data(data)
+    @connections[:client].send_data("#{data}\n\n")
+  end
+
 end
+
+if __FILE__ == $0
+  app = Controller.new
+  app.run!
+end
+
