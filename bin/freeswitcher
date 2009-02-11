@@ -2,7 +2,7 @@
 
 require 'rubygems'
 require 'eventmachine'
-require 'lib/event'
+require File.join(File.dirname(__FILE__), "..", 'lib', 'event')
 require 'pp'
 
 module FreeSwitcher
