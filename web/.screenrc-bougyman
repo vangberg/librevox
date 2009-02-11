@@ -1,0 +1,22 @@
+bindkey -k k8 hardstatus alwayslastline
+bindkey -k k9 hardstatus alwaysignore
+sessionname web
+
+hardstatus alwayslastline "%{= dR} %-Lw%50>%{= dG}%n%f* %{= dR}%t%+Lw%<"
+
+caption splitonly "%{= dC} %-Lw%50>%{= dR}%n%f* %{= dC}%t%+Lw%<"
+
+shell bash
+chdir /home/bougyman/git_checkouts/freeswitcher/web
+screen -t logs bash -c 'umask 002;while true;do cd /home/bougyman/git_checkouts/freeswitcher/web/log; bash;sleep 1;done'
+screen -t debug bash -c 'umask 002;while true;do RAILS_ENV=development script/ride-console;sleep 1;done'
+screen -t ide bash -c 'umask 002;while true;do vim -c "cd /home/bougyman/git_checkouts/freeswitcher/web" -c "e .";sleep 1;done'
+
+screen -t controllers bash -c 'umask 002;while true;do vim -c "cd /home/bougyman/git_checkouts/freeswitcher/web/controller/" -c "e .";sleep 1;done'
+screen -t views bash -c 'umask 002;while true;do vim -c "cd /home/bougyman/git_checkouts/freeswitcher/web/view/" -c "e .";sleep 1;done'
+screen -t lib bash -c 'umask 002;while true;do vim -c "cd /home/bougyman/git_checkouts/freeswitcher/web/lib/" -c "e .";sleep 1;done'
+screen -t models bash -c 'umask 002;while true;do vim -c "cd /home/bougyman/git_checkouts/freeswitcher/web/model/" -c "e .";sleep 1;done'
+screen -t svkwork bash -c 'umask 002;while true; do SVKROOT=/home/bougyman/.svk RAILS_ENV=development bash;sleep 1;done'
+screen -t script bash -c 'umask 002;while true;do RAILS_ENV=development bash;sleep 2;done'
+screen -t tests bash -c 'umask 002;while true;do cd /home/bougyman/git_checkouts/freeswitcher/web/spec/;RAILS_ENV=development bash;sleep 1;done'
+select 1

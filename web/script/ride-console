@@ -1,0 +1,28 @@
+#!/usr/bin/env ruby
+# File: script/console
+right_here = File.dirname(__FILE__)
+
+if File.exists?(console = File.join(right_here, "console")) and File.executable?(console)
+  # This is rails or a newgem app or someone who provided their own script/console, use it
+  exec "#{console}"
+elsif File.exists?(rakefile = File.join(right_here, "..", "Rakefile")) and File.read(rakefile).match(/Merb\.start/)
+  # looks like merb, start merb interactive
+  exec "merb -i"
+end
+
+# not merb, not rails, not an app with its own ./script/console, run irb
+irb = RUBY_PLATFORM =~ /(:?mswin|mingw)/ ? 'irb.bat' : 'irb'
+
+# Hold an array of libraries (to be required by irb)
+libs =  []
+
+# Perhaps use a console_lib to store any extra methods we may want available in the console
+libs << File.join(File.dirname(__FILE__) , "..", 'model', "init")
+
+# Add all libs to the irb session (so they can be required)
+Dir["lib/**/*"].map { |f| File.dirname(f) }.uniq.each { |dir| $: << dir }
+
+# Preload specific libs
+libs += %w{irb/completion}
+puts "Loading interactive session"
+exec "#{irb} -r #{libs.join(" -r ")}"

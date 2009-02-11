@@ -1,0 +1,14 @@
+screen -t logs bash -c 'umask 002;while true;do cd <%= $home %>/log; <%= OPTIONS[:shell] %>;sleep 1;done'
+screen -t debug bash -c 'umask 002;while true;do RAILS_ENV=<%= OPTIONS[:environment] %> <%= OPTIONS[:debugger] %>;sleep 1;done'
+screen -t ide bash -c 'umask 002;while true;do vim -c "cd <%= $home %>" -c "e .";sleep 1;done'
+<% if not OPTIONS[:reports_base].nil? %>
+screen -t reports bash -c 'umask 002;while true;do vim -c "cd <%= OPTIONS[:reports_base] %>" -c "e .";sleep 1;done'
+<% end %>
+screen -t controllers bash -c 'umask 002;while true;do vim -c "cd <%= OPTIONS[:controllers_base] %>" -c "e .";sleep 1;done'
+screen -t views bash -c 'umask 002;while true;do vim -c "cd <%= OPTIONS[:views_base] %>" -c "e .";sleep 1;done'
+screen -t lib bash -c 'umask 002;while true;do vim -c "cd <%= OPTIONS[:helpers_base] %>" -c "e .";sleep 1;done'
+screen -t models bash -c 'umask 002;while true;do vim -c "cd <%= OPTIONS[:models_base] %>" -c "e .";sleep 1;done'
+screen -t svkwork bash -c 'umask 002;while true; do SVKROOT=<%= ENV['SVKROOT'] || (ENV['REAL_HOME'] + "/.svk")  %> RAILS_ENV=<%= OPTIONS[:environment] %> <%= OPTIONS[:shell] %>;sleep 1;done'
+screen -t script bash -c 'umask 002;while true;do RAILS_ENV=<%= OPTIONS[:environment] %> <%= OPTIONS[:shell] %>;sleep 2;done'
+screen -t tests bash -c 'umask 002;while true;do cd <%= OPTIONS[:test_base] %>;RAILS_ENV=<%= OPTIONS[:environment] %> <%= OPTIONS[:shell] %>;sleep 1;done'
+select 1

@@ -1,0 +1,15 @@
+bindkey -k k8 hardstatus alwayslastline
+bindkey -k k9 hardstatus alwaysignore
+sessionname <%= OPTIONS[:screen_name] %>
+<% if OPTIONS[:multiuser] %>
+multiuser on
+	<% OPTIONS[:usernames].each do |username| %>
+acladd <%= username %>
+	<% end %>
+<% end %>
+hardstatus alwayslastline "%{= <%= OPTIONS[:background_color] + OPTIONS[:foreground_color] %>} %-Lw%50>%{= <%= OPTIONS[:background_color] + OPTIONS[:highlight_color] %>}%n%f* %{= <%= OPTIONS[:background_color] + OPTIONS[:foreground_color] %>}%t%+Lw%<"
+
+caption splitonly "%{= <%= OPTIONS[:caption_background_color] + OPTIONS[:caption_foreground_color] %>} %-Lw%50>%{= <%= OPTIONS[:caption_background_color] + OPTIONS[:caption_highlight_color] %>}%n%f* %{= <%= OPTIONS[:caption_background_color] + OPTIONS[:caption_foreground_color] %>}%t%+Lw%<"
+
+shell <%= OPTIONS[:shell] %>
+chdir <%= $home %>

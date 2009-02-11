@@ -1,0 +1,38 @@
+== 0.4.2 2008-10-14
+
+* 2 major enhancements:
+  * Fixed bug with rails irb loading when RAILS_GEM_VERSION is different from installed rails
+  * added StandardError#message_filters and StandardError#backtrace_filters to _not_ open
+    vim for certain messages or backtrace matches
+
+    TODO: Expose a method for adding filters
+
+== 0.4.1 2008-10-14
+
+* 2 major enhancements:
+  * Modified std_err_hooks.rb to know when the file loaded came from an <F12> in vim
+    (loading buffer into irb).  If so, it will just switch back to the screen window
+    with the original file open, and move the cursor to the erroring line
+  * Writing the file in /tmp/ now keeps SCREEN window number and full path intact (though coded)
+
+== 0.3.1 2008-10-13
+
+* 2 major enhancements:
+  * Added std_err_hooks.rb so that when on a console session, any errors encountered
+    open up the files which errored in vim, with the cursor on the line which triggered
+    the Exception
+  * Tested on newgem, merb, and rails.  Full working (with vim-only)
+
+== 0.2.1 2008-10-13
+
+* 4 major enhancements:
+  * Added <F12> keybinding in vim to load current vim buffer in irb and switch to it
+  * Moved vim files to proper directories
+  * Made a new ride-console script to make sure the debuuger (irb, window 1) opens 
+    properly for non-rails/non-newgem apps (works on merb!)
+  * Added .irbrc
+
+== 0.0.1 2008-08-19
+
+* 1 major enhancement:
+  * Initial release

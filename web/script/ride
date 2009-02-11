@@ -1,0 +1,149 @@
+#!/usr/bin/env ruby
+require "erb"
+require "optparse"
+$old_home = ENV['HOME']
+$home = ENV['PWD']
+ENV['HOME'] = $home
+ENV['REAL_HOME'] = $old_home
+OPTIONS = {
+  :directory       => $home,
+  :environment     => "development",
+  :public       => $home + "/public/",
+  :controllers_base => $home + "/controller/",
+  :views_base     => $home + "/view/",
+  :models_base     => $home + "/model/",
+  :reports_base   => $home + "/vendor/reports/",
+  :helpers_base    => $home + "/lib/",
+  :apis_base     => $home + "/app/api/",
+  :test_base     => $home + "/spec/",
+  :debugger     => "script/ride-console"
+}
+_orig = OPTIONS.dup
+def screen_color(color)
+  return color[0,1].capitalize unless color == 'black'
+  'K'
+end
+
+# Parse options
+ARGV.options do |opts|
+  script_name = File.basename($0)
+  opts.banner = "Usage: ruby #{script_name} [options] <template>"
+
+  opts.separator ""
+  OPTIONS.each do |key,opt|
+    s = key.to_s
+    f = "-" + s[0,1]
+    o = "--" + s[/[a-z]+/] + "=" + ( s == "environment" ? "environment" : "directory" )
+    d = "Rails " + s.gsub("_"," ").split.map { |a| a.capitalize }.join(" ")
+    opts.on(f,o,String,d,"Default: #{opt}") { |OPTIONS[key]| }
+  end
+
+  opts.separator ""
+  
+  opts.on("-S shell", "--shell=SHELL",String,
+        "Shell to use for command line","Default: bash") { |OPTIONS[:shell]| }
+  opts.on("-M", "--multiuser","Allow other users to access this screen?","Default: no") { |OPTIONS[:multiuser]| }
+  opts.on("-U USERNAMES", "--usernames=USERNAMES",String,
+        "Add comma-separated list of trusted users to be able to access this screen","Default: none") { |users| OPTIONS[:usernames] = users.split(',') }
+  opts.on("-C component", "--component_base=component",String,
+          "Use dirs for this component","Default: ''") { |OPTIONS[:component_base]| }
+  opts.separator ""
+  opts.on("-Fforeground_color", "--fgcolor=COLOR",String,
+        "Foreground Color of Status Line Text","Default: red") { |color| OPTIONS[:foreground_color] = screen_color(color) }
+  opts.on("-Hhighlight_color", "--hilight=COLOR",String,
+        "Foreground Color of Active Window Text","Default: green") { |color| OPTIONS[:highlight_color] = screen_color(color) }
+  opts.on("-Bbackground_color", "--bgcolor=COLOR",String,
+        "Background Color of Status Line","Default: transparent (default)") { |color| OPTIONS[:background_color] = screen_color(color) }
+  opts.on("-Xcaption_bgcolor", "--caption_bgcolor=COLOR",String,
+        "Background Color of Caption Line (when screen is split)","Default: transparent (default)") { |color| OPTIONS[:caption_background_color] = screen_color(color) }
+  opts.on("-Ycaption_foreground_color", "--caption_fgcolor=COLOR",String,
+        "Foreground Color of Caption Line Text","Default: cyan") { |color| OPTIONS[:caption_foreground_color] = screen_color(color) }
+  opts.on("-Zcaption_highlight_color", "--caption_hilight=COLOR",String,
+        "Foreground Color of Caption line Active Window Text","Default: red") { |color| OPTIONS[:caption_highlight_color] = screen_color(color) }
+  opts.separator "Available colors are black, red, green, yellow, blue, magenta, cyan, white, and default (transparent)"
+  opts.on("-Nname", "--name=NAME",String,
+        "Name to use for screen session","Default: Rails") { |OPTIONS[:screen_name]| }
+  opts.on("-Echar", "--escape=CHARACTER",String,
+        "Escape Key to use for screen session","Default: C-a") { |OPTIONS[:screen_escape]| }
+  opts.on("-?", "--help",
+          "Show this help message.") { puts opts; exit }
+  opts.parse!
+end
+OPTIONS[:multiuser] ||= false
+OPTIONS[:usernames] ||= []
+OPTIONS[:screen_name] ||= "web"
+OPTIONS[:foreground_color] ||= 'R'
+OPTIONS[:background_color] ||= 'd'
+OPTIONS[:highlight_color] ||= 'G'
+OPTIONS[:caption_foreground_color] ||= 'C'
+OPTIONS[:caption_background_color] ||= 'd'
+OPTIONS[:caption_highlight_color] ||= 'R'
+OPTIONS[:shell] ||= "bash"
+OPTIONS[:screen_escape] ||= "^Aa"
+
+begin
+
+  # Standard erb template
+  erb_template   = $home + "/config/.screenrc.code.erb"
+
+  # Standard erb template
+  code_template   = $home + "/config/code_template.erb"
+
+  # What screen template to use
+  template     = ARGV[0] || "basic"
+
+  # Don't need report screen if we aren't working on reports
+  OPTIONS[:reports_base] = nil if not template == "reports"
+
+  # Add the component path to views/controllers/helpers
+  if c = OPTIONS[:component_base]
+    [:controllers_base,:views_base,:helpers_base].each do |k|
+      OPTIONS[k] << c if OPTIONS[k] == _orig[k]
+    end
+  end
+
+  # Set template spefific options
+  case template
+    when "custom"
+      raise "Must specify full template path for custom" if not ARGV[1]
+      raise "Must specify full template path for custom" if not File.exists? ARGV[1]
+      code_template = ARGV[1]
+    when "reports"
+      raise "Must Specify Component for reports" if not OPTIONS[:component_base]
+      OPTIONS[:helpers_base] = OPTIONS[:reports_base] + "helpers/" unless OPTIONS[:helpers_base] != (_orig[:helpers_base] + OPTIONS[:component_base])
+      OPTIONS[:views_base] << ("/" + OPTIONS[:component_base] + "_reports/") unless OPTIONS[:views_base] != (_orig[:views_base] + OPTIONS[:component_base])
+  end
+
+  # Check for valid directories
+  raise "Must Have a rails tree in #{$home}" if not FileTest.directory? $home
+#  raise "Must Have a rails tree in #{OPTIONS[:public]}" if not FileTest.directory? OPTIONS[:public]
+#  raise "Must Have a rails tree in #{OPTIONS[:views_base]}" if not FileTest.directory? OPTIONS[:views_base]
+#  raise "Must Have a rails tree in #{OPTIONS[:models_base]}" if not FileTest.directory? OPTIONS[:models_base]
+#  raise "Must Have a rails tree in #{OPTIONS[:helpers_base]}" if not FileTest.directory? OPTIONS[:helpers_base]
+#  raise "Must Have a rails tree in #{OPTIONS[:controllers_base]}" if not FileTest.directory? OPTIONS[:controllers_base]
+
+  # Parse the template, save it as a .screenrc.code-USERNAME
+  screen_erb  = ERB.new(File.read(erb_template))
+  output = screen_erb.result(binding)
+
+  # Parse the template, save it as a .screenrc.code-USERNAME
+  code_erb  = ERB.new(File.read(code_template))
+  output << code_erb.result(binding)
+
+  screenfile = $home + "/.screenrc-" + (ENV['USER'] || "Bozo")
+  File.open(screenfile,"w+") { |file| file.puts output }
+
+  # Make symlinks
+  %x{ln -sf #{screenfile} #{$old_home}/.screenrc.code }
+  %x{ln -sf #{screenfile} #{$home}/.screenrc.code }
+  Dir.chdir($home)
+
+  # Start a screen with the newly linked .screenrc.code
+  exec("screen","-c#{File.basename(screenfile)}","-S","rails","-e",OPTIONS[:screen_escape])
+
+rescue => e
+  require "pp"
+  pp OPTIONS
+  puts e
+end
+
