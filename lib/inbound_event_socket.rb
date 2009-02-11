@@ -1,4 +1,4 @@
-require 'lib/event_socket'
+require File.join(File.dirname(__FILE__), 'event_socket')
 
 module FreeSwitcher
   class InboundEventSocket < EventSocket 

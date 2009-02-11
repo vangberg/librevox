@@ -1,6 +1,6 @@
 require 'socket'
 require 'pp'
-require 'lib/event'
+require File.join(File.dirname(__FILE__), 'event')
 
 module FreeSwitcher
   class EventSocket
