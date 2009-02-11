@@ -15,9 +15,9 @@ module FreeSwitcher
     end
   
     def login
-      return_result
+      response #Clear buf from initial socket creation/opening 
       self << "auth #{@auth}"
-      return_result
+      response #Return response, clear buf for rest of commands
     end
   end
 end

@@ -12,10 +12,10 @@ module FreeSwitcher
     # Send a command and return response
     def send(cmd)
       @socket.send("#{cmd}\n\n",0)
-      return_result
+      response
     end
 
-    # Send a command, do not return headers
+    # Send a command, do not return response
     def <<(cmd)
       @socket.send("#{cmd}\n\n",0)
     end
@@ -28,8 +28,9 @@ module FreeSwitcher
       end
       lines.join("\n")
     end
-
-    def return_result
+    
+    # Scrub result into a hash
+    def response
       Event.from(result)
     end
 
