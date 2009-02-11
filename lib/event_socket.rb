@@ -4,6 +4,7 @@ require File.join(File.dirname(__FILE__), 'event')
 
 module FreeSwitcher
   class EventSocket
+    attr_reader :socket
 
     def initialize(socket)
       @socket = socket
@@ -26,12 +27,13 @@ module FreeSwitcher
       until line = @socket.gets and line.chomp.empty?
          lines << line.chomp
       end
-      lines.join("\n")
+      lines
     end
     
     # Scrub result into a hash
     def response
-      Event.from(result)
+      result
+      #Event.from(result)
     end
 
   end
