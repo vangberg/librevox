@@ -22,7 +22,7 @@ module FreeSwitcher
     end
 
     # Grab result from command
-    def get_header
+    def get_header_and_body
       headers, body = {}, ""
       until line = @socket.gets and line.chomp.empty?
         if (kv = line.chomp.split(/:\s+/,2)).size == 2
@@ -38,7 +38,7 @@ module FreeSwitcher
 
     # Scrub result into a hash
     def response
-      get_header
+      get_header_and_body
     end
 
     def debug(msg)
