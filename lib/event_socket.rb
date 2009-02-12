@@ -1,5 +1,6 @@
 require 'socket'
 require 'pp'
+require 'yaml'
 require File.join(File.dirname(__FILE__), 'event')
 
 module FreeSwitcher
@@ -22,17 +23,24 @@ module FreeSwitcher
     end
 
     # Grab result from command
-    def result
+    def get_header
       lines = []
       until line = @socket.gets and line.chomp.empty?
          lines << line.chomp
       end
-      lines
+      lines.join("\n")
+    end
+
+    def get_content(header)
+      bytes = YAML.load(header)["Content-Length"]
+      bytes = 0 if bytes.nil?
+      header << "\n\n" << @socket.read(bytes) if bytes > 0
+      header
     end
     
     # Scrub result into a hash
     def response
-      result
+      result = get_content(get_header)
       #Event.from(result)
     end
 
