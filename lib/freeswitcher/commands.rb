@@ -1,12 +1,14 @@
+require File.join(File.dirname(__FILE__), "..", "freeswitcher") unless Object.const_defined?("FreeSwitcher")
 module FreeSwitcher
   module Commands
     @commands = []
-    def self.register_command(command)
-      @commands << command
+    def self.register(command, obj)
+      @commands << [command, obj]
     end
 
-    def list
-      @commands
+    def self.list
+      @commands.map { |n| n.first }
     end
+
   end
 end
