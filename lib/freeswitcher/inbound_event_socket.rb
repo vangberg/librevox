@@ -1,8 +1,5 @@
-
 module FreeSwitcher
-  require File.join(File.dirname(__FILE__), 'event_socket') unless FreeSwitcher.const_defined?("EventSocket")
-
-  class InboundEventSocket < EventSocket 
+  class InboundEventSocket < EventSocket
 
     def initialize(args = {})
       @server = args[:server] || "127.0.0.1"
@@ -14,9 +11,9 @@ module FreeSwitcher
         raise "Unable to login, check your password!"
       end
     end
-  
+
     def login
-      response #Clear buf from initial socket creation/opening 
+      response #Clear buf from initial socket creation/opening
       self << "auth #{@auth}"
       response #Return response, clear buf for rest of commands
     end

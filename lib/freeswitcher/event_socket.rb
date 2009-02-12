@@ -1,8 +1,4 @@
-require 'socket'
-require 'pp'
-
 module FreeSwitcher
-  require File.join(File.dirname(__FILE__), 'event') unless FreeSwitcher.const_defined?("Event")
   class EventSocket
     attr_reader :socket
 
