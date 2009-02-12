@@ -1,8 +1,8 @@
 require 'socket'
 require 'pp'
-require File.join(File.dirname(__FILE__), 'event')
 
 module FreeSwitcher
+  require File.join(File.dirname(__FILE__), 'event') unless FreeSwitcher.const_defined?("Event")
   class EventSocket
     attr_reader :socket
 
@@ -23,17 +23,27 @@ module FreeSwitcher
 
     # Grab result from command
     def result
-      lines = []
+      headers, body = {}, ""
       until line = @socket.gets and line.chomp.empty?
-         lines << line.chomp
+        if (kv = line.chomp.split(/:\s+/,2)).size == 2
+          headers.store *kv
+        end
       end
-      lines
+      if (content_length = headers["Content-Length"].to_i) > 0
+        debug "content_length is #{content_length}, grabbing from socket"
+        body << @socket.read(content_length)
+      end
+      headers.merge("body" => body)
     end
     
     # Scrub result into a hash
     def response
       result
-      #Event.from(result)
+    end
+
+    def debug(msg)
+      $stdout.puts msg
+      $stdout.flush
     end
 
   end

@@ -1,6 +1,7 @@
-require File.join(File.dirname(__FILE__), 'event_socket')
 
 module FreeSwitcher
+  require File.join(File.dirname(__FILE__), 'event_socket') unless FreeSwitcher.const_defined?("EventSocket")
+
   class InboundEventSocket < EventSocket 
 
     def initialize(args = {})
