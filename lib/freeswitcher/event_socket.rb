@@ -7,7 +7,7 @@ module FreeSwitcher
     end
 
     # Send a command and return response
-    def send(cmd)
+    def say(cmd)
       @socket.send("#{cmd}\n\n",0)
       response
     end
