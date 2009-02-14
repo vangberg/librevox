@@ -5,7 +5,7 @@ require 'pp'
 module FreeSwitcher
   # Global configuration options
   #
-  FS_INSTALL_PATHS = ["/usr/local", "/opt", "/usr"]
+  FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch"]
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FreeSwitcher"
 
@@ -36,8 +36,7 @@ module FreeSwitcher
 
   private
   def self.find_freeswitch_install
-    FS_INSTALL_PATHS.detect do |path|
-      fs_path = File.join(path, "freeswitch")
+    FS_INSTALL_PATHS.detect do |fs_path|
       File.directory?(fs_path) and File.directory?(File.join(fs_path, "conf")) and File.directory?(File.join(fs_path, "db"))
     end
   end
