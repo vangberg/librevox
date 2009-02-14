@@ -1,5 +1,6 @@
 module FreeSwitcher
   class CommandSocket < EventSocket
+    include Commands
 
     def initialize(args = {})
       @server = args[:server] || "127.0.0.1"

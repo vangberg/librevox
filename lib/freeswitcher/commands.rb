@@ -1,21 +1,19 @@
 require File.join(File.dirname(__FILE__), "..", "freeswitcher") unless Object.const_defined?("FreeSwitcher")
 require File.join(File.dirname(__FILE__), "command_socket") unless FreeSwitcher.const_defined?("CommandSocket")
+
 module FreeSwitcher
   module Commands
-    @commands = []
+    COMMANDS = {}
+
     def self.register(command, obj)
-      @commands << [command, obj]
-      FreeSwitcher::CommandSocket.class_eval(<<RUBY
-        def #{command} (args = {})
-          #{obj}.new(self, args) 
-        end
-RUBY
-)
+      COMMANDS[command.to_sym] = obj
+
+      code = "def %s(*args, &block) COMMANDS[%p].new(self, *args, &block) end" % [command, command]
+      Commands.module_eval(code)
     end
 
     def self.list
-      @commands.map { |n| n.first }
+      COMMANDS.keys
     end
-
   end
 end
