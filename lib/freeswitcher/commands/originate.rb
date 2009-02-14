@@ -30,13 +30,13 @@ module FreeSwitcher
 
       # Send the command to the event socket, using bgapi by default.
       def run(api_method = :bgapi)
-        orig_command = "%s %s" % [api_method, command_text]
+        orig_command = "%s %s" % [api_method, raw]
         Log.debug "saying #{orig_command}"
         @fs_socket.say(orig_command)
       end
 
       # This method builds the API command to send to the freeswitch event socket
-      def command_text
+      def raw
         target_opts = @target_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
         if @originator
           orig_command = "originate {#{target_opts.join(',')}}#{@target} #{@originator}"
