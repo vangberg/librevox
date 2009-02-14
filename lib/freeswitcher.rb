@@ -5,9 +5,9 @@ require 'pp'
 module FreeSwitcher
   # Global configuration options
   #
-  FS_ROOT = "/opt/freeswitch".freeze # Location of the freeswitch $${base_dir}
-  FS_CONFIG_PATH = "/opt/freeswitch/conf".freeze # Freeswitch conf dir
-  FS_DB_PATH = "/opt/freeswitch/db".freeze # Freeswitch db dir
+  FS_ROOT = "/usr/local/freeswitch".freeze # Location of the freeswitch $${base_dir}
+  FS_CONFIG_PATH = File.join(FS_ROOT, "conf").freeze # Freeswitch conf dir
+  FS_DB_PATH = File.join(FS_ROOT, "db").freeze # Freeswitch db dir
 
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FreeSwitcher"
