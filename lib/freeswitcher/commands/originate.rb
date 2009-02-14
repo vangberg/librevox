@@ -22,13 +22,8 @@ module FreeSwitcher::Commands
       else
         raise "Invalid originator or application"
       end
-      debug "saying #{orig_command}"
+      Log.debug "saying #{orig_command}"
       @fs_socket.say(orig_command)
-    end
-
-    def debug(message)
-      $stdout.puts message
-      $stdout.flush
     end
   end
 
