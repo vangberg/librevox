@@ -9,6 +9,8 @@ module FreeSwitcher
   FS_CONFIG_PATH = "/opt/freeswitch/conf".freeze # Freeswitch conf dir
   FS_DB_PATH = "/opt/freeswitch/db".freeze # Freeswitch db dir
 
+  DEFAULT_CALLER_ID_NUMBER = '8675309'
+  DEFAULT_CALLER_ID_NAME   = "FreeSwitcher"
 
   # Usage:
   #
