@@ -1,4 +1,3 @@
-require File.join(File.dirname(__FILE__), "..", "commands") unless FreeSwitcher.const_defined?("Commands")
 
 module FreeSwitcher
   module Commands

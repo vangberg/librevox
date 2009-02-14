@@ -1,3 +1,5 @@
+require "freeswitcher/event_socket"
+require "freeswitcher/commands"
 module FreeSwitcher
   class CommandSocket < EventSocket
     include Commands

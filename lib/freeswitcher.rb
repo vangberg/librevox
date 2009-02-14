@@ -2,9 +2,14 @@ require 'logger'
 require 'socket'
 require 'pp'
 
-$LOAD_PATH.unshift(File.dirname(__FILE__))
-
 module FreeSwitcher
+  # Global configuration options
+  #
+  FS_ROOT = "/opt/freeswitch".freeze # Location of the freeswitch $${base_dir}
+  FS_CONFIG_PATH = "/opt/freeswitch/conf".freeze # Freeswitch conf dir
+  FS_DB_PATH = "/opt/freeswitch/db".freeze # Freeswitch db dir
+
+
   # Usage:
   #
   #   Log.info('foo')
@@ -12,10 +17,24 @@ module FreeSwitcher
   #   Log.warn('foobar')
   #   Log.error('barfoo')
   Log = Logger.new($stdout)
+
+  ROOT = File.expand_path(File.dirname(__FILE__)).freeze
+
+  def self.load_all_commands
+    @load_retry = true
+    begin
+      Commands.load_all
+    rescue NameError
+      if @load_retry
+        @load_retry = false
+        require "freeswitcher/command_socket"
+        retry
+      else
+        raise
+      end
+    end
+  end
 end
 
-require 'freeswitcher/event'
-require 'freeswitcher/event_socket'
-require 'freeswitcher/command_socket'
-require 'freeswitcher/commands'
-require 'freeswitcher/commands/originate'
+$LOAD_PATH.unshift(FreeSwitcher::ROOT)
+

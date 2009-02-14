@@ -26,7 +26,7 @@ module FreeSwitcher
         end
       end
       if (content_length = headers["Content-Length"].to_i) > 0
-        debug "content_length is #{content_length}, grabbing from socket"
+        Log.debug "content_length is #{content_length}, grabbing from socket"
         body << @socket.read(content_length)
       end
       headers.merge("body" => body)
@@ -35,11 +35,6 @@ module FreeSwitcher
     # Scrub result into a hash
     def response
       get_header_and_body
-    end
-
-    def debug(msg)
-      $stdout.puts msg
-      $stdout.flush
     end
 
   end
