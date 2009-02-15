@@ -21,8 +21,11 @@ module FreeSwitcher
     def self.load_application(application, force_reload = false)
       exception = nil
 
-      glob = "{#{LOAD_PATH.join(',')}}/#{application}.{so,rb,bundle}"
-      p glob
+      if Pathname(application).absolute?
+        glob = application
+      else
+        glob = "{#{LOAD_PATH.join(',')}}/#{application}.{so,rb,bundle}"
+      end
 
       Dir[glob].each do |file|
         begin
@@ -36,7 +39,12 @@ module FreeSwitcher
 
     # Load all of the applications we find in Applications::LOAD_PATH
     def self.load_all(force_reload = false)
-      load_application('*', force_reload)
+      glob = "{#{LOAD_PATH.join(',')}}/*.{so,rb,bundle}"
+
+      Dir[glob].each do |file|
+        force_reload ? load(file) : require(file)
+      end
+
       list
     end
 
