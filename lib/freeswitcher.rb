@@ -1,5 +1,6 @@
 require 'logger'
 require 'socket'
+require 'pathname'
 require 'pp'
 
 module FreeSwitcher
@@ -17,7 +18,7 @@ module FreeSwitcher
   #   Log.error('barfoo')
   Log = Logger.new($stdout)
 
-  ROOT = File.expand_path(File.dirname(__FILE__)).freeze
+  ROOT = Pathname(__FILE__).dirname.expand_path.freeze
 
   def self.load_all_commands(retrying = false)
     require 'freeswitcher/command_socket'
@@ -34,17 +35,15 @@ module FreeSwitcher
   private
 
   def self.find_freeswitch_install
-    FS_INSTALL_PATHS.detect do |fs_path|
-      File.directory?(fs_path) and File.directory?(File.join(fs_path, "conf")) and File.directory?(File.join(fs_path, "db"))
-    end
+    FS_INSTALL_PATHS.find{|fs_path| Dir["#{fs_path}/{conf,db}/"].size == 2 }
   end
 
-  public
-  FS_ROOT = find_freeswitch_install # Location of the freeswitch $${base_dir}
-  raise "Could not find freeswitch root path, searched #{FS_INSTALL_PATHS.join(":")}" if FS_ROOT.nil?
-  FS_CONFIG_PATH = File.join(FS_ROOT, "conf").freeze # Freeswitch conf dir
-  FS_DB_PATH = File.join(FS_ROOT, "db").freeze # Freeswitch db dir
+  FS_ROOT = find_freeswitch_install # FreeSWITCH $${base_dir}
 
+  raise("Couldn't find FreeSWITCH root path, searched: %p" % FS_INSTALL_PATHS) unless FS_ROOT
+
+  FS_CONFIG_PATH = (FS_ROOT + 'conf').freeze # FreeSWITCH conf dir
+  FS_DB_PATH = (FS_ROOT + 'db').freeze       # FreeSWITCH db dir
 end
 
 $LOAD_PATH.unshift(FreeSwitcher::ROOT)
