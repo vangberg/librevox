@@ -7,6 +7,12 @@ module FSR
       def initialize(fs_socket, args = {})
         @fs_socket = fs_socket # FSR::CommandSocket object
         @status  = args[:status] # Status type; profile or gateway
+
+        # If status is given, make sure it's profile or gateway
+        unless @status.nil?
+          raise "status must be profile or gateway" unless @status =~ /profile|gateway/i
+        end
+
         @name = args[:name] # Name of profile or gateway
       end
 
@@ -20,7 +26,7 @@ module FSR
       # This method builds the API command to send to the freeswitch event socket
       def raw
         if @status and @name
-          orig_command = "sofia status #{@status} #{@name} #{@originator}"
+          orig_command = "sofia status #{@status} #{@name}"
         else
           raise "Usage <status> <name> - <status> is profile or gateway.  <name> is name of profile or gateway."
         end
