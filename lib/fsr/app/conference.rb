@@ -5,10 +5,10 @@ module FSR
     class Conference < Application
       attr_reader :target, :profile
 
-      def initialize(conference_name, conference_profile = "ultrawideband")
+      def initialize(conference_name, conference_profile = nil)
         # These are options that will precede the target address
         @target = conference_name
-        @profile = conference_profile
+        @profile = conference_profile || "ultrawideband"
       end
 
       # This method builds the API command to send to freeswitch
@@ -16,8 +16,12 @@ module FSR
         "conference(#{@target}@#{@profile})"
       end
 
-      def self.execute(target, opts = {})
-        self.new(target, opts).raw
+      def self.execute(conference_name, conference_profile = nil)
+        self.new(conference_name, conference_profile).raw
+      end
+
+      def self.[](conference_name)
+        self.execute(conference_name)
       end
     end
 
