@@ -1,17 +1,17 @@
-module FreeSwitcher
-  module Applications
+module FSR
+  module App
     class Application
     end
 
     APPLICATIONS = {}
-    LOAD_PATH = [Pathname('.'), FreeSwitcher::ROOT + "freeswitcher/applications"]
+    LOAD_PATH = [Pathname('.'), FSR::ROOT + "fsr/app"]
     REGISTER_CODE = "def %s(*args, &block) APPLICATIONS[%p].new(self, *args, &block) end"
 
     def self.register(application, obj)
       APPLICATIONS[application.to_sym] = obj
 
       code = REGISTER_CODE % [application, application]
-      Applications.module_eval(code)
+      App.module_eval(code)
     end
 
     def self.list
@@ -37,7 +37,7 @@ module FreeSwitcher
       raise("Couldn't find %s in %p" % application, LOAD_PATH)
     end
 
-    # Load all of the applications we find in Applications::LOAD_PATH
+    # Load all of the applications we find in App::LOAD_PATH
     def self.load_all(force_reload = false)
       glob = "{#{LOAD_PATH.join(',')}}/*.{so,rb,bundle}"
 
@@ -49,7 +49,7 @@ module FreeSwitcher
     end
 
     def applications
-      FreeSwitcher::Applications.list
+      FSR::App.list
     end
   end
 end

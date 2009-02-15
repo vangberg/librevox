@@ -1,6 +1,6 @@
-require "freeswitcher/applications"
-module FreeSwitcher
-  module Commands
+require "fsr/app"
+module FSR
+  module Cmd
     class Originate < Command
       attr_accessor :originator, :target, :application
       attr_reader :fs_socket, :target_options
@@ -18,8 +18,8 @@ module FreeSwitcher
         # or application to attach the target caller to, and arguments for the application
         @application = args[:application]
         
-        @target_options[:origination_caller_id_number] = args[:caller_id_number] || FreeSwitcher::DEFAULT_CALLER_ID_NUMBER
-        @target_options[:origination_caller_id_name] = args[:caller_id_name] || FreeSwitcher::DEFAULT_CALLER_ID_NAME
+        @target_options[:origination_caller_id_number] = args[:caller_id_number] || FSR::DEFAULT_CALLER_ID_NUMBER
+        @target_options[:origination_caller_id_name] = args[:caller_id_name] || FSR::DEFAULT_CALLER_ID_NAME
         @target_options[:originate_timeout] = args[:timeout] || @target_options[:timeout] || 15
       end
 
@@ -35,7 +35,7 @@ module FreeSwitcher
         target_opts = @target_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
         if @originator
           orig_command = "originate {#{target_opts}}#{@target} #{@originator}"
-        elsif @application and @application.kind_of?(FreeSwitcher::Applications::Application)
+        elsif @application and @application.kind_of?(FSR::App::Application)
           orig_command = "originate {#{target_opts}}#{@target} '&#{@application.raw}'"
         else
           raise "Invalid originator or application"

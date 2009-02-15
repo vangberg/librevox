@@ -1,16 +1,16 @@
-module FreeSwitcher
-  module Commands
+module FSR
+  module Cmd
     class Command
     end
 
     COMMANDS = {}
-    LOAD_PATH = [File.join(FreeSwitcher::ROOT, "freeswitcher", "commands")]
+    LOAD_PATH = [File.join(FSR::ROOT, "fsr", "cmd")]
 
     def self.register(command, obj)
       COMMANDS[command.to_sym] = obj
 
       code = "def %s(*args, &block) COMMANDS[%p].new(self, *args, &block) end" % [command, command]
-      Commands.module_eval(code)
+      Cmd.module_eval(code)
     end
 
     def self.list
@@ -39,7 +39,7 @@ module FreeSwitcher
       end
     end
 
-    # Load all of the commands we find in Commands::LOAD_PATH
+    # Load all of the commands we find in Cmd::LOAD_PATH
     def self.load_all(force_reload = false)
       LOAD_PATH.each do |load_path|
         Dir[File.join(load_path, "*.rb")].each { |command_file| load_command(command_file, force_reload) }
@@ -48,7 +48,7 @@ module FreeSwitcher
     end
 
     def commands
-      FreeSwitcher::Commands.list
+      FSR::Cmd.list
     end
   end
 end

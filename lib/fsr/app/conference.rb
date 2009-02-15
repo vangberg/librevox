@@ -1,7 +1,7 @@
 
-require "freeswitcher/applications"
-module FreeSwitcher
-  module Applications
+require "fsr/app"
+module FSR
+  module App
     class Conference < Application
       attr_reader :target, :profile
 

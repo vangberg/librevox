@@ -1,6 +1,6 @@
 # Logic to initialize the database here
 require "sequel"
-module FreeSwitcher
+module FSR
   module Database
   end
 end

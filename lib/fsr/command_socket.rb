@@ -1,8 +1,8 @@
-require "freeswitcher/event_socket"
-require "freeswitcher/commands"
-module FreeSwitcher
+require "fsr/event_socket"
+require "fsr/cmd"
+module FSR
   class CommandSocket < EventSocket
-    include Commands
+    include Cmd
 
     def initialize(args = {})
       @server = args[:server] || "127.0.0.1"

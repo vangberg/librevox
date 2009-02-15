@@ -1,4 +1,4 @@
-module FreeSwitcher
+module FSR
   class EventSocket
     attr_reader :socket
 

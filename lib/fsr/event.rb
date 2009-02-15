@@ -1,4 +1,4 @@
-module FreeSwitcher
+module FSR
   class Event
     def self.from(data)
       instance = new
