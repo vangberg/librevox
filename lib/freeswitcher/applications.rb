@@ -4,12 +4,13 @@ module FreeSwitcher
     end
 
     APPLICATIONS = {}
-    LOAD_PATH = [File.join(FreeSwitcher::ROOT, "freeswitcher", "applications")]
+    LOAD_PATH = [Pathname('.'), FreeSwitcher::ROOT + "freeswitcher/applications"]
+    REGISTER_CODE = "def %s(*args, &block) APPLICATIONS[%p].new(self, *args, &block) end"
 
     def self.register(application, obj)
       APPLICATIONS[application.to_sym] = obj
 
-      code = "def %s(*args, &block) APPLICATIONS[%p].new(self, *args, &block) end" % [application, application]
+      code = REGISTER_CODE % [application, application]
       Applications.module_eval(code)
     end
 
@@ -18,32 +19,24 @@ module FreeSwitcher
     end
 
     def self.load_application(application, force_reload = false)
-      # If we get a path specification and it's an existing file, load it
-      if File.file?(application)
-        if force_reload
-          return load(application)
-        else
-          return require(application)
+      exception = nil
+
+      glob = "{#{LOAD_PATH.join(',')}}/#{application}.{so,rb,bundle}"
+      p glob
+
+      Dir[glob].each do |file|
+        begin
+          return force_reload ? load(file) : require(file)
+        rescue LoadError => exception
         end
       end
 
-      # If we find a file named the same as the application passed in LOAD_PATH, load it
-      if application_file = LOAD_PATH.detect { |application_path| File.file?(File.join(application_path, "#{application}.rb")) }
-        if force_reload
-          load application_file
-        else
-          require application_file
-        end
-      else
-        raise "#{application} not found in #{LOAD_PATH.join(":")}"
-      end
+      raise("Couldn't find %s in %p" % application, LOAD_PATH)
     end
 
     # Load all of the applications we find in Applications::LOAD_PATH
     def self.load_all(force_reload = false)
-      LOAD_PATH.each do |load_path|
-        Dir[File.join(load_path, "*.rb")].each { |application_file| load_application(application_file, force_reload) }
-      end
+      load_application('*', force_reload)
       list
     end
 
