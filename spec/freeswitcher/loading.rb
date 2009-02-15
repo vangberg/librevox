@@ -1,3 +1,5 @@
+require 'spec/helper'
+
 # Must include spec/helper to run this test
 
 describe "Testing FreeSwitcher module methods" do
