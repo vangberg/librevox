@@ -19,38 +19,20 @@ module FreeSwitcher
 
   ROOT = File.expand_path(File.dirname(__FILE__)).freeze
 
-  def self.load_all_commands
-    @command_socket_load_retry = true
-    begin
-      load_all_applications
-      Commands.load_all
-    rescue NameError
-      if @command_socket_load_retry
-        @command_socket_load_retry = false
-        require "freeswitcher/command_socket"
-        retry
-      else
-        raise
-      end
-    end
+  def self.load_all_commands(retrying = false)
+    require 'freeswitcher/command_socket'
+
+    load_all_applications
+    Commands.load_all
   end
 
   def self.load_all_applications
-    @application_load_retry = true 
-    begin
-      Applications.load_all
-    rescue NameError
-      if @application_load_retry
-        @application_load_retry = false
-        require "freeswitcher/applications"
-        retry
-      else
-        raise
-      end
-    end
+    require "freeswitcher/applications"
+    Applications.load_all
   end
 
   private
+
   def self.find_freeswitch_install
     FS_INSTALL_PATHS.detect do |fs_path|
       File.directory?(fs_path) and File.directory?(File.join(fs_path, "conf")) and File.directory?(File.join(fs_path, "db"))
@@ -66,4 +48,3 @@ module FreeSwitcher
 end
 
 $LOAD_PATH.unshift(FreeSwitcher::ROOT)
-
