@@ -34,7 +34,7 @@ module FreeSwitcher
       def raw
         target_opts = @target_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
         if @originator
-          orig_command = "originate {#{target_opts.join(',')}}#{@target} #{@originator}"
+          orig_command = "originate {#{target_opts}}#{@target} #{@originator}"
         elsif @application and @application.kind_of?(FreeSwitcher::Applications::Application)
           orig_command = "originate {#{target_opts}}#{@target} '&#{@application.raw}'"
         else
