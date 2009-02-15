@@ -1,8 +1,8 @@
-require "freeswitcher/database"
-module FreeSwitcher
+require "fsr/database"
+module FSR
   module Database
     module CallLimit
-      DB = Sequel.connect("sqlite:///" + File.join(FreeSwitcher::FS_DB_PATH, "call_limit.db"))
+      DB = Sequel.connect("sqlite:///" + File.join(FSR::FS_DB_PATH, "call_limit.db"))
       class LimitData < Sequel::Model
       end
       LimitData.set_dataset :limit_data

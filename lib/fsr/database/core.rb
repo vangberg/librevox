@@ -1,11 +1,11 @@
-require "freeswitcher/database"
+require "fsr/database"
 # This module maps to the Free Switch core.db database
 #
 # TODO Separate these models into their own subdirectories
-module FreeSwitcher
+module FSR
   module Database
     module Core
-      DB = Sequel.connect("sqlite://" + File.join(FreeSwitcher::FS_DB_PATH, "core.db"))
+      DB = Sequel.connect("sqlite://" + File.join(FSR::FS_DB_PATH, "core.db"))
 
       class Complete < Sequel::Model
       end
