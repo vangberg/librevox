@@ -13,6 +13,6 @@ describe "Testing FSR module loading methods" do
   it "Loads all commands" do
     cmds_loaded = FSR.load_all_commands
     cmds_loaded.kind_of?(Array).should == true
-    cmds_loaded.should == [:originate]
+    cmds_loaded.should == [:originate, :sofia]
   end
 end
