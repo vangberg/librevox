@@ -20,13 +20,29 @@ module FreeSwitcher
   ROOT = File.expand_path(File.dirname(__FILE__)).freeze
 
   def self.load_all_commands
-    @load_retry = true
+    @command_socket_load_retry = true
     begin
+      load_all_applications
       Commands.load_all
     rescue NameError
-      if @load_retry
-        @load_retry = false
+      if @command_socket_load_retry
+        @command_socket_load_retry = false
         require "freeswitcher/command_socket"
+        retry
+      else
+        raise
+      end
+    end
+  end
+
+  def self.load_all_applications
+    @application_load_retry = true 
+    begin
+      Applications.load_all
+    rescue NameError
+      if @application_load_retry
+        @application_load_retry = false
+        require "freeswitcher/applications"
         retry
       else
         raise

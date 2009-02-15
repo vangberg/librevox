@@ -1,5 +1,8 @@
 module FreeSwitcher
   module Commands
+    class Command
+    end
+
     COMMANDS = {}
     LOAD_PATH = [File.join(FreeSwitcher::ROOT, "freeswitcher", "commands")]
 

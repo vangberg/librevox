@@ -1,9 +1,9 @@
-
+require "freeswitcher/applications"
 module FreeSwitcher
   module Commands
-    class Originate
-      attr_accessor :originator, :target, :application, :application_arguments
-      attr_reader :fs_socket, :target_options, :application_options
+    class Originate < Command
+      attr_accessor :originator, :target, :application
+      attr_reader :fs_socket, :target_options
 
       def initialize(fs_socket, args = {})
         # These are options that will precede the target address
@@ -17,11 +17,6 @@ module FreeSwitcher
 
         # or application to attach the target caller to, and arguments for the application
         @application = args[:application]
-        @application_arguments = args[:application_arguments]
-
-        # These are options that will precede the application as modifiers
-        @application_options = args[:application_options] || {}
-        raise "#{@application_options} must be a hash" unless @application_options.kind_of?(Hash)
         
         @target_options[:origination_caller_id_number] = args[:caller_id_number] || FreeSwitcher::DEFAULT_CALLER_ID_NUMBER
         @target_options[:origination_caller_id_name] = args[:caller_id_name] || FreeSwitcher::DEFAULT_CALLER_ID_NAME
@@ -40,9 +35,8 @@ module FreeSwitcher
         target_opts = @target_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
         if @originator
           orig_command = "originate {#{target_opts.join(',')}}#{@target} #{@originator}"
-        elsif @application and @application_arguments
-          application_opts = @application_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
-          orig_command = "originate {#{target_opts}}#{@target} '&#{@application}({#{application_opts}}#{@application_arguments})'"
+        elsif @application and @application.kind_of?(FreeSwitcher::Applications::Application)
+          orig_command = "originate {#{target_opts}}#{@target} '&#{@application.raw}'"
         else
           raise "Invalid originator or application"
         end
