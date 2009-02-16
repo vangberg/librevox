@@ -2,7 +2,7 @@ begin
   require 'bacon'
 rescue LoadError
   puts <<-EOS
-To run these tests you must install bacon. 
+To run these tests you must install bacon.
 Quick and easy install for gem:
     gem install bacon
 EOS

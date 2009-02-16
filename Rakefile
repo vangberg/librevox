@@ -1,6 +1,10 @@
 require 'rake/clean'
 require "rubygems"
 
+import(*Dir['tasks/*rake'])
+
+task :default => :spec
+
 desc 'install dependencies'
 task :setup do
   GemSetup.new do
@@ -10,10 +14,6 @@ task :setup do
     gem('bacon')
     setup
   end
-end
-
-Dir[File.join(File.dirname(__FILE__), "tasks", "*.rake")].each do |rakefile|
-  load rakefile
 end
 
 class GemSetup
