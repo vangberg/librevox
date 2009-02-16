@@ -29,7 +29,7 @@ module FSR
 
       # This method builds the API command to send to the freeswitch event socket
       def raw
-        target_opts = @target_options.map { |k,v| "%s=%s" % [k, v] }.join(",")
+        target_opts = @target_options.keys.sort { |a,b| a.to_s <=> b.to_s }.map { |k| "%s=%s" % [k, @target_options[k]] }.join(",")
         if @endpoint.kind_of?(String)
           orig_command = "originate {#{target_opts}}#{@target} #{@endpoint}"
         elsif @endpoint.kind_of?(FSR::App::Application)

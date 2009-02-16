@@ -26,11 +26,13 @@ module FSR
           return require(command)
         end
       end
-
+      Log.debug "Trying load paths"
       # If we find a file named the same as the command passed in LOAD_PATH, load it
-      if command_file = LOAD_PATH.detect { |command_path| File.file?(File.join(command_path, "#{command}.rb")) }
+      if found_command_path = LOAD_PATH.detect { |command_path| File.file?(File.join(command_path, "#{command}.rb")) }
+        command_file = Pathname.new(found_command_path).join(command)
+        Log.debug "Trying to load #{command_file}"
         if force_reload
-          load command_file
+          load command_file.to_s + ".rb"
         else
           require command_file
         end
