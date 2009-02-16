@@ -35,7 +35,11 @@ module FSR
   private
 
   def self.find_freeswitch_install
-    FS_INSTALL_PATHS.find{|fs_path| Dir["#{fs_path}/{conf,db}/"].size == 2 }
+    FS_INSTALL_PATHS.find do |fs_path|
+      raise("#{fs_path} is not a directory!") if File.exists?(fs_path) && !File.directory?(fs_path)
+      raise("#{fs_path} is not readable by this user!") if File.exists?(fs_path) && !File.readable?(fs_path)
+      Dir["#{fs_path}/{conf,db}/"].size == 2
+    end
   end
 
   FS_ROOT = find_freeswitch_install # FreeSWITCH $${base_dir}
