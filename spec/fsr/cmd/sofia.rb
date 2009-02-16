@@ -27,5 +27,25 @@ describe "Testing FSR::Cmd::Sofia" do
     status.raw.should == "sofia status gateway server"
   end
 
+  # Sofia profile
+  it "FSR::Cmd::Sofia should allow profile" do
+    sofia = FSR::Cmd::Sofia.new
+    profile = sofia.profile
+    profile.raw.should == "sofia profile"
+  end
+
+  it "FSR::Cmd::Sofia::Profile should allow stop" do
+    sofia = FSR::Cmd::Sofia.new
+    profile = sofia.profile(:profile => 'internal', :exec => 'stop')
+    profile.raw.should == "sofia profile internal stop"
+  end
+
+  it "FSR::Cmd::Sofia::Profile should allow raw string" do
+    sofia = FSR::Cmd::Sofia.new
+    profile = sofia.profile('internal stop')
+    profile.raw.should == "sofia profile internal stop"
+  end
+
+
 
 end
