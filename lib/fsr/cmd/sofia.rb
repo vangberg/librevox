@@ -4,7 +4,7 @@ module FSR
     class Sofia < Command
       attr_reader :fs_socket
 
-      def initialize(fs_socket, args = {})
+      def initialize(fs_socket = nil, args = {})
         @fs_socket = fs_socket # FSR::CommandSocket object
         @status  = args[:status] # Status type; profile or gateway
 
