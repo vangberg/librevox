@@ -3,11 +3,31 @@ module FSR
   module Cmd
     class Sofia 
       class Profile < Command
-        attr_reader :fs_socket, :raw_string
+        attr_reader :options
+        attr_accessor :fs_socket, :command_string, :name, :action
 
-        def initialize(fs_socket = nil, args = nil)
+        VALID_ACTIONS = [:start, :stop, :restart, :rescan]
+        def initialize(fs_socket = nil, options = nil)
           @fs_socket = fs_socket # FSR::CommandSocket object
-          @raw_string = args # If user wants to send a raw "sofia profile"
+          if options.kind_of?(String)
+            @command_string = options
+          else
+            raise "options must be a String or Hash" unless options.kind_of?(Hash)
+            @options = options
+            @action = @options[:action]
+            if @action
+              raise "Invalid action, must specify one of #{VALID_ACTIONS.inspect}" unless VALID_ACTIONS.include?(@action)
+              @name = @options[:name]
+              raise "Invalid profile name" unless @name.to_s.match(/\w/)
+            else
+              @command_string = @options[:command_string] # If user wants to send a raw "sofia profile"
+            end
+          end
+          @command_string ||= ""
+        end
+
+        VALID_ACTIONS.each do |action|
+          define_method(action, lambda { |name| @action, @name = action, name;self })
         end
 
         # Send the command to the event socket, using api by default.
@@ -17,34 +37,37 @@ module FSR
           @fs_socket.say(orig_command)
         end
 
-        # Start a sip_profile
-        def start(profile)
-          Profile.new(@fs_socket, "#{profile} start")
+        def self.start(profile, socket = FSR::CommandSocket.new)
+          new(socket, :name => profile, :action => :start)
         end
 
         # Restart a sip_profile
-        def restart(profile)
-          Profile.new(@fs_socket, "#{profile} restart")
+        def self.restart(profile, socket = FSR::CommandSocket.new)
+          new(socket, :name => profile, :action => :restart)
         end
 
         # Stop a sip_profile
-        def stop(profile)
-          Profile.new(@fs_socket, "#{profile} stop")
+        def self.stop(profile, socket = FSR::CommandSocket.new)
+          new(socket, :name => profile, :action => :stop)
         end
 
         # Rescan a sip_profile
-        def rescan(profile)
-          Profile.new(@fs_socket, "#{profile} rescan")
+        def self.rescan(profile, socket = FSR::CommandSocket.new)
+          new(socket, :name => profile, :action => :rescan)
         end
-
 
         # This method builds the API command to send to the freeswitch event socket
         def raw
-          unless @raw_string.nil? or @raw_string.empty?
-            orig_command = "sofia profile #{@raw_string}"
+          raise "Invalid action, must specify (start|stop|restart|rescan) as an action or pass a command_string" unless @command_string or @action
+          if @action
+            if @action_options
+              "sofia profile %s %s %s" % [@name, @action, @action_options]
+            else
+              "sofia profile %s %s" % [@name, @action]
+            end
           else
-            orig_command = "sofia profile"
-          end
+            "sofia profile %s" % @command_string
+          end.to_s.strip
         end
       end
     end

@@ -9,13 +9,17 @@ module FSR
       # sofia status
       def status(args = {})
         require "fsr/cmd/sofia/status" # Require sofia/status
-        Sofia::Status.new(@fs_socket, args)
+        Status.new(@fs_socket, args)
       end
 
       # sofia profile
-      def profile(args = {})
+      def profile(args = nil)
         require "fsr/cmd/sofia/profile" # Require sofia/profile
-        Sofia::Profile.new(@fs_socket, args)
+        if args == nil
+          Profile.new(@fs_socket, :command_string => "")
+        else
+          Profile.new(@fs_socket, args)
+        end
       end
 
       # Send the command to the event socket, using api by default.
