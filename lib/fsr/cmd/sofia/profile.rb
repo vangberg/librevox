@@ -19,26 +19,22 @@ module FSR
 
         # Start a sip_profile
         def start(profile)
-          require 'fsr/cmd/sofia/profile/start'
-          Profile::Start.new(@fs_socket, profile)
+          Profile.new(@fs_socket, "#{profile} start")
         end
 
         # Restart a sip_profile
         def restart(profile)
-          require 'fsr/cmd/sofia/profile/restart'
-          Profile::Restart.new(@fs_socket, profile)
+          Profile.new(@fs_socket, "#{profile} restart")
         end
 
         # Stop a sip_profile
         def stop(profile)
-          require 'fsr/cmd/sofia/profile/stop'
-          Profile::Stop.new(@fs_socket, profile)
+          Profile.new(@fs_socket, "#{profile} stop")
         end
 
         # Rescan a sip_profile
         def rescan(profile)
-          require 'fsr/cmd/sofia/profile/rescan'
-          Profile::Rescan.new(@fs_socket, profile)
+          Profile.new(@fs_socket, "#{profile} rescan")
         end
 
 
