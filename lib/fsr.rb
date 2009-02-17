@@ -35,19 +35,24 @@ module FSR
   private
 
   def self.find_freeswitch_install
-    FS_INSTALL_PATHS.find do |fs_path|
+    good_path = FS_INSTALL_PATHS.find do |fs_path|
       raise("#{fs_path} is not a directory!") if File.exists?(fs_path) && !File.directory?(fs_path)
       raise("#{fs_path} is not readable by this user!") if File.exists?(fs_path) && !File.readable?(fs_path)
       Dir["#{fs_path}/{conf,db}/"].size == 2
+    end
+    if good_path.nil?
+      Log.warn("No FreeSWITCH install found, database and configuration functionality disabled")
     end
   end
 
   FS_ROOT = find_freeswitch_install # FreeSWITCH $${base_dir}
 
-  raise("Couldn't find FreeSWITCH root path, searched: %p" % FS_INSTALL_PATHS) unless FS_ROOT
-
-  FS_CONFIG_PATH = (FS_ROOT + 'conf').freeze # FreeSWITCH conf dir
-  FS_DB_PATH = (FS_ROOT + 'db').freeze       # FreeSWITCH db dir
+  if FS_ROOT
+    FS_CONFIG_PATH = (FS_ROOT + 'conf').freeze # FreeSWITCH conf dir
+    FS_DB_PATH = (FS_ROOT + 'db').freeze       # FreeSWITCH db dir
+  else
+    FS_CONFIG_PATH = FS_DB_PATH = nil
+  end
 end
 
 $LOAD_PATH.unshift(FSR::ROOT)
