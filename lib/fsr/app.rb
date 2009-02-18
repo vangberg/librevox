@@ -53,3 +53,4 @@ module FSR
     end
   end
 end
+FSA = FSR::App

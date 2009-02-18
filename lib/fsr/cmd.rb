@@ -54,3 +54,4 @@ module FSR
     end
   end
 end
+FSC = FSR::Cmd
