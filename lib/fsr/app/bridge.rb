@@ -17,6 +17,26 @@ module FSR
         "bridge({#{opts}}#{@target})"
       end
 
+      def arguments
+        [@target]
+      end
+
+      def modifiers
+        @options.map { |k,v| "%s=%s" % [k, v] }.join(",")
+      end
+
+      def app_name
+        self.class.name.split("::").last.downcase
+      end
+
+      def raw
+        "%s({%s}%s)" % [app_name, modifiers, arguments.join(" ")]
+      end
+
+      def sendmsg
+        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\n\n" % [app_name, arguments.join(" ")]
+      end
+
       def self.execute(target, opts = {})
         self.new(target, opts).raw
       end
