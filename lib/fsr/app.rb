@@ -4,8 +4,8 @@ module FSR
     end
 
     APPLICATIONS = {}
-    LOAD_PATH = [Pathname('.'), FSR::ROOT + "fsr/app"]
-    REGISTER_CODE = "def %s(*args, &block) APPLICATIONS[%p].new(self, *args, &block) end"
+    LOAD_PATH = [FSR::ROOT.join("fsr/app")]
+    REGISTER_CODE = "def %s(*args, &block); APPLICATIONS[%p].new(*args, &block); end"
 
     def self.register(application, obj)
       APPLICATIONS[application.to_sym] = obj
@@ -34,7 +34,7 @@ module FSR
         end
       end
 
-      raise("Couldn't find %s in %p" % application, LOAD_PATH)
+      raise("Couldn't find %s in %p" % [application, LOAD_PATH])
     end
 
     # Load all of the applications we find in App::LOAD_PATH

@@ -1,6 +1,6 @@
 require 'eventmachine'
 module FSR
-  class Listener < EventMachine::Connection
+  module Listener 
     def dispatch(event)
       name = event.listener_name
       return unless respond_to?(name)

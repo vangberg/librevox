@@ -3,16 +3,20 @@
 require 'rubygems'
 require 'eventmachine'
 require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
-require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr', 'listener')
-require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr', 'listener', 'outbound')
-FSR.load_all_applications
+puts $LOAD_PATH.inspect
+$stdout.flush
+require "fsr/listener/outbound"
 
-class OesDemo < FSR::Listener::Outbound
-  def session_initiated(data)
-    #transfer "user/bougyman"
-    puts data.inspect
-    #exit
+module OesDemo
+  include FSR::Listener::Outbound
+  def session_initiated(session)
+    bridge "user/bougyman"
   end
+
+  def reply_received(command_reply)
+    puts "Received response: #{command_reply}"
+  end
+
 end
 EM.run do
   port = 1888

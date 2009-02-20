@@ -19,6 +19,7 @@ module FSR
   Log = Logger.new($stdout)
 
   ROOT = Pathname(__FILE__).dirname.expand_path.freeze
+  $LOAD_PATH.unshift(FSR::ROOT)
 
   def self.load_all_commands(retrying = false)
     require 'fsr/command_socket'
@@ -56,4 +57,3 @@ module FSR
   end
 end
 
-$LOAD_PATH.unshift(FSR::ROOT)
