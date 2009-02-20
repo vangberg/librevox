@@ -7,7 +7,7 @@ namespace :pkg do
     require "erb"
     unfiltered_files = Dir['**/*']
     spec_files = unfiltered_files.reject do |filename|
-      filename.match(/^(?:spec|config|script|log)(?:\/|$)/) || File.basename(filename).match(/\.(?:gem|gemspec|swp)$/) || File.basename(filename).match(/^(?:\.|RIDE)/)
+      filename.match(/^(?:spec|config|script|log)(?:\/|$)/) || File.basename(filename).match(/\.(?:gem|gemspec|swp|gemspec\.erb)$/) || File.basename(filename).match(/^(?:\.|RIDE)/)
     end.inspect
 
     spec_test_files = (["spec"] + Dir['spec/**/*']).inspect
