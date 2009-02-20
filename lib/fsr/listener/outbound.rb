@@ -22,12 +22,12 @@ module FSR
       def receive_data(data)
         FSR::Log.debug("received #{data}")
         FSR::Log.debug("Data hash is #{hash.inspect}")
-        FSR::Log.debug("Body is #{body || 'empty'}")
         if @session.nil?
           @session = Session.new(data)
           FSR::Log.debug("New Session, calling session_initiated on #{@session}")
           session_initiated(@session)
         else
+          FSR::Log.debug "@session is #{@session}"
           command_reply = CommandReply.new(data)
           FSR::Log.debug("Command reply received, calling reply_received on #{command_reply}")
           reply_received(command_reply)
@@ -35,9 +35,11 @@ module FSR
       end
 
       def session_initiated(session)
+        session
       end
 
       def reply_received(command_reply)
+        command_reply
       end
 
       def sendmsg(message)
@@ -55,9 +57,12 @@ module FSR
 
 
       class SocketResponse
+        attr_reader :headers, :body
         def initialize(data)
           headers, @body = data.split(/\n\n/)
           @headers = YAML.load(headers)
+          FSR::Log.debug("Headers are #{@headers || 'empty'}")
+          FSR::Log.debug("Body is #{@body || 'empty'}")
         end
       end
 
