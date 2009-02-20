@@ -42,6 +42,7 @@ module FSR
     end
     if good_path.nil?
       Log.warn("No FreeSWITCH install found, database and configuration functionality disabled")
+      return nil
     end
   end
 
