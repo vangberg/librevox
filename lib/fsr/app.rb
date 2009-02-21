@@ -1,6 +1,11 @@
 module FSR
   module App
     class Application
+      def to_s
+        #puts caller.join("\n")
+        from_methods = caller.select { |n| n.match(/:in\s`\w/) }.map { |s| s.split.last[1 .. -2] }
+        from_methods.include?("sendmsg") ? sendmsg : raw
+      end
     end
 
     APPLICATIONS = {}
