@@ -20,14 +20,20 @@ module FSR
       end
 
       # Received data dispatches the data received by the EM socket,
-      # Either as a Session, a continuation of a Session, or as a CommandReply
+      # Either as a Session, a continuation of a Session, or as a Session's last CommandReply
       def receive_data(data)
         FSR::Log.debug("received #{data}")
         if @session.nil? # If session_collected is true, no need to call our on_call hook.  We only want to execute once per call right?
           @session = Session.new(data)
           session_initiated(@session) if @session.initiated?
         else
-          @session.initiated? ? reply_received(CommandReply.new(data)) : @session << data
+          if @session.initiated?
+            @session << data
+            reply_received(@session.replies.last) if @session.replies.last.complete?
+          else
+            @session << data
+            session_initiated(@session) if @session.initiated?
+          end
         end
       end
 
@@ -57,8 +63,7 @@ module FSR
       class SocketResponse
         attr_accessor :headers, :body, :data
         def initialize(data)
-          @data = ""
-          @data << data
+          @data = data
           headers, @body = data.split("\n\n")  # Initialize data as a string for '<<' method
           @body ||= ""
           @headers = YAML.load(headers)
@@ -66,6 +71,7 @@ module FSR
         end
 
         def <<(data)
+          @data << data
           extra_headers, more_body = data.split("\n\n")
           @headers.merge(extra_headers)
           @body << more_body unless more_body.nil?
@@ -74,12 +80,35 @@ module FSR
       end
 
       class Session < SocketResponse
+        attr_accessor :replies
+        def initialize(data)
+          super
+          @replies = []
+        end
+
+        def <<(data)
+          if initiated?
+            if @replies.empty? or @replies.last.complete?
+              @replies << CommandReply.new(data)
+            else
+              @replies.last << data
+            end
+          else
+            super
+          end
+        end
+
         def initiated?
           @headers.keys.include?("Control")
         end
+        
       end
 
       class CommandReply < SocketResponse
+        # Set this to true for now, fill it in when we know what completed a reply
+        def complete?
+          true
+        end
       end
     end
 
