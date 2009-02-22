@@ -38,9 +38,9 @@ module FSR
         dump.each do |line|
           if line.match(/Control:/) # Last line of a new session dump ends with "Control:"
             @session_collected = true
-            @session.collect_response(dump)
-            @session.make_headers 
-            call_dispatcher(@session)
+            @session.collect_response(dump) # Collect last line
+            @session.make_headers # Turn raw data in a hash 
+            call_dispatcher(@session) # It is now safe to call the dispatcher, which will in turn call our hook "on_call"
           else
             @session.collect_response(dump)
           end
