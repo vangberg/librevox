@@ -9,7 +9,7 @@ require "fsr/listener/outbound"
 
 module OesDemo
   include FSR::Listener::Outbound
-  def on_call(session)
+  def session_initiated(session)
     puts "*** BEGIN ***"
     puts "* {{{ #{session.headers} }}}"
     bridge "user/1001"
@@ -21,8 +21,8 @@ module OesDemo
 end
 
 EM.run do
-  port = 8084 
-  host = "192.168.6.32"
+  port = 1888 
+  host = "127.0.0.1"
   EventMachine::start_server(host, port, OesDemo) 
   FSR::Log.debug "* FreeSWITCHer OES Listener on #{host}:#{port}"
 end

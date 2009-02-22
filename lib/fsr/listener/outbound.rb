@@ -45,8 +45,6 @@ module FSR
         session
       end
 
-      alias :on_call :session_initiated
-
       def reply_received(command_reply)
         command_reply
       end

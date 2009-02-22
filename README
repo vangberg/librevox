@@ -46,7 +46,7 @@ Example of creating an Outbound Eventsocket listener:
 
     module OesDemo
       include FSR::Listener::Outbound
-      def on_call(session)
+      def session_initiated(session)
         bridge "user/bougyman"
       end
     end
