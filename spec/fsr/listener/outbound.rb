@@ -53,8 +53,8 @@ describe "Testing FSR::Listener::Outbound" do
     # Receive more data, complete the session
     session3 = listener.receive_data("Yet_Another_Fake_Header: baz\nControl: full")
     session3.should.be.identical_to session2
-    session3.headers["Yet_Another_Fake_Header"].should == "baz"
     session3.initiated?.should.be.true?
+    session3.headers["Yet_Another_Fake_Header"].should == "baz"
     session3.headers["Control"].should == "full"
     session3.body.should == ""
     session3.data.size.should.be.identical_to 3
@@ -67,6 +67,7 @@ describe "Testing FSR::Listener::Outbound" do
     reply.complete?.should.be.true?
     reply.headers["Content-Disposition"].should == "+OK"
     reply.body.should == "Command Completed"
+    reply.data.size.should.be.identical_to 1
   end
 
 end
