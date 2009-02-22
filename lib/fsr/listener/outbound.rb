@@ -35,6 +35,7 @@ module FSR
             session_initiated(@session) if @session.initiated?
           end
         end
+        @session
       end
 
       def session_initiated(session)
@@ -63,7 +64,7 @@ module FSR
       class SocketResponse
         attr_accessor :headers, :body, :data
         def initialize(data)
-          @data = data
+          @data = [data]
           headers, @body = data.split("\n\n")  # Initialize data as a string for '<<' method
           @body ||= ""
           @headers = YAML.load(headers)
@@ -73,7 +74,7 @@ module FSR
         def <<(data)
           @data << data
           extra_headers, more_body = data.split("\n\n")
-          @headers.merge(extra_headers)
+          @headers.merge!(YAML.load(extra_headers))
           @body << more_body unless more_body.nil?
           self
         end
