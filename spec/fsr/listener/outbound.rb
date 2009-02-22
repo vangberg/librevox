@@ -26,7 +26,13 @@ describe "Testing FSR::Listener::Outbound" do
   end
 
   it "Receives data with #receive_data and creates a valid session" do
-     my_listener.receive_data("Fake_Header: foo\nControl: full\n\n").should == "Fake_Header: foo\nControl: full\n\n"
+    listener = my_listener
+    session = listener.receive_data("Fake_Header: foo\nControl: full\n\n")
+    session.kind_of?(FSR::Listener::Outbound::Session).should == true
+    session.headers["Control"].should == "full"
+    session.headers["Fake_Header"].should == "foo"
+    session.initiated?.should == true
+    session.body.should == ""
   end
 
 end
