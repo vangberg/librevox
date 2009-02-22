@@ -23,10 +23,13 @@ module FSR
       # Either as a Session, a continuation of a Session, or as a Session's last CommandReply
       def receive_data(data)
         FSR::Log.debug("received #{data}")
-        if @session.nil? # If session_collected is true, no need to call our on_call hook.  We only want to execute once per call right?
+        if @session.nil? # if @session is nil, create a new Session object
           @session = Session.new(data)
           session_initiated(@session) if @session.initiated?
         else
+          # If it's not nil, we add the data to this session, Session knows whether
+          # or not to create a CommandReply, complete a CommandReply, or simply add to
+          # its own @data array and @headers/@body structures
           if @session.initiated?
             @session << data
             reply_received(@session.replies.last) if @session.replies.last.complete?
@@ -65,17 +68,25 @@ module FSR
         attr_accessor :headers, :body, :data
         def initialize(data)
           @data = [data]
-          headers, @body = data.split("\n\n")  # Initialize data as a string for '<<' method
+          if data.match(/\n$/)
+            headers, @body = data.split("\n\n")
+            @headers = YAML.load(headers)
+          else 
+            @headers = {}
+          end
           @body ||= ""
-          @headers = YAML.load(headers)
           FSR::Log.debug("New #{self.class.name} created: #{self}")
         end
 
         def <<(data)
-          @data << data
-          extra_headers, more_body = data.split("\n\n")
-          @headers.merge!(YAML.load(extra_headers))
-          @body << more_body unless more_body.nil?
+          if data.match(/\n$/)
+            @data.last.match(/\n$/) ? @data << data : @data.last << data
+            extra_headers, more_body = @data.last.split("\n\n")
+            @headers.merge!(YAML.load(extra_headers))
+            @body << more_body unless more_body.nil?
+          else
+            @data.last << data
+          end
           self
         end
       end
