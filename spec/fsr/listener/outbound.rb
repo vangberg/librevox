@@ -89,4 +89,20 @@ describe "Testing FSR::Listener::Outbound" do
     session3.initiated?.should.be.true?
   end
 
+  it "should call the on_call hook after a session is initiated" do
+    class OesTest
+      attr_accessor :called
+      include FSR::Listener::Outbound
+      def initialize
+        @called = false
+      end
+      def on_call
+        @called = true
+      end
+    end
+    listener = OesTest.new
+    session = listener.receive_data("Fake_Header: foo\nControl: full\n")
+    listener.called.should.be.true?
+  end
+
 end
