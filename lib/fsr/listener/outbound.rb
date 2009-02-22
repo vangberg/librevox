@@ -66,7 +66,7 @@ module FSR
 
       class SocketResponse
         attr_accessor :headers, :body, :data
-        def initialize(data)
+        def initialize(data = "")
           @data = [data]
           if data.match(/\n$/)
             headers, @body = data.split("\n\n")
@@ -85,7 +85,7 @@ module FSR
             @headers.merge!(YAML.load(extra_headers))
             @body << more_body unless more_body.nil?
           else
-            @data.last << data
+            @data.last.match(/\n$/) ? @data << data : @data.last << data
           end
           self
         end
@@ -93,7 +93,7 @@ module FSR
 
       class Session < SocketResponse
         attr_accessor :replies
-        def initialize(data)
+        def initialize(data = "")
           super
           @replies = []
         end
