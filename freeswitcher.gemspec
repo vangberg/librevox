@@ -6,7 +6,7 @@ FSR_SPEC = Gem::Specification.new do |spec|
   spec.email = "FreeSWITCHeR@rubyists.com"
   spec.homepage = "http://code.rubyists.com/projects/fs"
 
-  spec.files = ["License.txt", "README", "Rakefile", "bin", "bin/freeswitcher", "bin/oes_demo.rb", "contrib", "contrib/fsr_ride_template.erb", "lib", "lib/fsr", "lib/fsr/app", "lib/fsr/app/bridge.rb", "lib/fsr/app/conference.rb", "lib/fsr/app/fifo.rb", "lib/fsr/app.rb", "lib/fsr/cmd", "lib/fsr/cmd/originate.rb", "lib/fsr/cmd/sofia", "lib/fsr/cmd/sofia/profile.rb", "lib/fsr/cmd/sofia/status.rb", "lib/fsr/cmd/sofia.rb", "lib/fsr/cmd.rb", "lib/fsr/command_socket.rb", "lib/fsr/database", "lib/fsr/database/call_limit.rb", "lib/fsr/database/core.rb", "lib/fsr/database/sofia_reg_external.rb", "lib/fsr/database/sofia_reg_internal.rb", "lib/fsr/database/voicemail_default.rb", "lib/fsr/database.rb", "lib/fsr/event.rb", "lib/fsr/event_socket.rb", "lib/fsr/fake_socket.rb", "lib/fsr/listener", "lib/fsr/listener/inbound.rb", "lib/fsr/listener/outbound.rb", "lib/fsr/listener.rb", "lib/fsr.rb", "tasks", "tasks/package.rake", "tasks/spec.rake"]
+  spec.files = ["License.txt", "README", "Rakefile", "bin", "bin/freeswitcher", "bin/oes_demo.rb", "contrib", "contrib/fsr_ride_template.erb", "lib", "lib/fsr", "lib/fsr/app", "lib/fsr/app/bridge.rb", "lib/fsr/app/conference.rb", "lib/fsr/app/fifo.rb", "lib/fsr/app.rb", "lib/fsr/cmd", "lib/fsr/cmd/originate.rb", "lib/fsr/cmd/sofia", "lib/fsr/cmd/sofia/profile.rb", "lib/fsr/cmd/sofia/status.rb", "lib/fsr/cmd/sofia.rb", "lib/fsr/cmd.rb", "lib/fsr/command_socket.rb", "lib/fsr/database", "lib/fsr/database/call_limit.rb", "lib/fsr/database/core.rb", "lib/fsr/database/sofia_reg_external.rb", "lib/fsr/database/sofia_reg_internal.rb", "lib/fsr/database/voicemail_default.rb", "lib/fsr/database.rb", "lib/fsr/event.rb", "lib/fsr/event_socket.rb", "lib/fsr/fake_socket.rb", "lib/fsr/listener", "lib/fsr/listener/inbound.rb", "lib/fsr/listener/outbound.rb", "lib/fsr/listener.rb", "lib/fsr.rb", "oes_demo.rb", "tasks", "tasks/package.rake", "tasks/ride.rake", "tasks/rspec.rake", "tasks/spec.rake", "tmp"]
   spec.test_files = ["spec", "spec/fsr", "spec/fsr/app", "spec/fsr/app/bridge.rb", "spec/fsr/app/conference.rb", "spec/fsr/app/fifo.rb", "spec/fsr/app.rb", "spec/fsr/cmd", "spec/fsr/cmd/originate.rb", "spec/fsr/cmd/sofia", "spec/fsr/cmd/sofia/profile.rb", "spec/fsr/cmd/sofia.rb", "spec/fsr/cmd.rb", "spec/fsr/listener", "spec/fsr/listener/outbound.rb", "spec/fsr/listener.rb", "spec/fsr/loading.rb", "spec/helper.rb"]
   spec.require_path = "lib"
 
@@ -58,15 +58,11 @@ Example of creating an Outbound Eventsocket listener:
 
     module OesDemo
       include FSR::Listener::Outbound
-      def session_initiated(session)
+      def on_call(session)
         bridge "user/bougyman"
       end
-
-      def reply_received(command_reply)
-        puts "Received response: #{command_reply}"
-      end
-
     end
+
     EM.run do
       port = 1888
       host = "127.0.0.1"

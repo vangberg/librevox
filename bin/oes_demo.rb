@@ -9,15 +9,17 @@ require "fsr/listener/outbound"
 
 module OesDemo
   include FSR::Listener::Outbound
-  def session_initiated(session)
-    bridge "user/bougyman"
+  def on_call(session)
+    puts "*** BEGIN ***"
+    puts "* {{{ #{session.headers} }}}"
+    bridge "user/1001"
+    bridge "user/1002"
+    bridge "user/1003"
+    bridge "user/1004"
+    puts "** END **"
   end
-
-  def reply_received(command_reply)
-    puts "Received response: #{command_reply}"
-  end
-
 end
+
 EM.run do
   port = 1888
   host = "127.0.0.1"

@@ -26,19 +26,7 @@ describe "Testing FSR::Listener::Outbound" do
   end
 
   it "Receives data with #receive_data and creates a valid session" do
-    session = my_listener.receive_data("Fake_Header: foo\n\nbody")
-    session.kind_of?(FSR::Listener::Outbound::Session).should == true
-    session.headers.keys.include?("Fake_Header").should == true
-    session.headers["Fake_Header"].should == "foo"
-    session.body.should == "body"
-  end
-
-  it "Receives data with #receive_data as a CommandReply" do
-    listener = my_listener
-    listener.receive_data("Fake_Header: foo\n\nbody").kind_of?(FSR::Listener::Outbound::Session).should == true
-    (reply = listener.receive_data("Fake_Header: foo\n\nbody")).kind_of?(FSR::Listener::Outbound::CommandReply).should == true
-    reply.headers["Fake_Header"].should == "foo"
-    reply.body.should == "body"
+     my_listener.receive_data("Fake_Header: foo\nControl: full\n\n").should == "Fake_Header: foo\nControl: full\n\n"
   end
 
 end

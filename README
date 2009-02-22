@@ -46,15 +46,11 @@ Example of creating an Outbound Eventsocket listener:
 
     module OesDemo
       include FSR::Listener::Outbound
-      def session_initiated(session)
+      def on_call(session)
         bridge "user/bougyman"
       end
-
-      def reply_received(command_reply)
-        puts "Received response: #{command_reply}"
-      end
-
     end
+
     EM.run do
       port = 1888
       host = "127.0.0.1"

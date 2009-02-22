@@ -14,32 +14,53 @@ module FSR
       APPLICATIONS.each { |app, obj| module_eval(SENDMSG_METHOD_DEFINITION % app.to_s) }
 
       def post_init
-        @session = nil
+        @session_collected = nil # set to false until we have collected the initial variable dump
+        @session = nil # holds the session object
+        @session_completed = true # Insure statements are only executed once per session, not per receive_data
         send_data("connect\n\n")
         FSR::Log.debug "Accepting connections."
       end
 
       def receive_data(data)
         FSR::Log.debug("received #{data}")
-        FSR::Log.debug("Data hash is #{hash.inspect}")
-        if @session.nil?
-          @session = Session.new(data)
-          FSR::Log.debug("New Session, calling session_initiated on #{@session}")
-          session_initiated(@session)
+        if @session_collected.nil? # If session_collected is true, no need to call our on_call hook.  We only want to execute once per call right?
+          FSR::Log.debug("New Session, calling collect_session_dump on #{@session}")
+          collect_session_dump(data)
         else
           FSR::Log.debug "@session is #{@session}"
-          command_reply = CommandReply.new(data)
-          FSR::Log.debug("Command reply received, calling reply_received on #{command_reply}")
-          reply_received(command_reply)
+          FSR::Log.debug("Command reply received, calling reply_received on #{data}")
+          #receive_response(data) # TODO: Need to write collect_response
         end
       end
 
-      def session_initiated(session)
-        session
+      def collect_session_dump(dump)
+        @session = Session.new if @session.nil?
+        dump.each do |line|
+          if line.match(/Control:/) # Last line of a new session dump ends with "Control:"
+            @session_collected = true
+            @session.collect_response(dump)
+            @session.make_headers 
+            call_dispatcher(@session)
+          else
+            @session.collect_response(dump)
+          end
+        end
       end
 
-      def reply_received(command_reply)
-        command_reply
+      def receive_response(dump)
+        @response = SocketResponse.new
+        @response.collect_response(dump)
+      end
+
+      def call_dispatcher(session)
+        #before_hook
+        on_call(session)
+        #after_hook
+      end
+
+      # This is the method a user would define to use the library
+      def on_call(session)
+        session
       end
 
       def sendmsg(message)
@@ -57,13 +78,19 @@ module FSR
 
 
       class SocketResponse
-        attr_reader :headers, :body
-        def initialize(data)
-          headers, @body = data.split(/\n\n/)
-          @headers = YAML.load(headers)
-          FSR::Log.debug("Headers are #{@headers || 'empty'}")
-          FSR::Log.debug("Body is #{@body || 'empty'}")
+        attr_accessor :headers, :body, :data
+        def initialize
+          @data = ""  # Initialize data as a string for '<<' method
         end
+
+        def collect_response(data)
+          @data << data
+        end
+
+        def make_headers
+          @headers = YAML.load(@data)
+        end
+
       end
 
       class Session < SocketResponse
