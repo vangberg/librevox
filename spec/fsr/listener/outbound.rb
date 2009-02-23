@@ -96,7 +96,7 @@ describe "Testing FSR::Listener::Outbound" do
       def initialize
         @called = false
       end
-      def on_call
+      def session_initiated(session)
         @called = true
       end
     end
