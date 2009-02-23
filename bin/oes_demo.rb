@@ -21,8 +21,8 @@ module OesDemo
 end
 
 EM.run do
-  port = 1888
-  host = "127.0.0.1"
+  port = 8084 
+  host = "192.168.6.32"
   EventMachine::start_server(host, port, OesDemo) 
   FSR::Log.debug "* FreeSWITCHer OES Listener on #{host}:#{port}"
 end
