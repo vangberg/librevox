@@ -11,9 +11,8 @@ module FSR
         @profile = conference_profile || "ultrawideband"
       end
 
-      # This method builds the API command to send to freeswitch
-      def raw
-        "conference(#{@target}@#{@profile})"
+      def arguments
+        ["%s@%s" % [@target, @profile]]
       end
 
       def self.execute(conference_name, conference_profile = nil)

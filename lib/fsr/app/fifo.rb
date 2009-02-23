@@ -23,14 +23,12 @@ module FSR
         raise "options must be a hash" unless @options.kind_of?(Hash)
       end
 
-      # This method builds the API command to send to freeswitch
-      def raw
+      def arguments
+        @args = [@name, @direction]
         if @direction == "out"
-          options[:wait] = options[:wait] ? "wait" : "nowait"
-          "fifo(#{name} out #{options[:wait]})"
-        else
-          "fifo(#{name} in)"
+          @args << (options[:wait] ? "wait" : "nowait")
         end
+        @args
       end
 
     end

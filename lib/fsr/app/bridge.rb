@@ -11,12 +11,6 @@ module FSR
         @options = opts || {}
       end
 
-      # This method builds the API command to send to freeswitch
-      def raw
-        opts = @options.map { |k,v| "%s=%s" % [k, v] }.join(",")
-        "bridge({#{opts}}#{@target})"
-      end
-
       def arguments
         [@target]
       end
@@ -25,16 +19,8 @@ module FSR
         @options.map { |k,v| "%s=%s" % [k, v] }.join(",")
       end
 
-      def app_name
-        self.class.name.split("::").last.downcase
-      end
-
       def raw
         "%s({%s}%s)" % [app_name, modifiers, arguments.join(" ")]
-      end
-
-      def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\n\n" % [app_name, arguments.join(" ")]
       end
 
       def self.execute(target, opts = {})

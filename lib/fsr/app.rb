@@ -2,9 +2,20 @@ module FSR
   module App
     class Application
       def to_s
-        #puts caller.join("\n")
-        from_methods = caller.select { |n| n.match(/:in\s`\w/) }.map { |s| s.split.last[1 .. -2] }
-        from_methods.include?("sendmsg") ? sendmsg : raw
+        sendmsg
+      end
+
+      def app_name
+        self.class.name.split("::").last.downcase
+      end
+
+      # This method builds the API command to send to freeswitch
+      def raw
+        "%s(%s)" % [app_name, arguments.join(" ")]
+      end
+
+      def sendmsg
+        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\n\n" % [app_name, arguments.join(" ")]
       end
     end
 
