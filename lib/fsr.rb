@@ -6,7 +6,7 @@ require 'pp'
 module FSR
   # Global configuration options
   #
-  VERSION = '0.0.3'
+  VERSION = '0.0.4'
   FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch"]
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FSR"
@@ -38,8 +38,8 @@ module FSR
 
   def self.find_freeswitch_install
     good_path = FS_INSTALL_PATHS.find do |fs_path|
-      raise("#{fs_path} is not a directory!") if File.exists?(fs_path) && !File.directory?(fs_path)
-      raise("#{fs_path} is not readable by this user!") if File.exists?(fs_path) && !File.readable?(fs_path)
+      Log.warn("#{fs_path} is not a directory!") if File.exists?(fs_path) && !File.directory?(fs_path)
+      Log.warn("#{fs_path} is not readable by this user!") if File.exists?(fs_path) && !File.readable?(fs_path)
       Dir["#{fs_path}/{conf,db}/"].size == 2
     end
     if good_path.nil?
