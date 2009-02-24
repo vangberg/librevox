@@ -14,5 +14,5 @@ module IesDemo
 end
 
 EM.run do
-  EventMachine::connect("esther", 8021, IesDemo)
+  EventMachine::connect("localhost", 8021, IesDemo)
 end
