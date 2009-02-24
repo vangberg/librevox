@@ -6,8 +6,8 @@ require 'ramaze'
 $LOAD_PATH.unshift(__DIR__)
 
 # Initialize controllers and models
-require 'controller/init'
 require "fsr"
 require "fsr/command_socket"
+require 'controller/init'
 FSR.load_all_commands
 

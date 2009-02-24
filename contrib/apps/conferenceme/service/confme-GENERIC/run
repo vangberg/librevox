@@ -1,0 +1,9 @@
+#!/bin/sh
+dir=$(basename $PWD)
+extra_port=$(echo $dir|awk -F'-' '{print $(NF)}')
+[ "n$dir" == "n$extra_port" ] && extra_port=0
+[ "n$extra_port" == "n" ] && extra_port=0
+echo Using port $(<env/PORT)${extra_port} on $(<env/IP)
+export extra_port
+exec 2>&1
+exec chpst -e ./env bash -c 'cd $RAILS_ROOT && exec spawn-fcgi -n -a ${IP} -p ${PORT}${extra_port} -f $RAILS_ROOT/public/dispatch.fcgi'

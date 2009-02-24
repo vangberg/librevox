@@ -16,7 +16,6 @@ class MainController < Controller
   # the index action is called automatically when no other action is specified
   def index
     @title = "Welcome to ConfMe, The Conference Service that calls You!"
-    Ramaze::Action.current.template = 'view/about.haml'
   end
 
   def start
@@ -38,7 +37,7 @@ class MainController < Controller
     end
     @conference = conference
     target = request.params["phone_number"] || ""
-    if target
+    if target != ""
       if conference_exists?(conference)
         Ramaze::Log.info("joining #{conference} for #{target}")
         @action_taken = "joined"
