@@ -20,15 +20,30 @@ task :spec => :setup do
 
   specs.each_with_index do |spec, idx|
     print(left_format % [idx + 1, total, spec])
+    unless RUBY_PLATFORM.include?("mswin32")
+      Open3.popen3("#{RUBY} -rubygems #{spec}") do |sin, sout, serr|
+        out = sout.read
+        err = serr.read
 
-    Open3.popen3("#{RUBY} -rubygems #{spec}") do |sin, sout, serr|
-      out = sout.read
-      err = serr.read
-
+        all = out.match(matcher).captures.map{|c| c.to_i }
+        tests, assertions, failures, errors = all
+        tt += tests; ta += assertions; tf += failures; te += errors
+  
+        if tests == 0 || failures + errors > 0
+          some_failed = true
+          puts((red % "%5d tests, %d assertions, %d failures, %d errors") % all)
+          puts "", out, err, ""
+        else
+          puts((green % "%5d passed") % tests)
+        end
+      end 
+    else
+      out = %x{#{RUBY} -rubygems #{spec}}
+      error = ""
       all = out.match(matcher).captures.map{|c| c.to_i }
       tests, assertions, failures, errors = all
       tt += tests; ta += assertions; tf += failures; te += errors
-
+  
       if tests == 0 || failures + errors > 0
         some_failed = true
         puts((red % "%5d tests, %d assertions, %d failures, %d errors") % all)
