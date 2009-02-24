@@ -11,11 +11,16 @@ module FSR
       end
    
       def receive_data(data)
-        pp event = Event.from(data)
+        event = Event.from(data)
+        on_event(event)
       end
 
       def say(line)
         send_data("#{line}\n\n")
+      end
+
+      def on_event(event)
+        event
       end
 
     end

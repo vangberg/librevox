@@ -11,6 +11,11 @@ require "fsr/listener/inbound"
 
 module IesDemo
   include FSR::Listener::Inbound
+
+  def on_event(event)
+    pp event
+  end
+
 end
 
 EM.run do
