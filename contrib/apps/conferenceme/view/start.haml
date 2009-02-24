@@ -1,0 +1,7 @@
+%div{:class => "error"}= flash[:ERROR]
+%form{:action => "/start", :method => "POST"}
+  %label{:for => "phone_number"} Phone Number
+  %input{:type => "text", :id => "phone_number", :name => "phone_number", :size => 10, :maxlength => 10}
+  %label{:for => "caller_id"} Caller ID
+  %input{:type => "text", :value => "0008675309", :id => "caller_id", :name => "caller_id", :size => 10, :maxlength => 10}
+  %input{:type => "submit", :value => "Start Conf!"}

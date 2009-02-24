@@ -1,0 +1,41 @@
+!!! XML
+!!!
+%html
+  %head
+    %title= @title
+    %link{:rel => "stylesheet", :href => "/css/style.css", :type => "text/css", :media => "screen"}/
+    %link{:rel => "stylesheet", :href => "/css/iplastic.css", :type => "text/css", :media => "screen"}/
+    %link{:rel => "stylesheet", :href => "/css/coderay.css", :type => "text/css", :media => "screen"}/
+  %body
+    #container
+			
+      #headergroup
+        #header
+          %h1 ConfMe: All Talk
+          
+        #menu
+          %ul
+            %li 
+              %a{:href => "/about",  :title => "All About ConfMe"} About
+            %li 
+              %a{:href => "/start",  :title => "Start A Conference"} New Conf
+            %li 
+              %a{:href => "/join",  :title => "Join A Conference"} Join Conf
+      #content= @content
+    #footer
+      Powered by 
+      %a{:href => "http://code.rubyists.com/projecst/fs"} FreeSWITCHeR
+      ,
+      %a{:href => "http://freeswitch.org"} FreeSWITCH
+      ,
+      %a{:href => "http://lighttpd.net"} Lighttpd
+      ,
+      %a{:href => "http://ramaze.net"} Ramaze
+      ,
+      %a{:href => "http://sequel.rubyforge.org"} Sequel
+      , and 
+      %a{:href => "http://postgresql.org"} PostgreSQL
+    #subfooter{:style => "text-align: center; padding-top: 10px; margin: auto;"}
+      %a{:href => "http://wikimediafoundation.org/wiki/Fundraising?s=cl-Wikipedia-free-mini-button.png"}
+        %img{:src => "http://upload.wikimedia.org/wikipedia/meta/6/66/Wikipedia-free-mini-button.png", :alt => "Wikipedia...keep it free."}
+    
