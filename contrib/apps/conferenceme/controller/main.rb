@@ -22,7 +22,7 @@ class MainController < Controller
   # is silently ignored
   #
   def join(conference = nil)
-    @conference = conference || request[:conference]
+    @conference = conference || request[:conference].to_s
 
     target = request[:phone_number].to_s
 
@@ -33,19 +33,16 @@ class MainController < Controller
         caller_id = request.params["caller_id"]
         conference(conference, target, caller_id)
       else
-        flash[:ERROR] = "Conference #{conference} does not exist!"
+        flash[:ERROR] = "Conference #{h conference} does not exist!"
       end
     end
   end
 
   private
 
+  # See if a conference exists, later add a db check as well as the realtime socket check
   def conference_exists?(conf)
-    require "hpricot"
-    @sock ||= FSR::CommandSocket.new
-    confs = Hpricot(@sock.say("api conference xml_list")["body"])
-    all_conf_names = (confs/:conferences/:conference).map { |n| n[:name] }
-    all_conf_names.include?(conf)
+    Conference.exists?(conf)
   end
 
   def conference(conf, target, caller_id = "0008675309")
@@ -62,13 +59,9 @@ class MainController < Controller
   def next_conf
     charray = ("A" .. "Z").to_a + ("a" .. "z").to_a + ("0" .. "9").to_a
     rands = ""
-    until rands.size > 4
-      rands << charray[rand(charray.size - 1)]
-    end
+    rands << charray[rand(charray.size - 1)] until rands.size > 4
     conf = "a"
-    while conference_exists?([rands, conf].join("-"))
-      conf = conf.succ
-    end
+    conf = conf.succ while conference_exists?([rands, conf].join("-"))
     [rands, conf].join("-")
   end
 end
