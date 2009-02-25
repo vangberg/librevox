@@ -17,7 +17,8 @@ module FSR
 
         @target_options[:origination_caller_id_number] ||= args[:caller_id_number] || FSR::DEFAULT_CALLER_ID_NUMBER
         @target_options[:origination_caller_id_name] ||= args[:caller_id_name] || FSR::DEFAULT_CALLER_ID_NAME
-        @target_options[:originate_timeout] ||= args[:timeout] || @target_options[:timeout] || 15
+        @target_options[:originate_timeout] ||= args[:timeout] || @target_options[:timeout] || 30
+        @target_options[:ignore_early_media] ||= true
       end
 
       # Send the command to the event socket, using bgapi by default.
