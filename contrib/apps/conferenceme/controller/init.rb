@@ -4,7 +4,7 @@
 class Controller < Ramaze::Controller
   layout '/page'
   helper :xhtml, :user, :form
-  engine :Ezamar
+  engine :Haml
 end
 
 # Here go your requires for subclasses of Controller:
