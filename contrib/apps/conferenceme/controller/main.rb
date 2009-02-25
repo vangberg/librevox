@@ -69,7 +69,7 @@ class MainController < Controller
       return false
     end
     @sock ||= FSR::CommandSocket.new
-    orig = @sock.originate(:target => "sofia/gateway/carlos/#{target}", :target_options => {:origination_caller_id_number => caller_id}, :endpoint => FSA::Conference.new(conf)).run
+    orig = @sock.originate(:target => "sofia/gateway/carlos/#{target}", :target_options => {:origination_caller_id_number => caller_id}, :endpoint => FSA::Conference.new(conf, "default")).run
     @conference, @target = conf, target
     Ramaze::Action.current.template = 'view/conference_joined.haml'
   end

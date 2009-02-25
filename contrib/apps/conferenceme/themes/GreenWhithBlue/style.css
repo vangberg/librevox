@@ -122,6 +122,10 @@ a {
   text-decoration: none;
 }
 
+#content a {
+  color: #009ddd;
+}
+
 div.pager a {
   color: #00A;
   text-decoration: none;
