@@ -97,15 +97,13 @@ class Auth < Controller
     redirect Rs(:forgot)
   end
 
-  def recover(nick, hash)
+  def recover(login, hash)
     redirect_referrer if logged_in?
 
-    users = User.view_docs(:recover, :key => [nick, hash])
+    user = User[:login => login, :digest => hash]
 
-    if users.size > 1
-      flash[:bad] = "Something went terribly wrong!"
-    elsif user = users.first
-      user_login('nick' => user.nick, 'digest' => user.digest)
+    if user
+      user_login('login' => user.login, 'digest' => user.digest)
       user.recovery = nil
       user.save!
       flash[:good] = "We log you in this one time, change your password as soon as possible"

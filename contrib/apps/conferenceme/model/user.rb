@@ -3,6 +3,7 @@ class User < Sequel::Model
     primary_key :id
 
     varchar :login, :unique => true
+    varchar :nick, :unique => true
     varchar :digest
     varchar :openid, :unique => true
     varchar :email, :unique => true
@@ -21,5 +22,9 @@ class User < Sequel::Model
     elsif openid
       self[:openid => openid]
     end
+  end
+
+  def self.prepare(hash)
+    new(:login => hash['login'], :email => hash['email'])
   end
 end

@@ -3,7 +3,7 @@
 
 class Controller < Ramaze::Controller
   layout '/page'
-  helper :xhtml, :user, :form
+  helper :xhtml, :user, :form, :stack
   engine :Haml
 end
 

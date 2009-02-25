@@ -3,9 +3,9 @@
     %fieldset
       %legend Sign up
 
-      %p= "Welcome to #{options.title}, we are currently in private beta."
+      %p= "Welcome to ConfMe, we are currently in beta."
 
-      = form_text 'Nickname', 'nick', @user.nick
+      = form_text 'Login', 'login', @user.login
       = form_text 'Email', 'email', @user.email
       = form_password 'Password', 'password'
       = form_password 'Password confirmation', 'password_confirmation'
