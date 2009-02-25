@@ -1,14 +1,4 @@
-# Default url mappings are:
-#  a controller called Main is mapped on the root of the site: /
-#  a controller called Something is mapped on: /something
-# If you want to override this, add a line like this inside the class
-#  map '/otherurl'
-# this will force the controller to be mounted on: /otherurl
-
-require "fsr/command_socket"
-FSR.load_all_commands
 class MainController < Controller
-
   def about
     @title = "Welcome to ConfMe, The Conference Service that calls You!"
   end
@@ -32,11 +22,10 @@ class MainController < Controller
   # is silently ignored
   #
   def join(conference = nil)
-    if conference.nil?
-      conference = request.params["conference"]
-    end
-    @conference = conference
-    target = request.params["phone_number"] || ""
+    @conference = conference || request[:conference]
+
+    target = request[:phone_number].to_s
+
     if target != ""
       if conference_exists?(conference)
         Ramaze::Log.info("joining #{conference} for #{target}")
@@ -49,12 +38,8 @@ class MainController < Controller
     end
   end
 
-
-  def notemplate
-    "there is no 'notemplate.xhtml' associated with this action"
-  end
-
   private
+
   def conference_exists?(conf)
     require "hpricot"
     @sock ||= FSR::CommandSocket.new

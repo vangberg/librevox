@@ -9,5 +9,5 @@ $LOAD_PATH.unshift(__DIR__)
 require "fsr"
 require "fsr/command_socket"
 require 'controller/init'
-FSR.load_all_commands
 
+FSR.load_all_commands

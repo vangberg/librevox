@@ -3,9 +3,7 @@
 %html
   %head
     %title= @title
-    %link{:rel => "stylesheet", :href => "/css/style.css", :type => "text/css", :media => "screen"}/
-    %link{:rel => "stylesheet", :href => "/css/iplastic.css", :type => "text/css", :media => "screen"}/
-    %link{:rel => "stylesheet", :href => "/css/coderay.css", :type => "text/css", :media => "screen"}/
+    = css :style
   %body
     #container
 			
@@ -21,7 +19,9 @@
               %a{:href => "/start",  :title => "Start A Conference"} New Conf
             %li 
               %a{:href => "/join",  :title => "Join A Conference"} Join Conf
-      #content= @content
+      #content
+        = flashbox
+        = @content
     #footer
       Powered by 
       %a{:href => "http://code.rubyists.com/projecst/fs"} FreeSWITCHeR
