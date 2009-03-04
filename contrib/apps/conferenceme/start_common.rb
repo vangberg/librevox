@@ -8,6 +8,7 @@ $LOAD_PATH.unshift(__DIR__)
 # Initialize controllers and models
 require "fsr"
 require "fsr/command_socket"
+require 'model/init'
 require 'controller/init'
 require 'model/init'
 
