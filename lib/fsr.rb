@@ -18,7 +18,7 @@ module FSR
   #   Log.warn('foobar')
   #   Log.error('barfoo')
   Log = Logger.new($stdout)
-  Log.level = Logger::WARN
+  Log.level = Logger::INFO
 
   ROOT = Pathname(__FILE__).dirname.expand_path.freeze
   $LOAD_PATH.unshift(FSR::ROOT)
@@ -33,6 +33,26 @@ module FSR
   def self.load_all_applications
     require "fsr/app"
     App.load_all
+  end
+
+  def self.start_oes!(klass, args = {})
+    port = args[:port] || "8084"
+    host = args[:host] || "localhost"
+    EM.run do
+      EventMachine::start_server(host, port, klass)
+      FSR::Log.info "*** FreeSWITCHer Outbound EventSocket Listener on #{host}:#{port} ***"
+      FSR::Log.info "*** http://code.rubyists.com/projects/fs"
+    end
+  end
+
+  def self.start_ies!(klass, args = {})
+    port = args[:port] || "8021"
+    host = args[:host] || "localhost"
+    EM.run do
+      EventMachine::connect(host, port, klass)
+      FSR::Log.info "*** FreeSWITCHer Inbound EventSocket Listener connected to #{host}:#{port} ***"
+      FSR::Log.info "*** http://code.rubyists.com/projects/fs"
+    end
   end
 
   private

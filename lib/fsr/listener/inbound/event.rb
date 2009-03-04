@@ -12,7 +12,7 @@ module FSR
           data.each_line do |line|
             line.strip!
 
-            case line
+          case line
             when ''
               capture = body
             when /([a-zA-Z0-9-]+):\s*(.*)/
