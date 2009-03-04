@@ -29,7 +29,7 @@ module FSR
         Log.debug "content_length is #{content_length}, grabbing from socket"
         body << @socket.read(content_length)
       end
-      headers.merge("body" => body)
+      headers.merge("body" => body.strip)
     end
 
     # Scrub result into a hash

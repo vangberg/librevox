@@ -18,6 +18,7 @@ module FSR
   #   Log.warn('foobar')
   #   Log.error('barfoo')
   Log = Logger.new($stdout)
+  Log.level = Logger::WARN
 
   ROOT = Pathname(__FILE__).dirname.expand_path.freeze
   $LOAD_PATH.unshift(FSR::ROOT)

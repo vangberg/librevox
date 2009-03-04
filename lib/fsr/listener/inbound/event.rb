@@ -16,7 +16,7 @@ module FSR
             when ''
               capture = body
             when /([a-zA-Z0-9-]+):\s*(.*)/
-              capture[$1] = $2
+              capture[$1.strip] = $2.strip
             end
           end
           
