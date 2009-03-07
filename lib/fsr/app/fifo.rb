@@ -11,7 +11,7 @@ module FSR
       end
 
       def self.>>(name)
-        new(name, "out", :wait => false)
+        new(name, "out", :wait => true)
       end
 
       def initialize(name, direction = nil, options = nil)

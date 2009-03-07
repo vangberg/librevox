@@ -15,7 +15,7 @@ module FSR
       end
 
       def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\n\n" % [app_name, arguments.join(" ")]
+        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\n\n" % [app_name, arguments.join(" ")] 
       end
     end
 
