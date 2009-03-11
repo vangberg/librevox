@@ -14,11 +14,19 @@
         #menu
           %ul
             %li 
-              %a{:href => "/about",  :title => "All About ConfMe"} About
+              %a{:href => R(MainController, :about),  :title => "All About ConfMe"} About
             %li 
-              %a{:href => "/start",  :title => "Start A Conference"} New Conf
+              %a{:href => R(MainController, :start),  :title => "Start A Conference"} New Conf
             %li 
-              %a{:href => "/join",  :title => "Join A Conference"} Join Conf
+              %a{:href => R(MainController, :join),  :title => "Join A Conference"} Join Conf
+            - if logged_in?
+              %li
+                %a{:href => R(AuthController, :logout), :title => "Logout"} Logout
+            - else
+              %li
+                %a{:href => R(AuthController, :login), :title => "Login"} Login
+              %li
+                %a{:href => R(AuthController, :new), :title => "Sign up"} Sign up
       #content
         = flashbox
         = @content
@@ -38,4 +46,3 @@
     #subfooter{:style => "text-align: center; padding-top: 10px; margin: auto;"}
       %a{:href => "http://wikimediafoundation.org/wiki/Fundraising?s=cl-Wikipedia-free-mini-button.png"}
         %img{:src => "http://upload.wikimedia.org/wikipedia/meta/6/66/Wikipedia-free-mini-button.png", :alt => "Wikipedia...keep it free."}
-    
