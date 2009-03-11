@@ -68,14 +68,19 @@ module Ramaze
         opts = hash.merge(form_tabindex.merge(:id => form_id))
         errors = form_errors
 
-        Ramaze::Gestalt.build{
-          label(:for => form_id){ "#{label}:" }
-          if error = errors[opts[:name]]
-            div(:class => "error"){ error }
+        Ramaze::Gestalt.build do
+          tr do
+            td do
+              label(:for => form_id){ "#{label}:" }
+              if error = errors[opts[:name]]
+                div(:class => "error"){ error }
+              end
+            end
+            td do
+              tag(tag_name, opts, &block)
+            end
           end
-          tag(tag_name, opts, &block)
-          div(:class => "clearfix"){ "" }
-        }
+        end
       end
 
       def form_tabindex

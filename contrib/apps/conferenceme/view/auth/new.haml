@@ -1,17 +1,18 @@
-#new
+.auth.new
   %form{:method => :post, :name => '/account/new'}
     %fieldset
       %legend Sign up
 
       %p= "Welcome to ConfMe, we are currently in beta."
 
-      = form_text 'Login', 'login', @user.login
-      = form_text 'Email', 'email', @user.email
-      = form_password 'Password', 'password'
-      = form_password 'Password confirmation', 'password_confirmation'
-      = form_text "What is #{simple_captcha}", 'captcha'
-      = form_checkbox 'Accept <a href="/tos">Terms of Service</a>', 'tos'
-      = form_checkbox 'Remember me', 'remember', true
+      %table
+        = form_text 'Login', 'login', @user.login
+        = form_text 'Email', 'email', @user.email
+        = form_password 'Password', 'pass'
+        = form_password 'Password confirmation', 'pass_confirmation'
+        = form_text "What is #{simple_captcha}", 'captcha'
+        = form_checkbox 'Accept <a href="/tos">Terms of Service</a>', 'tos'
+        = form_checkbox 'Remember me', 'remember', true
 
       %input{:type => :submit, :value => "Sign up Now", :class => :button}
 

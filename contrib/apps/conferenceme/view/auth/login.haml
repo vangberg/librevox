@@ -1,12 +1,13 @@
-#login
+.auth.login
   %form{:method => :post, :name => '/account/login'}
     %fieldset
       %legend Login
       %p
         %a{:href => Rs(:openid)} OpenID login is over here
-      = form_text 'Name', 'nick', @nick
-      = form_password 'Password', 'password'
-      = form_checkbox 'Remember me', 'remember', true
+      %table
+        = form_text 'Name', 'login', @login
+        = form_password 'Password', 'pass'
+        = form_checkbox 'Remember me', 'remember', true
 
       %input{:type => :submit, :value => 'Log in', :class => :button}
 
