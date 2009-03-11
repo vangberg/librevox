@@ -1,7 +1,7 @@
 * {
   margin: 0;
   padding: 0;
-}  
+}
 
 .completed {
   text-decoration: line-through;
@@ -60,7 +60,6 @@ ul li {
   margin-top: 15px;
   margin-left: 20px;
 }
-
 
 #menu {
   margin: auto;
@@ -253,10 +252,10 @@ a:active {
 }
 
 #content blockquote:after {
-  color: #85c20c;  
+  color: #85c20c;
   font-weight: bold;
   content: '"';
-}  
+}
 
 #footer {
   width: 50%;
@@ -271,4 +270,19 @@ a:active {
 .section-title {
   font-weight: bold;
   font-size: +1;
+}
+
+.auth fieldset legend {
+  font-size: 1.2em;
+}
+
+.auth fieldset {
+  border 0px;
+  padding: 1em;
+  margin: 1em 0 1em 0;
+}
+
+form .error {
+  color: #f00;
+  text-align: right;
 }
