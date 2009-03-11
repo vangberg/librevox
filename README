@@ -51,12 +51,28 @@ Example of creating an Outbound Eventsocket listener:
       end
     end
 
-    EM.run do
-      port = 1888
-      host = "127.0.0.1"
-      EventMachine::start_server(host, port, OesDemo)
-      FSR::Log.debug "* FreeSWITCHeR OES Listener on #{host}:#{port}"
+    FSR.start_oes!(OesDemo, :port => 8084, :host => "localhost")
+
+
+Example of creating an Inbound Eventsocket listener:
+
+    #!/usr/bin/env ruby
+
+    require 'rubygems'
+    require 'eventmachine'
+    require 'fsr'
+    require "fsr/listener/inbound"
+
+    module IesDemo
+      include FSR::Listener::Inbound
+
+      def on_event(event)
+        pp event
+      end
+
     end
+
+    FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
 
 Support
 -------

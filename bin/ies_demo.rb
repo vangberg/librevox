@@ -18,6 +18,4 @@ module IesDemo
 
 end
 
-EM.run do
-  EventMachine::connect("localhost", 8021, IesDemo)
-end
+FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
