@@ -23,7 +23,7 @@ describe "Testing FSR::App::Fifo" do
   
   it "Adds a consumer to a queue, with >>" do
     fifo = FSR::App::Fifo >> "myqueue"
-    fifo.raw.should == "fifo(myqueue out nowait)"
+    fifo.raw.should == "fifo(myqueue out wait)"
   end
 
 end
