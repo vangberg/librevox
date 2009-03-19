@@ -9,4 +9,4 @@ Ramaze::Global.adapter = :fcgi
 
 start_common = File.join(__DIR__, '..', 'start_common')
 require start_common
-Ramaze.start :sourcereload => false, :adapter => :fcgi, :load_engines => [:Haml, :Erubis, :Ezamar]
+Ramaze.start :sourcereload => false, :adapter => :fcgi

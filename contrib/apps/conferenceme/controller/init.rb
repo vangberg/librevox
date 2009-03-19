@@ -3,10 +3,11 @@
 
 class Controller < Ramaze::Controller
   layout '/page'
-  helper :xhtml, :user, :form
-  engine :Ezamar
+  helper :xhtml, :user, :form, :stack
+  engine :Haml
 end
 
 # Here go your requires for subclasses of Controller:
 require 'controller/main'
 require 'controller/auth'
+require 'controller/profile'

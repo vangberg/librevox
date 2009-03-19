@@ -10,5 +10,6 @@ require "fsr"
 require "fsr/command_socket"
 require 'model/init'
 require 'controller/init'
+require 'model/init'
 
 FSR.load_all_commands

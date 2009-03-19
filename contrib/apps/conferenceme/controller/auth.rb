@@ -1,5 +1,11 @@
-class Auth < Controller
+class AuthController < Controller
+  map '/auth'
   helper :simple_captcha, :identity
+
+  def index
+    redirect_referer if request.referer =~ /\/auth\/\w+$/
+    redirect Rs(:login)
+  end
 
   def new
     redirect_referrer if logged_in?
@@ -7,13 +13,22 @@ class Auth < Controller
     # they will be used in the form
     @login, @email = @user.login, @user.email
 
-    if request.post?
-      redirect_referrer unless check_captcha(request[:captcha])
-      if @user.save
-        flash[:good] = "You signed up, welcome on board #{@user.login}!"
-        user_login('login' => @user.login)
-        answer R(ProfileController, @user.login)
-      end
+    return unless request.post?
+
+    unless valid_captcha = check_captcha(request[:captcha])
+      form_error('captcha', "Wrong answer")
+    end
+
+    unless valid_tos = request['tos'] == 'on'
+      form_error('tos', "Terms of Service not accepted")
+    end
+
+    if @user.valid? and valid_captcha and valid_tos and @user.save
+      flash[:good] = "You signed up, welcome on board #{@user.login}!"
+      user_login('login' => @user.login, 'digest' => @user.digest)
+      answer R(ProfileController, @user.login)
+    else
+      form_errors_from_model(@user)
     end
   end
 
@@ -21,17 +36,18 @@ class Auth < Controller
     redirect_referrer if logged_in?
     push request.referrer unless inside_stack?
 
-    case request[:fail]
-    when 'session'
-      flash[:bad] =
+    if request[:fail] == 'session'
+      flash[:ERROR] =
         'Failed to login, please make sure you have cookies enabled for this site'
     end
 
     return unless request.post?
 
-    if user_login
+    if user_login(request.params)
       flash[:good] = "Welcome back #{user.login}"
       answer Rs(:after_login)
+    else
+      flash[:error] = "Login or password is wrong"
     end
   end
 
@@ -45,8 +61,6 @@ class Auth < Controller
       openid_finalize
     elsif request.post?
       openid_begin
-    else
-      flash[:bad] = flash[:error] || "Bleep"
     end
   end
 
@@ -84,34 +98,32 @@ class Auth < Controller
     user = User[:email => @email]
 
     if users.size > 1
-      flash[:bad] = 'There exists more than one user with this email address'
+      flash[:ERROR] = 'There exists more than one user with this email address'
       # This is very bad... duplicate email addresses
     elsif user = users.first
       send_forgot_email(user)
       flash[:good] = "We sent you some information to recover your password, please check your inbox."
       redirect R(Main, :/)
     else
-      flash[:bad] = 'No user with this address found'
+      flash[:ERROR] = 'No user with this address found'
     end
 
     redirect Rs(:forgot)
   end
 
-  def recover(nick, hash)
+  def recover(login, hash)
     redirect_referrer if logged_in?
 
-    users = User.view_docs(:recover, :key => [nick, hash])
+    user = User[:login => login, :digest => hash]
 
-    if users.size > 1
-      flash[:bad] = "Something went terribly wrong!"
-    elsif user = users.first
-      user_login('nick' => user.nick, 'digest' => user.digest)
+    if user
+      user_login('login' => user.login, 'digest' => user.digest)
       user.recovery = nil
       user.save!
       flash[:good] = "We log you in this one time, change your password as soon as possible"
       redirect R(Users, :edit)
     else
-      flash[:bad] = "Is it a bird? Is it a plane? No, it's a failed password recovery!"
+      flash[:ERROR] = "Is it a bird? Is it a plane? No, it's a failed password recovery!"
     end
 
     redirect Rs(:forgot)
@@ -124,7 +136,7 @@ class Auth < Controller
       flash[:good] = flash[:success]
       answer R('/')
     else
-      flash[:bad] = "None of our users belongs to this OpenID"
+      flash[:ERROR] = "None of our users belongs to this OpenID"
     end
   end
 end

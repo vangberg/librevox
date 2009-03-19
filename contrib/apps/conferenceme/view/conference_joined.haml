@@ -5,7 +5,8 @@
 
 %p 
   Send others the link 
-  %a{:href => "http://confme.com/join/#{@conference}"}= "http://confme.com/join/#{@conference}"
+  - link = "http://confme.com/join/#{@conference}"
+  %a{:href => link}= link
   to have them join
 
 %form
@@ -16,7 +17,7 @@
         Mute: 
         %b  0
       %li 
-        Deaf & Mute:
+        Deaf &amp; Mute:
         %b  *
       %li 
         Talk Volume Up:

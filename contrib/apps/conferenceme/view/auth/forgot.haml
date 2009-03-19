@@ -1,4 +1,4 @@
-#forgot
+.auth.forgot
   %form{:method => :post, :name => '/account/forgot'}
     %fieldset
       %legend Forgot password
@@ -11,7 +11,8 @@
         account there is nothing we can do, please head over to the site of
         your OpenID provider and try to recover it there.
 
-      = form_text 'E-mail address of your profile', 'email', @email
+      %table
+        = form_text 'E-mail address of your profile', 'email', @email
 
       %input{:type => :submit, :value => 'Let me log in again', :class => :button}
 
