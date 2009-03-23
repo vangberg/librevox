@@ -3,38 +3,6 @@ require 'ramaze/gestalt'
 module Ramaze
   module Helper
     module Form
-      def form_ac(function, label, name, value = nil)
-        ac_options = "ajax_get:#{function}, minchars:1, autowidth:true, multi:true"
-
-        input(
-          label,
-          :onfocus => "$(this).autocomplete({#{ac_options}})",
-          :type => :text,
-          :name => name,
-          :value => value)
-      end
-
-      def form_acfb(label, name, values = [], may_add = true)
-        value = values.flatten.join(',')
-        tabindex = form_tabindex[:tabindex]
-
-        klass = "#{name} acfb-input"
-        klass << " acfb-restrict" unless may_add
-
-        <<-FORM.strip
-        <label for='form-#{name}'>#{label}</label>
-        <ul class='#{name}'>
-          <input id='form-#{name}' class='#{klass}' type='text' name='#{name}' value='#{value}' tabindex='#{tabindex}' />
-        </ul>
-        <div class='clearfix'></div>
-        FORM
-      end
-
-      def form_multifile(label, name, options = {})
-        hash = options.merge(:type => :file, :name => name, :class => :multi)
-        input(label, hash)
-      end
-
       def form_text(label, name, value = nil)
         input(label, :type => :text, :name => name, :value => value)
       end
