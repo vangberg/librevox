@@ -46,8 +46,14 @@ Example of creating an Outbound Eventsocket listener:
 
     module OesDemo
       include FSR::Listener::Outbound
+
       def session_initiated(session)
-        bridge "user/bougyman"
+        number = session.headers["Channel-Caller-ID-Number"] # Grab the inbound caller id
+        FSR::Log.info "*** Answering incoming call from #{exten}"
+        answer # Answer the call
+        playback 'a_sound_file.wav' # Playback a wavfile
+        bridge "user/1001" # Bridge the call to "user/1001"
+        hangup # Hangup the call
       end
     end
 
