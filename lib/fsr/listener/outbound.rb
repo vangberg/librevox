@@ -66,11 +66,13 @@ module FSR
         attr_accessor :headers, :body, :data
         def initialize(data = "")
           @data = [data]
+          @headers = {}
           if data.match(/\n$/)
             headers, @body = data.split("\n\n")
-            @headers = YAML.load(headers)
-          else 
-            @headers = {}
+            headers.each_line do |line|
+              key, value = line.split(":")
+              @headers[key.gsub("-", "_").downcase.to_sym] = value.strip
+            end
           end
           @body ||= ""
           FSR::Log.debug("New #{self.class.name} created: #{self}")
@@ -80,7 +82,10 @@ module FSR
           if data.match(/\n$/)
             @data.last.match(/\n$/) ? @data << data : @data.last << data
             extra_headers, more_body = @data.last.split("\n\n")
-            @headers.merge!(YAML.load(extra_headers))
+            extra_headers.each_line do |line|
+              key, value = line.split(":")
+              @headers[key.gsub("-", "_").downcase.to_sym] = value.strip
+            end
             @body << more_body unless more_body.nil?
           else
             @data.last.match(/\n$/) ? @data << data : @data.last << data
