@@ -71,7 +71,7 @@ module FSR
             headers, @body = data.split("\n\n")
             headers.each_line do |line|
               key, value = line.split(":")
-              @headers[key.gsub("-", "_").downcase.to_sym] = value.strip
+              @headers[key.gsub("-", "_").downcase.to_sym] = value.to_s.strip
             end
           end
           @body ||= ""
@@ -84,7 +84,7 @@ module FSR
             extra_headers, more_body = @data.last.split("\n\n")
             extra_headers.each_line do |line|
               key, value = line.split(":")
-              @headers[key.gsub("-", "_").downcase.to_sym] = value.strip
+              @headers[key.gsub("-", "_").downcase.to_sym] = value.to_s.strip
             end
             @body << more_body unless more_body.nil?
           else
