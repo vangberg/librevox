@@ -18,7 +18,7 @@ module FSR
             when /([a-zA-Z0-9-]+):\s*(.*)/
               #capture[$1] = $2.strip
               key, val = line.split(":")
-              capture[key.gsub("-", "_").downcase.to_sym] = val.to_s.strip
+              capture[key] = val.to_s.strip
             end
           end
           
