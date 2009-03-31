@@ -11,7 +11,7 @@ module OesDemo
   include FSR::Listener::Outbound
 
   def session_initiated(session)
-    number = session.headers["Channel-Caller-ID-Number"] # Grab the inbound caller id
+    number = session.headers[:channel_caller_id_number] # Grab the inbound caller id
     FSR::Log.info "*** Answering incoming call from #{number}"
     answer # Answer the call
     playback 'a_sound_file.wav'
