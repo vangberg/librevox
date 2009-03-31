@@ -114,7 +114,7 @@ module FSR
         end
 
         def initiated?
-          @headers.keys.include?(:control)
+          @headers.keys.include?("Control")
         end
         
       end
