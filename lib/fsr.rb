@@ -23,18 +23,20 @@ module FSR
   ROOT = Pathname(__FILE__).dirname.expand_path.freeze
   $LOAD_PATH.unshift(FSR::ROOT)
 
+  # Load all FSR::Cmd classes
   def self.load_all_commands(retrying = false)
     require 'fsr/command_socket'
-
     load_all_applications
     Cmd.load_all
   end
-
+  
+  # Load all FSR::App classes
   def self.load_all_applications
     require "fsr/app"
     App.load_all
   end
 
+  # Method to start EM for Outbound Event Socket
   def self.start_oes!(klass, args = {})
     port = args[:port] || "8084"
     host = args[:host] || "localhost"
@@ -44,7 +46,8 @@ module FSR
       FSR::Log.info "*** http://code.rubyists.com/projects/fs"
     end
   end
-
+  
+  # Method to start EM for Inbound Event Socket
   def self.start_ies!(klass, args = {})
     port = args[:port] || "8021"
     host = args[:host] || "localhost"
@@ -57,6 +60,8 @@ module FSR
 
   private
 
+  # Find the FreeSWITCH install path if running FSR on a local box with FreeSWITCH installed.
+  # This will enable sqlite db access
   def self.find_freeswitch_install
     good_path = FS_INSTALL_PATHS.find do |fs_path|
       Log.warn("#{fs_path} is not a directory!") if File.exists?(fs_path) && !File.directory?(fs_path)

@@ -17,7 +17,7 @@ module FSR
       @socket.send("#{cmd}\n\n",0)
     end
 
-    # Grab result from command
+    # Grab result from command and create a hash, simple but works.
     def get_header_and_body
       headers, body = {}, ""
       until line = @socket.gets and line.chomp.empty?
