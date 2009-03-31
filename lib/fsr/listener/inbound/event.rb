@@ -17,7 +17,7 @@ module FSR
               capture = body
             when /([a-zA-Z0-9-]+):\s*(.*)/
               #capture[$1.to_s.gsub("-", "_").downcase.strip.to_sym] = $2.strip
-              capture[$1] = $2.strip
+              capture[$1.gsub("-", "_").downcase.to_sym] = $2.strip
             end
           end
           
