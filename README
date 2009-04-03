@@ -39,33 +39,30 @@ Example of creating an Outbound Eventsocket listener:
 
     #!/usr/bin/env ruby
 
-    require 'rubygems'
-    require 'eventmachine'
     require 'fsr'
     require "fsr/listener/outbound"
 
-    module OesDemo
-      include FSR::Listener::Outbound
+    class OesDemo < FSR::Listener::Outbound
 
       def session_initiated(session)
-        number = session.headers["Channel-Caller-ID-Number"] # Grab the inbound caller id
-        FSR::Log.info "*** Answering incoming call from #{exten}"
+        number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
+        FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
-        playback 'a_sound_file.wav' # Playback a wavfile
-        bridge "user/1001" # Bridge the call to "user/1001"
+        set "hangup_after_bridge=true" # Set a variable
+        speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
         hangup # Hangup the call
       end
+
     end
 
-    FSR.start_oes!(OesDemo, :port => 8084, :host => "localhost")
+    FSR.start_oes!(OesDemo, :port => 1888, :host => "localhost")
+
 
 
 Example of creating an Inbound Eventsocket listener:
 
     #!/usr/bin/env ruby
 
-    require 'rubygems'
-    require 'eventmachine'
     require 'fsr'
     require "fsr/listener/inbound"
 

@@ -1,7 +1,5 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-require 'eventmachine'
 require 'pp'
 require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
 puts $LOAD_PATH.inspect

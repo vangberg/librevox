@@ -1,25 +1,21 @@
 #!/usr/bin/env ruby
 
-require 'rubygems'
-require 'eventmachine'
 require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
 puts $LOAD_PATH.inspect
 $stdout.flush
 require "fsr/listener/outbound"
 
-module OesDemo
-  include FSR::Listener::Outbound
+class OesDemo < FSR::Listener::Outbound
 
   def session_initiated(session)
-    number = session.headers["Channel-Caller-ID-Number"] # Grab the inbound caller id
+    number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
     FSR::Log.info "*** Answering incoming call from #{number}"
     answer # Answer the call
     set "hangup_after_bridge=true" # Set a variable
-    playback 'a_sound_file.wav'
-    bridge "user/1001" # Bridge the call to "user/1001"
+    speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
     hangup # Hangup the call
   end
 
 end
 
-FSR.start_oes!(OesDemo, :port => 8084, :host => "localhost")
+FSR.start_oes!(OesDemo, :port => 1888, :host => "localhost")
