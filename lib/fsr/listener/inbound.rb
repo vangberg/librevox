@@ -1,11 +1,12 @@
 require 'rubygems'
 require 'eventmachine'
 require 'fsr/listener'
-require 'fsr/listener/inbound/event.rb'
+require 'fsr/listener/header_and_content_response.rb'
 
 module FSR
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
+      HOOKS = {}
 
       def initialize(args = {})
         super
@@ -55,46 +56,6 @@ module FSR
       end
 
     end
-
-#    module Inbound 
-#      include FSR::Listener
-#      HOOKS = {}
-#      def post_init
-#        say('auth ClueCon')
-#        say('event plain ALL')
-#      end
-#      def receive_data(data)
-#        event = Event.from(data)
-#        event_name = event["Event-Name"].to_s
-#        unless event_name.empty?
-#          HOOKS[event_name.to_sym].call(event) unless HOOKS[event_name.to_sym].nil?
-#        end
-#        on_event(event)
-#      end
-#      def say(line)
-#        send_data("#{line}\n\n")
-#      end
-#      def on_event(event)
-#        event
-#      end
-#      # Add or replace a block to execute when the specified event occurs
-#      #
-#      # <b>Parameters</b>
-#      # - event             : What event to trigger the block on. May be
-#      #                       :CHANNEL_CREATE, :CHANNEL_DESTROY etc
-#      # - block             : Block to execute
-#      #
-#      # <b>Returns/<b>
-#      # - nil
-#      def self.add_event_hook(event, &block)
-#        HOOKS[event] = block
-#      end
-#      # Delete the block that was to be executed for the specified event.
-#      def self.del_event_hook(event)
-#        HOOKS.delete(event)
-#      end
-#
-#    end
 
   end
 end

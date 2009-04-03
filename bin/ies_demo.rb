@@ -9,8 +9,7 @@ $stdout.flush
 require "fsr/listener/inbound"
 
 
-module IesDemo
-  include FSR::Listener::Inbound
+class IesDemo < FSR::Listener::Inbound
 
   def on_event(event)
     pp event
@@ -18,4 +17,4 @@ module IesDemo
 
 end
 
-FSR.start_ies!(IesDemo, :host => "pip", :port => 8021, :secret => "pip_clue")
+FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
