@@ -72,7 +72,8 @@ Example of creating an Inbound Eventsocket listener:
     class IesDemo < FSR::Listener::Inbound
 
       def on_event(event)
-        pp event
+        pp event.headers
+        pp event.content[:event_name]
       end
 
     end

@@ -12,7 +12,8 @@ require "fsr/listener/inbound"
 class IesDemo < FSR::Listener::Inbound
 
   def on_event(event)
-    pp event
+    pp event.headers
+    pp event.content[:event_name]
   end
 
 end
