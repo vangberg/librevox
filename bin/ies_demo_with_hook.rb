@@ -18,4 +18,8 @@ module IesDemo
 
 end
 
-FSR.start_ies!(IesDemo, :host => "pip", :port => 8021, :secret => "pip_clue")
+# This adds a hook on CHANNEL_CREATE events
+FSR::Listener::Inbound.add_event_hook(:CHANNEL_CREATE) {|event| FSR::Log.info "*** [#{event['Unique-ID']}} Channel created - greetings from the hook!" }
+
+FSR.start_ies!(IesDemo, :host => "kitty", :port => 8021, :secret => "ClueCon")
+

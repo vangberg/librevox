@@ -14,6 +14,7 @@ module OesDemo
     number = session.headers["Channel-Caller-ID-Number"] # Grab the inbound caller id
     FSR::Log.info "*** Answering incoming call from #{number}"
     answer # Answer the call
+    set "hangup_after_bridge=true" # Set a variable
     playback 'a_sound_file.wav'
     bridge "user/1001" # Bridge the call to "user/1001"
     hangup # Hangup the call
