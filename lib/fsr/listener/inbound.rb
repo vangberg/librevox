@@ -1,22 +1,31 @@
+require 'rubygems'
+require 'eventmachine'
 require 'fsr/listener'
-require 'fsr/listener/inbound/event.rb'
+require 'fsr/listener/header_and_content_response'
+
 module FSR
   module Listener
-    module Inbound 
-      include FSR::Listener
+    class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
+
+      def initialize(args = {})
+        super
+        @auth = args[:auth] || "ClueCon"
+      end
 
       def post_init
-        say('auth ClueCon')
+        say("auth #{@auth}")
         say('event plain ALL')
       end
-   
-      def receive_data(data)
-        event = Event.from(data)
+
+      def receive_request(header, content)
+        hash_header = headers_2_hash(header)
+        hash_content = headers_2_hash(content)
+        event = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         on_event(event)
       end
-
+   
       def say(line)
-        send_data("#{line}\n\n")
+        send_data("#{line}\r\n\r\n")
       end
 
       def on_event(event)

@@ -64,21 +64,20 @@ Example of creating an Inbound Eventsocket listener:
 
     #!/usr/bin/env ruby
 
-    require 'rubygems'
-    require 'eventmachine'
     require 'fsr'
     require "fsr/listener/inbound"
 
-    module IesDemo
-      include FSR::Listener::Inbound
+    class IesDemo < FSR::Listener::Inbound
 
       def on_event(event)
-        pp event
+        pp event.headers
+        pp event.content[:event_name]
       end
 
     end
 
     FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+ 
 
 Support
 -------
