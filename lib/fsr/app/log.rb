@@ -5,7 +5,7 @@ module FSR
     class Log < Application
       attr_reader :level, :text
 
-      def initialize(level = 1, text)
+      def initialize(level = 1, text = "")
         @level = level
         @text = text
       end
