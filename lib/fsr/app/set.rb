@@ -1,6 +1,7 @@
 require "fsr/app"
 module FSR
   module App
+    # http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_set
     class Set < Application
       attr_reader :data
 
@@ -9,6 +10,7 @@ module FSR
         # the value?
         @data = data
       end
+
       def arguments
         @data
       end

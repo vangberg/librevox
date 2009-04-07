@@ -11,8 +11,9 @@ class OesDemo < FSR::Listener::Outbound
     number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
     FSR::Log.info "*** Answering incoming call from #{number}"
     answer # Answer the call
+    log("1", "Pong from the FSR event socket!")
     set "hangup_after_bridge=true" # Set a variable
-    speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
+    speak 'Hello, This is your phone switch. Have a great day' # use mod_flite to speak
     hangup # Hangup the call
   end
 
