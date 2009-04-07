@@ -3,20 +3,17 @@ module FSR
   module App
     # http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_set
     class Set < Application
-      attr_reader :data
-
-      def initialize(data)
-        # We might consider the first arg to be the variable name and the second
-        # the value?
-        @data = data
+      def initialize(key, value)
+        @key = key
+        @value = value
       end
 
       def arguments
-        @data
+        [@key, @value]
       end
 
       def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments] 
+        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments.join("=")] 
       end
     end
 
