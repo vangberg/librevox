@@ -1,6 +1,6 @@
 FSR_SPEC = Gem::Specification.new do |spec|
   spec.name = "freeswitcher"
-  spec.version = "0.0.9"
+  spec.version = "0.0.10"
   spec.summary = 'A library for interacting with the "FreeSWITCH":http://freeswitch.org telephony platform'
   spec.authors = ["Jayson Vaughn", "Michael Fellinger", "Kevin Berry", "TJ Vanderpoel"]
   spec.email = "FreeSWITCHeR@rubyists.com"
@@ -61,7 +61,7 @@ Example of creating an Outbound Eventsocket listener:
         number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
         FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
-        set "hangup_after_bridge=true" # Set a variable
+        set("hangup_after_bridge", "true")# Set a variable
         speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
         hangup # Hangup the call
       end
@@ -147,7 +147,7 @@ Example of creating an Outbound Eventsocket listener:
         number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
         FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
-        set "hangup_after_bridge=true" # Set a variable
+        set("hangup_after_bridge", "true")# Set a variable
         speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
         hangup # Hangup the call
       end
