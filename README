@@ -48,7 +48,7 @@ Example of creating an Outbound Eventsocket listener:
         number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
         FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
-        set "hangup_after_bridge=true" # Set a variable
+        set("hangup_after_bridge", "true")# Set a variable
         speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
         hangup # Hangup the call
       end
