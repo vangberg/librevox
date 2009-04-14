@@ -6,8 +6,8 @@ module FSR
 
       def initialize(destination_number, dialplan = nil, context = nil)
         @destination_number = destination_number
-        @dialplan = dialplan || "XML"
-        @context = context || "default"
+        @dialplan = dialplan
+        @context = context
       end
 
       def arguments
