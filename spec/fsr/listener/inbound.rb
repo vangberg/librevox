@@ -16,4 +16,11 @@ describe "Testing FSR::Listener::Inbound" do
     FSR::Listener::Inbound.method_defined?(:post_init).should == true
   end
 
+  it "adds and deletes hooks" do
+    FSL::Inbound.add_event_hook(:CHANNEL_CREATE) {|event| puts event.inspect }
+    FSL::Inbound::HOOKS.size.should == 1
+    FSL::Inbound.del_event_hook(:CHANNEL_CREATE)
+    FSL::Inbound::HOOKS.size.should == 0
+  end
+
 end

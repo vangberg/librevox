@@ -20,8 +20,6 @@ end
 FSL::Inbound.add_event_hook(:CHANNEL_HANGUP) {|event| custom_channel_hangup_handler(event) }
 
 
-
-
 # Start FSR Inbound Listener
 FSR.start_ies!(FSL::Inbound, :host => "localhost", :port => 8021)
 
