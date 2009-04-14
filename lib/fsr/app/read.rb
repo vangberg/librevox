@@ -10,6 +10,11 @@ module FSR
       def arguments
         [@min, @max, @sound_file, @chan_var, @timeout, @terminators.join(",")]
       end
+
+      def sendmsg
+        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments.join("|")]
+      end
+
     end
 
     register(:read, Read)
