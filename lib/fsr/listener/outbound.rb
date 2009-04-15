@@ -29,7 +29,7 @@ module FSR
           @session = session
           session_initiated(session) 
         else
-          if session.headers[:event_calling_function].match(/uuid_dump/i)
+          if session.headers[:event_calling_function].to_s.match(/uuid_dump/i)
             @session = session
           else
             receive_reply(session)
