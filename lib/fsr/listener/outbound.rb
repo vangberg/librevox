@@ -32,7 +32,6 @@ module FSR
           if session.headers[:event_calling_function].to_s.match(/uuid_dump/i)
             @session = session
           else
-            @wait_for_reply = false
             receive_reply(session)
           end
         end
@@ -58,24 +57,13 @@ module FSR
         text = message.respond_to?(:sendmsg) ? message.sendmsg : message.to_s
         FSR::Log.debug "sending #{text}"
         message = "sendmsg\n%s\n" % text
-        if self.respond_to?(:send_data)
-          @wait_for_reply = true
-          send_data(message)
-        else
-          message
-        end
+        self.respond_to?(:send_data) ? send_data(message) : message
       end
 
       # Update_session
 
       def update_session
         send_data("api uuid_dump #{@session.headers[:unique_id]}")
-      end
-
-      def wait_for_reply
-        while @wait_for_reply
-          next
-        end
       end
 
     end
