@@ -3,7 +3,7 @@ module FSR
   #http://wiki.freeswitch.org/wiki/Mod_commands#uuid_getvar
   module App
     class UuidGetVar < Application
-      def initialize(uuid, variable)
+      def initialize(uuid, var)
         @uuid = uuid # Unique channel ID
         @var = var # Channel variable you wish to 'get'
       end
