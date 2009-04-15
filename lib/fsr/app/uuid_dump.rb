@@ -3,7 +3,7 @@ module FSR
   #http://wiki.freeswitch.org/wiki/Mod_commands#uuid_dump
   module App
     class UuidDump < Application
-      def initialize(uuid, var, assignment)
+      def initialize(uuid)
         @uuid = uuid # Unique channel ID
       end
 
