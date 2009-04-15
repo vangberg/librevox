@@ -26,10 +26,14 @@ module FSR
         hash_content = headers_2_hash(content)
         session = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         if @session.nil?
-          @session = self
+          @session = session
           session_initiated(session) 
         else
-          receive_reply(session)
+          if session.headers[:event_calling_function].match(/uuid_dump/i)
+            @session = session
+          else
+            receive_reply(session)
+          end
         end
       end
 
@@ -54,6 +58,12 @@ module FSR
         FSR::Log.debug "sending #{text}"
         message = "sendmsg\n%s\n" % text
         self.respond_to?(:send_data) ? send_data(message) : message
+      end
+
+      # Update_session
+
+      def update_session
+        send_data("api uuid_dump #{@session.headers[:unique_id]}")
       end
 
     end
