@@ -1,6 +1,6 @@
 FSR_SPEC = Gem::Specification.new do |spec|
   spec.name = "freeswitcher"
-  spec.version = "0.0.12"
+  spec.version = "0.0.13"
   spec.summary = 'A library for interacting with the "FreeSWITCH":http://freeswitch.org telephony platform'
   spec.authors = ["Jayson Vaughn", "Michael Fellinger", "Kevin Berry", "TJ Vanderpoel"]
   spec.email = "FreeSWITCHeR@rubyists.com"
@@ -57,8 +57,8 @@ Example of creating an Outbound Eventsocket listener:
 
     class OesDemo < FSR::Listener::Outbound
 
-      def session_initiated(session)
-        number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
+      def session_initiated
+        number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
         FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
         set("hangup_after_bridge", "true")# Set a variable
@@ -84,16 +84,14 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
 
     class DtmfDemo < FSR::Listener::Outbound
 
-      def session_initiated(session, step = 0)
-        @step ||= step
-        exten = session.headers[:channel_caller_id_number]
+      def session_initiated
+        exten = @session.headers[:caller_caller_id_number]
         FSR::Log.info "*** Answering incoming call from #{exten}"
         answer # Answer the call
       end
 
       def receive_reply(reply)
-        exten = @session.headers[:channel_caller_id_number]
-        @step += 1
+        exten = @session.headers[:caller_caller_id_number]
         case @step
         when 1
           FSR::Log.info "*** Reading dtmf for #{exten}"
@@ -102,7 +100,7 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
           FSR::Log.info "*** updating session for #{exten}"
           update_session
         when 3
-          FSR::Log.info "** Success, grabbed #{reply.content[:variable_test].strip} from #{exten}"
+          FSR::Log.info "** Success, grabbed #{@session.headers[:variable_test].strip} from #{exten}"
           FSR::Log.info "*** Hanging up call"
           hangup # Hangup the call
         end
@@ -186,8 +184,8 @@ Example of creating an Outbound Eventsocket listener:
 
     class OesDemo < FSR::Listener::Outbound
 
-      def session_initiated(session)
-        number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
+      def session_initiated
+        number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
         FSR::Log.info "*** Answering incoming call from #{number}"
         answer # Answer the call
         set("hangup_after_bridge", "true")# Set a variable
@@ -213,16 +211,14 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
 
     class DtmfDemo < FSR::Listener::Outbound
 
-      def session_initiated(session, step = 0)
-        @step ||= step
-        exten = session.headers[:channel_caller_id_number]
+      def session_initiated
+        exten = @session.headers[:caller_caller_id_number]
         FSR::Log.info "*** Answering incoming call from #{exten}"
         answer # Answer the call
       end
 
       def receive_reply(reply)
-        exten = @session.headers[:channel_caller_id_number]
-        @step += 1
+        exten = @session.headers[:caller_caller_id_number]
         case @step
         when 1
           FSR::Log.info "*** Reading dtmf for #{exten}"
@@ -231,7 +227,7 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
           FSR::Log.info "*** updating session for #{exten}"
           update_session
         when 3
-          FSR::Log.info "** Success, grabbed #{reply.content[:variable_test].strip} from #{exten}"
+          FSR::Log.info "** Success, grabbed #{@session.headers[:variable_test].strip} from #{exten}"
           FSR::Log.info "*** Hanging up call"
           hangup # Hangup the call
         end
