@@ -53,6 +53,7 @@ module FSR
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
       end
 
+      protected
       def post_init
         @session = nil # holds the session object
         send_data("connect\n\n")
@@ -79,7 +80,7 @@ module FSR
           session_initiated 
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
           if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
-            session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content), :content => {}})
+            session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
             @step += 1
             receive_reply(hash_header)
@@ -91,5 +92,11 @@ module FSR
       end
 
     end
+  end
+end
+
+class Hash
+  def strip_value_newlines
+    Hash[self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }]
   end
 end
