@@ -29,10 +29,13 @@ module FSR
           @session = session
           session_initiated(session) 
         else
-          if session.headers[:event_calling_function].to_s.match(/uuid_dump/i)
-            @session = session
-          else
+          if session.headers[:event_name].nil?
             receive_reply(session)
+          else
+            if session.headers[:event_name].to_s.match(/CHANNEL_DATA/i)
+              @session = session
+              receive_reply(HeaderAndConentResponse.new({:headers => {:session => "update"}, :content => {}}))
+            end
           end
         end
       end
@@ -63,7 +66,7 @@ module FSR
       # Update_session
 
       def update_session
-        send_data("api uuid_dump #{@session.headers[:unique_id]}")
+        send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
       end
 
     end
