@@ -9,13 +9,13 @@ FSR.load_all_commands
 class DtmfDemo < FSR::Listener::Outbound
 
   def session_initiated
-    exten = @session.headers[:channel_caller_id_number]
+    exten = @session.headers[:caller_caller_id_number]
     FSR::Log.info "*** Answering incoming call from #{exten}"
     answer # Answer the call
   end
 
   def receive_reply(reply)
-    exten = @session.headers[:channel_caller_id_number]
+    exten = @session.headers[:caller_caller_id_number]
     case @step
     when 1
       FSR::Log.info "*** Reading dtmf for #{exten}"
