@@ -6,8 +6,8 @@ require "fsr/listener/outbound"
 
 class OesDemo < FSR::Listener::Outbound
 
-  def session_initiated(session)
-    number = session.headers[:caller_caller_id_number] # Grab the inbound caller id
+  def session_initiated
+    number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
     FSR::Log.info "*** Answering incoming call from #{number}"
     answer # Answer the call
     log("1", "Pong from the FSR event socket!")
