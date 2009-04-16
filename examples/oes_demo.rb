@@ -1,7 +1,6 @@
 #!/usr/bin/env ruby
 
 require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
-puts $LOAD_PATH.inspect
 $stdout.flush
 require "fsr/listener/outbound"
 

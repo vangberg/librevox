@@ -1,8 +1,9 @@
 #!/usr/bin/env ruby
-require 'eventmachine'
+
+require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
 require "fsr/listener/outbound"
-require 'pp'
 $stdout.flush
+
 FSR.load_all_applications
 FSR.load_all_commands
 class DtmfDemo < FSR::Listener::Outbound
@@ -10,7 +11,6 @@ class DtmfDemo < FSR::Listener::Outbound
   def session_initiated(session, step = 0)
     @step ||= step
     exten = session.headers[:channel_caller_id_number]
-    pp session.headers
     FSR::Log.info "*** Answering incoming call from #{exten}"
     answer # Answer the call
   end

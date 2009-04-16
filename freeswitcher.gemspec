@@ -1,6 +1,6 @@
 FSR_SPEC = Gem::Specification.new do |spec|
   spec.name = "freeswitcher"
-  spec.version = "0.0.11"
+  spec.version = "0.0.12"
   spec.summary = 'A library for interacting with the "FreeSWITCH":http://freeswitch.org telephony platform'
   spec.authors = ["Jayson Vaughn", "Michael Fellinger", "Kevin Berry", "TJ Vanderpoel"]
   spec.email = "FreeSWITCHeR@rubyists.com"
@@ -75,9 +75,9 @@ Example of creating an Outbound Eventsocket listener:
 Example of creating an Outbound Eventsocket listener that can read DTMF input and keep state:
 
     #!/usr/bin/env ruby
-
-    require "fsr/listener/outbound"
-    require 'pp'
+    
+    require 'fsr'
+    require 'fsr/listener/outbound'
 
     FSR.load_all_applications
     FSR.load_all_commands
@@ -87,7 +87,6 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
       def session_initiated(session, step = 0)
         @step ||= step
         exten = session.headers[:channel_caller_id_number]
-        pp session.headers
         FSR::Log.info "*** Answering incoming call from #{exten}"
         answer # Answer the call
       end
@@ -120,7 +119,8 @@ Example of creating an Inbound Eventsocket listener:
     #!/usr/bin/env ruby
 
     require 'fsr'
-    require "fsr/listener/inbound"
+    require 'fsr/listener/inbound'
+    require 'pp'
 
     class IesDemo < FSR::Listener::Inbound
 
@@ -204,9 +204,9 @@ Example of creating an Outbound Eventsocket listener:
 Example of creating an Outbound Eventsocket listener that can read DTMF input and keep state:
 
     #!/usr/bin/env ruby
-
-    require "fsr/listener/outbound"
-    require 'pp'
+    
+    require 'fsr'
+    require 'fsr/listener/outbound'
 
     FSR.load_all_applications
     FSR.load_all_commands
@@ -216,7 +216,6 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
       def session_initiated(session, step = 0)
         @step ||= step
         exten = session.headers[:channel_caller_id_number]
-        pp session.headers
         FSR::Log.info "*** Answering incoming call from #{exten}"
         answer # Answer the call
       end
@@ -249,7 +248,8 @@ Example of creating an Inbound Eventsocket listener:
     #!/usr/bin/env ruby
 
     require 'fsr'
-    require "fsr/listener/inbound"
+    require 'fsr/listener/inbound'
+    require 'pp'
 
     class IesDemo < FSR::Listener::Inbound
 
