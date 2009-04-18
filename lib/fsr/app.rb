@@ -29,7 +29,7 @@ module FSR
       code = REGISTER_CODE % [application, application]
       App.module_eval(code)
     end
-
+     
     def self.list
       APPLICATIONS.keys
     end

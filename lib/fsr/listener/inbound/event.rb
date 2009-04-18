@@ -16,7 +16,9 @@ module FSR
             when ''
               capture = body
             when /([a-zA-Z0-9-]+):\s*(.*)/
-              capture[$1.strip] = $2.strip
+              #capture[$1] = $2.strip
+              key, val = line.split(":")
+              capture[key] = val.to_s.strip
             end
           end
           

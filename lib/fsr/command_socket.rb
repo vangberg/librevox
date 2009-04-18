@@ -10,15 +10,20 @@ module FSR
       @auth = args[:auth] || "ClueCon"
       @socket = TCPSocket.new(@server, @port)
       super(@socket)
+      # Attempt to login or raise an exception
       unless login
         raise "Unable to login, check your password!"
       end
     end
-
+    
+    # Method to authenticate to FreeSWITCH
     def login
-      response #Clear buf from initial socket creation/opening
+      #Clear buf from initial socket creation/opening
+      response 
+      # Send auth string to FreeSWITCH
       self << "auth #{@auth}"
-      response #Return response, clear buf for rest of commands
+      #Return response, clear buf for rest of commands
+      response 
     end
   end
 end

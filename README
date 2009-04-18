@@ -39,40 +39,86 @@ Example of creating an Outbound Eventsocket listener:
 
     #!/usr/bin/env ruby
 
-    require 'rubygems'
-    require 'eventmachine'
     require 'fsr'
     require "fsr/listener/outbound"
 
-    module OesDemo
-      include FSR::Listener::Outbound
-      def session_initiated(session)
-        bridge "user/bougyman"
+    class OesDemo < FSR::Listener::Outbound
+
+      def session_initiated
+        number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
+        FSR::Log.info "*** Answering incoming call from #{number}"
+        answer # Answer the call
+        set("hangup_after_bridge", "true")# Set a variable
+        speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
+        hangup # Hangup the call
       end
+
     end
 
-    FSR.start_oes!(OesDemo, :port => 8084, :host => "localhost")
+    FSR.start_oes!(OesDemo, :port => 1888, :host => "localhost")
+
+
+
+Example of creating an Outbound Eventsocket listener that can read DTMF input and keep state:
+
+    #!/usr/bin/env ruby
+    
+    require 'fsr'
+    require 'fsr/listener/outbound'
+
+    FSR.load_all_applications
+    FSR.load_all_commands
+
+    class DtmfDemo < FSR::Listener::Outbound
+
+      def session_initiated
+        exten = @session.headers[:caller_caller_id_number]
+        FSR::Log.info "*** Answering incoming call from #{exten}"
+        answer # Answer the call
+      end
+
+      def receive_reply(reply)
+        exten = @session.headers[:caller_caller_id_number]
+        case @step
+        when 1
+          FSR::Log.info "*** Reading dtmf for #{exten}"
+          read "/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav",4,10,"test",15000 # read test
+        when 2
+          FSR::Log.info "*** updating session for #{exten}"
+          update_session
+        when 3
+          FSR::Log.info "** Success, grabbed #{@session.headers[:variable_test].strip} from #{exten}"
+          FSR::Log.info "*** Hanging up call"
+          hangup # Hangup the call
+        end
+      end
+
+    end
+
+    FSR.start_oes! DtmfDemo, :port => 8084, :host => "127.0.0.1"
+
 
 
 Example of creating an Inbound Eventsocket listener:
 
     #!/usr/bin/env ruby
 
-    require 'rubygems'
-    require 'eventmachine'
     require 'fsr'
-    require "fsr/listener/inbound"
+    require 'fsr/listener/inbound'
+    require 'pp'
 
-    module IesDemo
-      include FSR::Listener::Inbound
+    class IesDemo < FSR::Listener::Inbound
 
       def on_event(event)
-        pp event
+        pp event.headers
+        pp event.content[:event_name]
       end
 
     end
 
     FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+
+
 
 Support
 -------

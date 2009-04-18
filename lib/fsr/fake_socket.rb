@@ -1,3 +1,5 @@
+## Fake socket used for mock testing ##
+#
 require 'stringio'
 
 module FSR
