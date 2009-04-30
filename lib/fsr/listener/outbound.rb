@@ -97,6 +97,6 @@ end
 
 class Hash
   def strip_value_newlines
-    Hash[self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }]
+    Hash[*(self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }.flatten)]
   end
 end
