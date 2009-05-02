@@ -53,6 +53,11 @@ module FSR
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
       end
 
+      def next_step
+        @step += 1
+        receive_reply(@session)
+      end
+
       protected
       def post_init
         @session = nil # holds the session object
