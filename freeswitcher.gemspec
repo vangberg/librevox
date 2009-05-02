@@ -1,6 +1,6 @@
 FSR_SPEC = Gem::Specification.new do |spec|
   spec.name = "freeswitcher"
-  spec.version = "0.1.0"
+  spec.version = "0.1.1"
   spec.summary = 'A library for interacting with the "FreeSWITCH":http://freeswitch.org telephony platform'
   spec.authors = ["Jayson Vaughn", "Michael Fellinger", "Kevin Berry", "TJ Vanderpoel"]
   spec.email = "FreeSWITCHeR@rubyists.com"
