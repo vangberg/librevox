@@ -31,7 +31,6 @@ module FSR
       # @param reply This HeaderAndContent instance will have the channel variables
       #              in #content, if the session has been updated
       def receive_reply(reply)
-        FSR::Log.warn "#{self.class.name}#receive_reply not overwritten"
         FSR::Log.debug reply.inspect
       end
 
