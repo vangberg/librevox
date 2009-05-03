@@ -61,6 +61,7 @@ module FSR
       protected
       def post_init
         @session = nil # holds the session object
+        @stack = [] # Keep track of stack for state machine
         send_data("connect\n\n")
         FSR::Log.debug "Accepting connections."
       end
@@ -88,12 +89,18 @@ module FSR
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
             @step += 1
+            @stack.pop.call unless @stack.empty?
             receive_reply(hash_header)
           end
         else
           @step += 1
+          @stack.pop.call unless @stack.empty?
           receive_reply(session_header_and_content)
         end
+      end
+
+      def cmd(&block)
+        @stack << block
       end
 
     end
