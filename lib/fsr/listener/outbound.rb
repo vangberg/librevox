@@ -16,7 +16,7 @@ module FSR
       SENDMSG_METHOD_DEFINITION = [
                                    "def %s(*args, &block)",
                                    "  sendmsg super",
-                                   "  @stack << block if block_given?",
+                                   "  @queue << block if block_given?",
                                    "end"
                                   ].join("\n")
 
@@ -56,7 +56,7 @@ module FSR
 
       def update_session(&block)
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
-        @stack << block if block_given?
+        @queue << block if block_given?
       end
 
       def next_step
@@ -67,7 +67,7 @@ module FSR
       protected
       def post_init
         @session = nil # holds the session object
-        @stack = [] # Keep track of stack for state machine
+        @queue = [] # Keep track of queue for state machine
         send_data("connect\n\n")
         FSR::Log.debug "Accepting connections."
       end
@@ -97,18 +97,14 @@ module FSR
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
             @step += 1 if @state.include?(:initiated)
-            @stack.pop.call unless @stack.empty?
+            @queue.pop.call unless @queue.empty?
             receive_reply(hash_header)
           end
         else
           @step += 1 if @state.include?(:initiated)
-          @stack.pop.call unless @stack.empty?
+          @queue.pop.call unless @queue.empty?
           receive_reply(session_header_and_content)
         end
-      end
-
-      def cmd(&block)
-        @stack << block
       end
 
     end
