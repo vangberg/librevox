@@ -6,7 +6,6 @@ require 'pp'
 module FSR
   # Global configuration options
   #
-  VERSION = '0.1.3'
   FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch"]
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FSR"
@@ -83,4 +82,5 @@ module FSR
     FS_CONFIG_PATH = FS_DB_PATH = nil
   end
 end
+require "fsr/version"
 

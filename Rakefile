@@ -1,82 +1,27 @@
 require 'rake/clean'
 require "rubygems"
 
+require "lib/fsr"
+GEMSPEC = Gem::Specification.new do |spec|
+  spec.name = "freeswitcher"
+  spec.version = FSR::VERSION
+  spec.summary = 'A library for interacting with the "FreeSWITCH":http://freeswitch.org telephony platform'
+  spec.authors = ["Jayson Vaughn", "Michael Fellinger", "Kevin Berry", "TJ Vanderpoel"]
+  spec.email = "FreeSWITCHeR@rubyists.com"
+  spec.homepage = "http://code.rubyists.com/projects/fs"
+  spec.add_dependency "eventmachine"
+  all_files = %x{git ls-files}.split.reject { |f| f.match(/^(?:contrib)(?:\/|$)/) }
+  
+  spec.files = all_files.reject { |f| f.match(/^(?:spec)(?:\/|$)/) }
+  spec.test_files = all_files - spec.files
+  spec.require_path = "lib"
+
+  description = File.read("README")
+  spec.description = description
+  spec.rubyforge_project = "freeswitcher"
+  spec.post_install_message = description
+end
+
 import(*Dir['tasks/*rake'])
 
-task :default => :spec
-
-desc 'install dependencies'
-task :setup do
-  GemSetup.new do
-    github = 'http://gems.github.com'
-    Gem.sources << github
-
-    gem('bacon')
-    setup
-  end
-end
-
-class GemSetup
-  def initialize(options = {}, &block)
-    @gems = []
-    @options = options
-
-    run(&block)
-  end
-
-  def run(&block)
-    instance_eval(&block) if block_given?
-  end
-
-  def gem(name, version = nil, options = {})
-    if version.respond_to?(:merge!)
-      options = version
-    else
-      options[:version] = version
-    end
-
-    @gems << [name, options]
-  end
-
-  def setup
-    require 'rubygems'
-    require 'rubygems/dependency_installer'
-
-    @gems.each do |name, options|
-      setup_gem(name, options)
-    end
-  end
-
-  def setup_gem(name, options, try_install = true)
-    print "activating #{name} ... "
-    Gem.activate(name, *[options[:version]].compact)
-    require(options[:lib] || name)
-    puts "success."
-  rescue LoadError => error
-    puts error
-    install_gem(name, options) if try_install
-    setup_gem(name, options, try_install = false)
-  end
-
-  def install_gem(name, options)
-    installer = Gem::DependencyInstaller.new(options)
-
-    temp_argv(options[:extconf]) do
-      print "Installing #{name} ... "
-      installer.install(name, options[:version])
-      puts "done."
-    end
-  end
-
-  def temp_argv(extconf)
-    if extconf ||= @options[:extconf]
-      old_argv = ARGV.clone
-      ARGV.replace(extconf.split(' '))
-    end
-
-    yield
-
-  ensure
-    ARGV.replace(old_argv) if extconf
-  end
-end
+task :default => :bacon
