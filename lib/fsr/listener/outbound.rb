@@ -13,7 +13,13 @@ module FSR
       include FSR::App
 
       # Redefine the FSR::App methods to wrap sendmsg around them
-      SENDMSG_METHOD_DEFINITION = "def %s(*args, &block); sendmsg super; end"
+      SENDMSG_METHOD_DEFINITION = [
+                                   "def %s(*args, &block)",
+                                   "  sendmsg super",
+                                   "  @stack << block if block_given?",
+                                   "end"
+                                  ].join("\n")
+
       APPLICATIONS.each { |app, obj| module_eval(SENDMSG_METHOD_DEFINITION % app.to_s) }
 
       # session_initiated is called when a @session is first created.
@@ -48,8 +54,9 @@ module FSR
 
       # Update_session
 
-      def update_session
+      def update_session(&block)
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
+        @stack << block if block_given?
       end
 
       def next_step
@@ -82,17 +89,19 @@ module FSR
         if @session.nil?
           @session = session_header_and_content
           @step = 0
+          @state = [:uninitiated]
           session_initiated 
+          @state << :initiated
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
           if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
-            @step += 1
+            @step += 1 if @state.include?(:initiated)
             @stack.pop.call unless @stack.empty?
             receive_reply(hash_header)
           end
         else
-          @step += 1
+          @step += 1 if @state.include?(:initiated)
           @stack.pop.call unless @stack.empty?
           receive_reply(session_header_and_content)
         end
