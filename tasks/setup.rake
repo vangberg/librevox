@@ -6,6 +6,10 @@ task :setup => :gem_installer do
 
     # spec
     gem 'bacon'
+    gem 'rcov'
+    
+    # doc
+    gem 'yard'
 
     setup
   end

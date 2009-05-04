@@ -1,6 +1,6 @@
 desc "add copyright to all .rb files in the distribution"
 task :copyright do
-  ignore = File.readlines('doc/LEGAL').
+  ignore = File.readlines('License.txt').
     select{|line| line.strip!; File.exist?(line)}.
     map{|file| File.expand_path(file)}
 

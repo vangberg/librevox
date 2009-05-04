@@ -2,7 +2,7 @@ desc 'code coverage'
 task :rcov => :clean do
   specs = PROJECT_SPECS
 
-  ignore = %w[ gem rack bacon innate hpricot nagoro/lib/nagoro ]
+  ignore = %w[ gem rack bacon ]
 
   if RUBY_VERSION >= '1.8.7'
     ignore << 'begin_with' << 'end_with'
