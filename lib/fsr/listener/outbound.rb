@@ -73,14 +73,14 @@ module FSR
       end
 
       # receive_request is called each time data is received by the event machine
-      # it will manipulate the received data into either a new session or a reply,
-      # to be picked up by #session_initiated or #receive_reply.
-      # If your listener is listening for events, this will also renew your @session
-      # each time you receive a CHANNEL_DATA event.
+      #  it will manipulate the received data into either a new session or a reply,
+      #  to be picked up by #session_initiated or #receive_reply.
+      #  If your listener is listening for events, this will also renew your @session
+      #  each time you receive a CHANNEL_DATA event.
       # @param header The header of the request, as passed by HeaderAndContentProtocol
       # @param content The content of the request, as passed by HeaderAndContentProtocol
       #
-      # @returns HeaderAndContentResponse
+      # @return [HeaderAndContentResponse] An EventMachine HeaderAndContentResponse
       def receive_request(header, content)
         hash_header = headers_2_hash(header)
         hash_content = headers_2_hash(content)
