@@ -3,11 +3,15 @@ require 'socket'
 require 'pathname'
 require 'pp'
 
+# Author::    TJ Vanderpoel (mailto:bougy.man@gmail.com)
+# Copyright:: Copyright (c) 2009 The Rubyists (Jayson Vaughn, TJ Vanderpoel, Michael Fellinger, Kevin Berry)
+# License::   Distributes under the terms of the MIT License http://www.opensource.org/licenses/mit-license.php
+
+## This module declares the namespace under which the freeswitcher framework
+## Any constants will be defined here, as well as methods for loading commands and applications
 module FSR
   # Global configuration options
-  #
-  VERSION = '0.0.13'
-  FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch"]
+  FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch", "/home/freeswitch/freeswitch"]
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FSR"
 
@@ -48,8 +52,13 @@ module FSR
   end
   
   # Method to start EM for Inbound Event Socket
+  # @see FSR::Listener::Inbound
+  # @param [FSR::Listener::Inbound] klass An Inbound Listener class, to be started by EM.run
+  # @param [::Hash] args A hash of options, may contain
+  #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost") 
+  #                       <tt>:port [Integer]</tt> the port to listen on (Default: 8021)
   def self.start_ies!(klass, args = {})
-    port = args[:port] || "8021"
+    port = args[:port] || 8021
     host = args[:host] || "localhost"
     EM.run do
       EventMachine::connect(host, port, klass)
@@ -83,4 +92,5 @@ module FSR
     FS_CONFIG_PATH = FS_DB_PATH = nil
   end
 end
+require "fsr/version"
 

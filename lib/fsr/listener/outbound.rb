@@ -13,7 +13,13 @@ module FSR
       include FSR::App
 
       # Redefine the FSR::App methods to wrap sendmsg around them
-      SENDMSG_METHOD_DEFINITION = "def %s(*args, &block); sendmsg super; end"
+      SENDMSG_METHOD_DEFINITION = [
+                                   "def %s(*args, &block)",
+                                   "  sendmsg super",
+                                   "  @queue << block if block_given?",
+                                   "end"
+                                  ].join("\n")
+
       APPLICATIONS.each { |app, obj| module_eval(SENDMSG_METHOD_DEFINITION % app.to_s) }
 
       # session_initiated is called when a @session is first created.
@@ -31,7 +37,6 @@ module FSR
       # @param reply This HeaderAndContent instance will have the channel variables
       #              in #content, if the session has been updated
       def receive_reply(reply)
-        FSR::Log.warn "#{self.class.name}#receive_reply not overwritten"
         FSR::Log.debug reply.inspect
       end
 
@@ -49,26 +54,33 @@ module FSR
 
       # Update_session
 
-      def update_session
+      def update_session(&block)
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
+        @queue << block if block_given?
+      end
+
+      def next_step
+        @step += 1
+        receive_reply(@session)
       end
 
       protected
       def post_init
         @session = nil # holds the session object
+        @queue = [] # Keep track of queue for state machine
         send_data("connect\n\n")
         FSR::Log.debug "Accepting connections."
       end
 
       # receive_request is called each time data is received by the event machine
-      # it will manipulate the received data into either a new session or a reply,
-      # to be picked up by #session_initiated or #receive_reply.
-      # If your listener is listening for events, this will also renew your @session
-      # each time you receive a CHANNEL_DATA event.
+      #  it will manipulate the received data into either a new session or a reply,
+      #  to be picked up by #session_initiated or #receive_reply.
+      #  If your listener is listening for events, this will also renew your @session
+      #  each time you receive a CHANNEL_DATA event.
       # @param header The header of the request, as passed by HeaderAndContentProtocol
       # @param content The content of the request, as passed by HeaderAndContentProtocol
       #
-      # @returns HeaderAndContentResponse
+      # @return [HeaderAndContentResponse] An EventMachine HeaderAndContentResponse
       def receive_request(header, content)
         hash_header = headers_2_hash(header)
         hash_content = headers_2_hash(content)
@@ -77,16 +89,20 @@ module FSR
         if @session.nil?
           @session = session_header_and_content
           @step = 0
+          @state = [:uninitiated]
           session_initiated 
+          @state << :initiated
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
           if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
-            @step += 1
+            @step += 1 if @state.include?(:initiated)
+            @queue.pop.call unless @queue.empty?
             receive_reply(hash_header)
           end
         else
-          @step += 1
+          @step += 1 if @state.include?(:initiated)
+          @queue.pop.call unless @queue.empty?
           receive_reply(session_header_and_content)
         end
       end
@@ -97,6 +113,6 @@ end
 
 class Hash
   def strip_value_newlines
-    Hash[self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }]
+    Hash[*(self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }.flatten)]
   end
 end

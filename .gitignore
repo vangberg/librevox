@@ -1,3 +1,4 @@
+ydoc/
 .[a-zA-Z]*
 web/log/*
 RIDE*
@@ -5,4 +6,4 @@ config/code_template.erb
 script/ride*
 tasks/ride.rake
 tasks/rspec.rake
-
+pkg/*
