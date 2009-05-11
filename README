@@ -6,11 +6,7 @@ Distributed under the terms of the MIT License.
 
 About
 -----
-*** STILL UNDER HEAVY DEVELOPMENT ***
-
 A ruby library for interacting with the "FreeSWITCH" (http://www.freeswitch.org) opensource telephony platform
-
-*** STILL UNDER HEAVY DEVELOPMENT ***
 
 Requirements
 ------------
@@ -19,47 +15,9 @@ Requirements
 
 Usage
 -----
+Outbound Eventsocket listener example that will read and return DTMF input
 
-Example of originating a new call in 'irb' using FSR::CommandSocket#originate:
-
-  irb(main):001:0> require 'fsr'
-  => true
-
-  irb(main):002:0> FSR.load_all_commands
-  => [:sofia, :originate]
-
-  irb(main):003:0> sock = FSR::CommandSocket.new
-  => #<FSR::CommandSocket:0xb7a89104 @server="127.0.0.1", @socket=#<TCPSocket:0xb7a8908c>, @port="8021", @auth="ClueCon">
-
-  irb(main):007:0> sock.originate(:target => 'sofia/gateway/carlos/8179395222', :endpoint => FSR::App::Bridge.new("user/bougyman")).run
-  => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
-
-
-Example of creating an Outbound Eventsocket listener:
-
-    #!/usr/bin/env ruby
-
-    require 'fsr'
-    require "fsr/listener/outbound"
-
-    class OesDemo < FSR::Listener::Outbound
-
-      def session_initiated
-        number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
-        FSR::Log.info "*** Answering incoming call from #{number}"
-        answer # Answer the call
-        set("hangup_after_bridge", "true")# Set a variable
-        speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
-        hangup # Hangup the call
-      end
-
-    end
-
-    FSR.start_oes!(OesDemo, :port => 1888, :host => "localhost")
-
-
-
-Example of creating an Outbound Eventsocket listener that can read DTMF input and keep state:
+  * NOTE:  Use blocks to ensure that the next command is not executed until the previous command has finished
 
     #!/usr/bin/env ruby
     
@@ -73,8 +31,7 @@ Example of creating an Outbound Eventsocket listener that can read DTMF input an
 
       def session_initiated
         exten = @session.headers[:caller_caller_id_number]
-        FSR::Log.info "*** Answering incoming call from #{exten}"
-        answer # Answer the call
+        FSR::Log.info "*** Answering incoming call from #{exten}" 
       end
 
       def receive_reply(reply)
@@ -119,6 +76,19 @@ Example of creating an Inbound Eventsocket listener:
     FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
 
 
+Example of originating a new call in 'irb' using FSR::CommandSocket#originate:
+
+  irb(main):001:0> require 'fsr'
+  => true
+
+  irb(main):002:0> FSR.load_all_commands
+  => [:sofia, :originate]
+
+  irb(main):003:0> sock = FSR::CommandSocket.new
+  => #<FSR::CommandSocket:0xb7a89104 @server="127.0.0.1", @socket=#<TCPSocket:0xb7a8908c>, @port="8021", @auth="ClueCon">
+
+  irb(main):007:0> sock.originate(:target => 'sofia/gateway/carlos/8179395222', :endpoint => FSR::App::Bridge.new("user/bougyman")).run
+  => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
 
 Support
 -------
