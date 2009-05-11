@@ -1,5 +1,8 @@
 .gitignore
+AUTHORS
+CHANGELOG
 License.txt
+MANIFEST
 NEWS
 README
 Rakefile
@@ -11,9 +14,9 @@ examples/bin/oes_demo.rb
 examples/dtmf_test.rb
 examples/ies_demo.rb
 examples/ies_demo_with_hook.rb
-examples/new_state_machine_test.rb
-examples/oes_demo.rb
-examples/play_and_get_test.rb
+examples/inbound_event_socket.rb
+examples/inbound_socket_events.rb
+examples/outbound_event_socket.rb
 freeswitcher.gemspec
 lib/fsr.rb
 lib/fsr/app.rb
@@ -62,9 +65,9 @@ lib/fsr/listener/outbound.rb.orig
 lib/fsr/model/call.rb
 lib/fsr/version.rb
 tasks/authors.rake
+tasks/bacon.rake
 tasks/changelog.rake
 tasks/copyright.rake
-tasks/doc.rake
 tasks/gem.rake
 tasks/gem_installer.rake
 tasks/install_dependencies.rake
@@ -74,6 +77,7 @@ tasks/release.rake
 tasks/reversion.rake
 tasks/setup.rake
 tasks/spec.rake
+tasks/yard.rake
 spec/helper.rb
 spec/fsr/app.rb
 spec/fsr/app/bridge.rb

@@ -1,3 +1,31 @@
+[a110dc6 | Mon May 11 16:12:17 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Corrected typos in README
+
+[da6d963 | Mon May 11 16:00:35 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Removed 'puts $LOAD_PATH.inspect'
+
+[5fd154d | Mon May 11 15:57:36 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Updated README
+
+
+
+[981d6bb | Mon May 11 15:42:27 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Updating README
+
+
+
+[2d2fdb5 | Tue May 05 12:32:35 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * added some yard documentation
+
+[0e72f02 | Mon May 04 22:15:48 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * fixed broken tasks, tested all tasks
+
 [8e6f7e8 | Mon May 04 21:38:28 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
 
   * updated package building and added a bunch of convenience tasks
