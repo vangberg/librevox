@@ -4,19 +4,20 @@ Copyright (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel, Michael Fellinger
 Distributed under the terms of the MIT License.
 ==========================================================
 
-About
+ABOUT
 -----
 A ruby library for interacting with the "FreeSWITCH" (http://www.freeswitch.org) opensource telephony platform
 
-Requirements
+REQUIREMENTS
 ------------
 - ruby (>= 1.8)
 - eventmachine (If you wish to use Outbound and Inbound listener)
 
-Usage
+USAGE
 -----
 
-An Outbound Event Listern example that reads and returns DTMF input:
+An Outbound Event Listener Example that reads and returns DTMF input:
+--------------------------------------------------------------------
 
 Simply just create a subclass of FSR::Listner::Outbound and all
 new calls/sessions will invoke the "session_initiated" callback method.
@@ -52,7 +53,8 @@ new calls/sessions will invoke the "session_initiated" callback method.
     FSR.start_oes! OutboundDemo, :port => 8084, :host => "127.0.0.1"
 
 
-An Inbound Event Socket Listner example using FreeSWITCHeR's hook system:
+An Inbound Event Socket Listener example using FreeSWITCHeR's hook system:
+--------------------------------------------------------------------------
 
     require 'pp'
     require 'fsr'
@@ -77,7 +79,28 @@ An Inbound Event Socket Listner example using FreeSWITCHeR's hook system:
     FSR.start_ies!(FSL::Inbound, :host => "localhost", :port => 8021)
 
 
+An Inbound Event Socket Listener example using the on_event callback method instead of hooks:
+---------------------------------------------------------------------------------------------
+
+    require 'pp'
+    require 'fsr'
+    require "fsr/listener/inbound"
+
+
+    class IesDemo < FSR::Listener::Inbound
+
+      def on_event(event)
+        pp event.headers
+        pp event.content[:event_name]
+      end
+
+    end
+
+    FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+
+
 An example of using FSR::CommandSocket to originate a new call in irb:
+----------------------------------------------------------------------
 
     irb(main):001:0> require 'fsr'
     => true
@@ -91,7 +114,9 @@ An example of using FSR::CommandSocket to originate a new call in irb:
     irb(main):007:0> sock.originate(:target => 'sofia/gateway/carlos/8179395222', :endpoint => FSR::App::Bridge.new("user/bougyman")).run
     => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
 
-Support
+
+
+SUPPORT
 -------
 Home page at http://code.rubyists.com/projects/fs
 #rubyists on FreeNode
