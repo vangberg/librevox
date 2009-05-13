@@ -8,17 +8,20 @@ module FSR
       def initialize(fs_socket = nil, args = {})
         # These are options that will precede the target address
         @target_options = args[:target_options] || {:ignore_early_media => true}
-        raise "#{@target_options} must be a hash" unless @target_options.kind_of?(Hash)
+        raise(ArgumentError, "#{@target_options} must be a hash") unless @target_options.kind_of?(Hash)
         
         @fs_socket = fs_socket # This socket must support say and <<
         @target = args[:target] # The target address to call
+        raise(ArgumentError, "Cannot originate without a :target set") unless @target.to_s.size > 0
         # The origination endpoint (can be an extension (use a string) or application)
         @endpoint = args[:endpoint] || args[:application]
+        raise(ArgumentError, "Cannot originate without an :enpoint set") unless @endpoint.to_s.size > 0
 
         @target_options[:origination_caller_id_number] ||= args[:caller_id_number] || FSR::DEFAULT_CALLER_ID_NUMBER
         @target_options[:origination_caller_id_name] ||= args[:caller_id_name] || FSR::DEFAULT_CALLER_ID_NAME
-        @target_options[:originate_timeout] ||= args[:timeout] || @target_options[:timeout] || 30
-        @target_options[:ignore_early_media] ||= true
+        @target_options[:originate_timeout] = args[:timeout] || @target_options[:timeout] || 30
+        raise(ArgumentError, "Origination timeout (#{@target_options[:originate_timeout]}) must be a positive integer") unless @target_options[:originate_timeout].to_i > 0
+        @target_options[:ignore_early_media] = true unless @target_options.keys.include?(:ignore_early_media)
       end
 
       # Send the command to the event socket, using bgapi by default.
