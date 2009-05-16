@@ -56,16 +56,6 @@ module FSR
         end
       end
 
-      private
-
-      def default_options(args = {}, &block)
-        defaults = {:origination_caller_id_name => FSR::DEFAULT_CALLER_ID_NAME, 
-                    :origination_caller_id_number => FSR::DEFAULT_CALLER_ID_NUMBER,
-                    :originate_timeout => 30,
-                    :ignore_early_media => true}
-        args.merge!(defaults)
-        yield args if block_given?
-      end
     end
 
     register(:originate, Originate)

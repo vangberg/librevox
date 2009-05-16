@@ -1,10 +1,27 @@
 module FSR
   module Cmd
     class Command
+      DEFAULT_OPTIONS = {
+                         :origination_caller_id_name => FSR::DEFAULT_CALLER_ID_NAME,
+                         :origination_caller_id_number => FSR::DEFAULT_CALLER_ID_NUMBER,
+                         :originate_timeout => 30,
+                         :ignore_early_media => true
+                        }
+      protected
+      def default_options(args = {}, defaults = nil, &block)
+        opts = if defaults.nil?
+          DEFAULT_OPTIONS.merge(args)
+        else
+          raise(ArgumentError, "defaults argument must ba a hash") unless defaults.kind_of?(Hash)
+          defaults.merge(args)
+        end
+        yield opts if block_given?
+      end
+
     end
 
     COMMANDS = {}
-    LOAD_PATH = [File.join(FSR::ROOT, "fsr", "cmd")]
+    LOAD_PATH = [Pathname(FSR::ROOT).join( "fsr", "cmd")]
 
     def self.register(command, obj)
       COMMANDS[command.to_sym] = obj
@@ -28,8 +45,8 @@ module FSR
       end
       Log.debug "Trying load paths"
       # If we find a file named the same as the command passed in LOAD_PATH, load it
-      if found_command_path = LOAD_PATH.detect { |command_path| File.file?(File.join(command_path, "#{command}.rb")) }
-        command_file = Pathname.new(found_command_path).join(command)
+      if found_command_path = LOAD_PATH.detect { |command_path| command_path.join("#{command}.rb").file? }
+        command_file = found_command_path.join(command)
         Log.debug "Trying to load #{command_file}"
         if force_reload
           load command_file.to_s + ".rb"
@@ -44,7 +61,7 @@ module FSR
     # Load all of the commands we find in Cmd::LOAD_PATH
     def self.load_all(force_reload = false)
       LOAD_PATH.each do |load_path|
-        Dir[File.join(load_path, "*.rb")].each { |command_file| load_command(command_file, force_reload) }
+        Dir[load_path.join("*.rb")].each { |command_file| load_command(command_file, force_reload) }
       end
       list
     end
