@@ -23,7 +23,6 @@ module FSR
         def uuid_setvar(*args, &block)
           me = super(*args)
           api_call = "api uuid_setvar #{me.uuid} #{me.var} #{me.assignment}\n\n"
-          FSR::Log.info("sending #{api_call}")
           send_data(api_call) 
           @queue.unshift block if block_given?
         end
