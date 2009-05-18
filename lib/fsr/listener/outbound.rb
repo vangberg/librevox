@@ -72,6 +72,7 @@ module FSR
 
       protected
       def post_init
+        @read_var = nil
         @session = nil # holds the session object
         @queue = [] # Keep track of queue for state machine
         send_data("connect\n\n")
@@ -90,11 +91,19 @@ module FSR
       # @return [HeaderAndContentResponse] An EventMachine HeaderAndContentResponse
       def receive_request(header, content)
         hash_header = headers_2_hash(header)
-        hash_content = headers_2_hash(content)
+        if content.to_s.match(/:/)
+          hash_content = headers_2_hash(content)
+        else
+          hash_content = content
+        end
         session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         # If we're a new session, call session initiate
-        if @session.nil?
+        if session.nil?
           establish_new_session(session_header_and_content)
+        elsif @uuid_var  and session_header_and_content.headers[:content_type] == "api/response"
+          FSR::Log.info("@uuid_var is set => #{session_header_and_content.inspect} : #{content}")
+          r, @uuid_var = session_header_and_content.content.strip, nil
+          @queue.pop.call(r) if @queue.size > 0
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
           check_for_updated_session(session_header_and_content, hash_content, hash_header)
         else
