@@ -121,7 +121,7 @@ module FSR
         @state = [:uninitiated]
         session_initiated 
         @state << :initiated
-        session_header_and_content
+        header_and_content_hash
       end
 
       def check_for_updated_session(header_and_content_hash)
