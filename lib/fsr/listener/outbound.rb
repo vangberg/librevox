@@ -94,20 +94,9 @@ module FSR
         session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         # If we're a new session, call session initiate
         if @session.nil?
-          @session = session_header_and_content
-          @step = 0
-          @state = [:uninitiated]
-          session_initiated 
-          @state << :initiated
-          session_header_and_content
+          establish_new_session
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
-          if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
-            session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
-            @session = session_header_and_content
-            @step += 1 if @state.include?(:initiated)
-            queue_pop
-            receive_reply(hash_header)
-          end
+          check_for_updated_session
         else
           @step += 1 if @state.include?(:initiated)
           queue_pop
@@ -124,6 +113,26 @@ module FSR
           else
             @queue.pop.call
           end
+        end
+      end
+
+      private
+      def establish_new_session
+        @session = session_header_and_content
+        @step = 0
+        @state = [:uninitiated]
+        session_initiated 
+        @state << :initiated
+        session_header_and_content
+      end
+
+      def check_for_updated_session
+        if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
+          session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
+          @session = session_header_and_content
+          @step += 1 if @state.include?(:initiated)
+          queue_pop
+          receive_reply(hash_header)
         end
       end
 
