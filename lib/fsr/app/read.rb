@@ -18,7 +18,7 @@ module FSR
 
     end
 
-    REGISiTER_CODE = %q{
+    REGISITER_CODE = %q|
       def read(*args, &block)
         r = FSR::App::Read.new(*args)
         @read_var = "variable_#{r.chan_var}"
@@ -26,7 +26,7 @@ module FSR
         @queue << Proc.new { update_session } 
         @queue << &block if block_given?
       end
-    }
-    register(:read, Read)
+    |
+    register(:read, Read, REGISTER_CODE)
   end
 end

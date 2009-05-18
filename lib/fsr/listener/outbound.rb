@@ -77,6 +77,7 @@ module FSR
       #  to be picked up by #session_initiated or #receive_reply.
       #  If your listener is listening for events, this will also renew your @session
       #  each time you receive a CHANNEL_DATA event.
+      #
       # @param header The header of the request, as passed by HeaderAndContentProtocol
       # @param content The content of the request, as passed by HeaderAndContentProtocol
       #
@@ -92,6 +93,7 @@ module FSR
           @state = [:uninitiated]
           session_initiated 
           @state << :initiated
+          session_header_and_content
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
           if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
@@ -110,8 +112,8 @@ module FSR
       protected
       def queue_pop
         if @queue.size > 0
-          if r = @read_var
-            @read_var = nil 
+          if @read_var and session.headers[@read_var]
+            r, @read_var = @read_var, nil
             @queue.pop.call(session[r])
           else
             @queue.pop.call
