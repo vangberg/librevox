@@ -13,11 +13,16 @@ module FSR
         @auth = args[:auth] || "ClueCon"
       end
 
+      # post_init is called upon each "new" socket connection
       def post_init
         say("auth #{@auth}")
         say('event plain ALL')
       end
 
+      # receive_request is the callback method when data is recieved from the socket
+      #
+      # param header headers from standard Header and Content protocol
+      # param content content from standard Header and Content protocol
       def receive_request(header, content)
         hash_header = headers_2_hash(header)
         hash_content = headers_2_hash(content)
@@ -29,28 +34,32 @@ module FSR
         on_event(event)
       end
 
+      # say encapsulates #send_data for the user
+      #
+      # param line Line of text to send to the socket
       def say(line)
         send_data("#{line}\r\n\r\n")
       end
-
+      
+      # on_event is the callback method when an event is triggered
+      #
+      # param event The triggered event object
+      # return event The triggered event object
       def on_event(event)
         event
       end
 
-      # Add or replace a block to execute when the specified event occurs
+      # add_event_hook adds an Event to listen for.  When that Event is triggered, it will call the defined block
       #
-      # <b>Parameters</b>
-      # - event             : What event to trigger the block on. May be
-      #                       :CHANNEL_CREATE, :CHANNEL_DESTROY etc
-      # - block             : Block to execute
-      #
-      # <b>Returns/<b>
-      # - nil
+      # @param event The event to trigger the block on.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
+      # @param block The block to execute when the event is triggered
       def self.add_event_hook(event, &block)
         HOOKS[event] = block 
       end
 
-      # Delete the block that was to be executed for the specified event.
+      # del_event_hook removes an Event.
+      #
+      # @param event The event to remove.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
       def self.del_event_hook(event)
         HOOKS.delete(event)  
       end

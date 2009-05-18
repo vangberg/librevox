@@ -124,6 +124,13 @@ module FSR
       end
 
       private
+      # establish_new_session is called once during a new session.
+      # This establishes and sets up the variables used to hold state.  
+      # Called from #receive_request
+      #
+      # @param header_and_content_hash HeaderAndContentProtocol object representing the session
+      #
+      # @return header_and_content_hash HeaderAndContentProtocol object representing the session
       def establish_new_session(header_and_content_hash)
         @session = header_and_content_hash
         @step = 0
@@ -132,7 +139,13 @@ module FSR
         @state << :initiated
         header_and_content_hash
       end
-
+      
+      # check_for_updated_session is called from #receive_request if a session has already been established
+      # This will overwrite @session with the new variables representing state.  
+      #
+      # @param header_and_content_hash HeaderAndContentProtocol object
+      # @param hash_content hash of content from standard Header and Content Protocol
+      # @param hash_header hash of headers from standard Header and Content Protocol
       def check_for_updated_session(header_and_content_hash, hash_content, hash_header)
         if header_and_content_hash.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
           header_and_content_hash = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
@@ -141,6 +154,10 @@ module FSR
         end
       end
 
+      # update_state_machine when called will increment @step, 
+      # call the next block from @queue and dispatch the callback method
+      # #receive_reply
+      # @param response_header Response sent to #recieve_reply callback method
       def update_state_machine(response_header)
         @step += 1 if @state.include?(:initiated)
         queue_pop

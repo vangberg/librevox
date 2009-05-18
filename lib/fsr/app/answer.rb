@@ -3,6 +3,8 @@ require "fsr/app"
 module FSR
   module App
     class Answer < Application
+      # Answer a call
+     
       def initialize
       end
 

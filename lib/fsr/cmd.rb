@@ -2,11 +2,12 @@ module FSR
   module Cmd
     class Command
       DEFAULT_OPTIONS = {
-                         :origination_caller_id_name => FSR::DEFAULT_CALLER_ID_NAME,
-                         :origination_caller_id_number => FSR::DEFAULT_CALLER_ID_NUMBER,
-                         :originate_timeout => 30,
-                         :ignore_early_media => true
-                        }
+        :origination_caller_id_name => FSR::DEFAULT_CALLER_ID_NAME,
+        :origination_caller_id_number => FSR::DEFAULT_CALLER_ID_NUMBER,
+        :originate_timeout => 30,
+        :ignore_early_media => true
+      }
+
       protected
       def default_options(args = {}, defaults = nil, &block)
         opts = if defaults.nil?
