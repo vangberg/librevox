@@ -97,13 +97,25 @@ module FSR
             session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
             @session = session_header_and_content
             @step += 1 if @state.include?(:initiated)
-            @queue.pop.call unless @queue.empty?
+            queue_pop
             receive_reply(hash_header)
           end
         else
           @step += 1 if @state.include?(:initiated)
-          @queue.pop.call unless @queue.empty?
+          queue_pop
           receive_reply(session_header_and_content)
+        end
+      end
+
+      protected
+      def queue_pop
+        if @queue.size > 0
+          if r = @read_var
+            @read_var = nil 
+            @queue.pop.call(session[r])
+          else
+            @queue.pop.call
+          end
         end
       end
 
