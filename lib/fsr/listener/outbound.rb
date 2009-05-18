@@ -128,7 +128,7 @@ module FSR
         if header_and_content_hash.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
           header_and_content_hash = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
           @session = header_and_content_hash
-          update_state_machine(header_and_content.headers)
+          update_state_machine(header_and_content_hash.headers)
         end
       end
 
