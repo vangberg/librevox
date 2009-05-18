@@ -26,8 +26,8 @@ module FSR
     def self.register(application, obj, code = nil)
       APPLICATIONS[application.to_sym] = obj
 
-      code ||= REGISTER_CODE % [application, application]
-      App.module_eval(code)
+      code = REGISTER_CODE
+      App.module_eval(code % [application, application])
     end
      
     def self.list

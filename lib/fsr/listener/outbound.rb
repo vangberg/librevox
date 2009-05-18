@@ -20,7 +20,13 @@ module FSR
                                    "end"
                                   ].join("\n")
 
-      APPLICATIONS.each { |app, obj| module_eval(SENDMSG_METHOD_DEFINITION % app.to_s) }
+      APPLICATIONS.each do |app, obj| 
+        if obj.const_defined?("SENDMSG_METHOD")
+          module_eval(obj::SENDMSG_METHOD)
+        else
+          module_eval(SENDMSG_METHOD_DEFINITION % app.to_s)
+        end
+      end
 
       # session_initiated is called when a @session is first created.
       # Overwrite this in your worker class with the call/channel
