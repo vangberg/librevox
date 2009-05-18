@@ -94,13 +94,11 @@ module FSR
         session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         # If we're a new session, call session initiate
         if @session.nil?
-          establish_new_session
+          establish_new_session(session_header_and_content)
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
-          check_for_updated_session
+          check_for_updated_session(session_header_and_content)
         else
-          @step += 1 if @state.include?(:initiated)
-          queue_pop
-          receive_reply(session_header_and_content)
+          update_state_machine(session_header_and_content)
         end
       end
 
@@ -117,8 +115,8 @@ module FSR
       end
 
       private
-      def establish_new_session
-        @session = session_header_and_content
+      def establish_new_session(header_and_content_hash)
+        @session = header_and_content_hash
         @step = 0
         @state = [:uninitiated]
         session_initiated 
@@ -126,14 +124,18 @@ module FSR
         session_header_and_content
       end
 
-      def check_for_updated_session
-        if session_header_and_content.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
-          session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
-          @session = session_header_and_content
-          @step += 1 if @state.include?(:initiated)
-          queue_pop
-          receive_reply(hash_header)
+      def check_for_updated_session(header_and_content_hash)
+        if header_and_content_hash.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
+          header_and_content_hash = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
+          @session = header_and_content_hash
+          update_state_machine(header_and_content.headers)
         end
+      end
+
+      def update_state_machine(response_header)
+        @step += 1 if @state.include?(:initiated)
+        queue_pop
+        receive_reply(response_header)
       end
 
     end
