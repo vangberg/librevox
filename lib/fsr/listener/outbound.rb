@@ -112,7 +112,7 @@ module FSR
       protected
       def queue_pop
         if @queue.size > 0
-          if @read_var and session.headers[@read_var]
+          if @read_var and session.headers[@read_var.to_sym]
             r, @read_var = @read_var, nil
             @queue.pop.call(session[r])
           else
