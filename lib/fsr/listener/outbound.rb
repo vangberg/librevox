@@ -96,7 +96,7 @@ module FSR
         if @session.nil?
           establish_new_session(session_header_and_content)
         elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
-          check_for_updated_session(session_header_and_content, hash_content)
+          check_for_updated_session(session_header_and_content, hash_content, hash_header)
         else
           update_state_machine(session_header_and_content)
         end
@@ -124,7 +124,7 @@ module FSR
         header_and_content_hash
       end
 
-      def check_for_updated_session(header_and_content_hash, hash_content)
+      def check_for_updated_session(header_and_content_hash, hash_content, hash_header)
         if header_and_content_hash.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
           header_and_content_hash = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
           @session = header_and_content_hash
