@@ -15,18 +15,18 @@ module FSR
       def sendmsg
         "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments.join(" ")]
       end
-
+      REGISTER_CODE = %q|
+        def read(*args, &block)
+          r = FSR::App::Read.new(*args)
+          @read_var = "variable_#{r.chan_var}"
+          r.sendmsg
+          @queue << Proc.new { update_session } 
+          @queue << block if block_given?
+        end
+      |
     end
+    register(:read, Read, Read::REGISTER_CODE)
 
-    REGISITER_CODE = %q|
-      def read(*args, &block)
-        r = FSR::App::Read.new(*args)
-        @read_var = "variable_#{r.chan_var}"
-        r.sendmsg
-        @queue << Proc.new { update_session } 
-        @queue << &block if block_given?
-      end
-    |
-    register(:read, Read, REGISTER_CODE)
+
   end
 end
