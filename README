@@ -10,8 +10,8 @@ A ruby library for interacting with the "FreeSWITCH" (http://www.freeswitch.org)
 
 REQUIREMENTS
 ------------
-- ruby (>= 1.8)
-- eventmachine (If you wish to use Outbound and Inbound listener)
+* ruby (>= 1.8)
+* eventmachine (If you wish to use Outbound and Inbound listener)
 
 USAGE
 -----
@@ -22,94 +22,94 @@ An Outbound Event Listener Example that reads and returns DTMF input:
 Simply just create a subclass of FSR::Listner::Outbound and all
 new calls/sessions will invoke the "session_initiated" callback method.
  
-  * NOTE:  FSR uses blocks within the 'session_inititated' method to ensure 
-           that the next "freeswich command" is not executed until the previous 
-           "Freeswitch command" has finished.  This is kicked off by "answer do"
+<b>NOTE</b>: FSR uses blocks within the 'session_inititated' method to ensure that the next "freeswich command" is not executed until the previous "Freeswitch command" has finished.  This is kicked off by "answer do"
 
-    require 'fsr'
-    require 'fsr/listener/outbound'
+  #!/usr/bin/ruby
+  require 'fsr'
+  require 'fsr/listener/outbound'
 
-    class OutboundDemo < FSR::Listener::Outbound
+  class OutboundDemo < FSR::Listener::Outbound
 
-      def session_initiated
-        exten = @session.headers[:caller_caller_id_number]
-        FSR::Log.info "*** Answering incoming call from #{exten}"
+    def session_initiated
+      exten = @session.headers[:caller_caller_id_number]
+      FSR::Log.info "*** Answering incoming call from #{exten}"
 
-        answer do
-          FSR::Log.info "***Reading DTMF from #{exten}"
-          read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
-              FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
-              hangup #Hangup the call
-          end
+      answer do
+        FSR::Log.info "***Reading DTMF from #{exten}"
+        read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
+            FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
+            hangup #Hangup the call
         end
-
       end
 
     end
 
-    FSR.start_oes! OutboundDemo, :port => 8084, :host => "127.0.0.1"
+  end
 
+  FSR.start_oes! OutboundDemo, :port => 8084, :host => "127.0.0.1"
 
 An Inbound Event Socket Listener example using FreeSWITCHeR's hook system:
 --------------------------------------------------------------------------
 
-    require 'pp'
-    require 'fsr'
-    require "fsr/listener/inbound"
+  #!/usr/bin/ruby
+  require 'pp'
+  require 'fsr'
+  require "fsr/listener/inbound"
 
-    # EXAMPLE 1 
-    # This adds a hook on CHANNEL_CREATE events. You can also create a method to handle the event you're after. See the next example
-    FSL::Inbound.add_event_hook(:CHANNEL_CREATE) {|event| FSR::Log.info "*** [#{event.content[:unique_id]}] Channel created - greetings from the hook!" }
+  # EXAMPLE 1 
+  # This adds a hook on CHANNEL_CREATE events. You can also create a method to handle the event you're after. See the next example
+  FSL::Inbound.add_event_hook(:CHANNEL_CREATE) {|event| FSR::Log.info "*** [#{event.content[:unique_id]}] Channel created - greetings from the hook!" }
 
-    # EXAMPLE 2
-    # Define a method to handle CHANNEL_HANGUP events.
-    def custom_channel_hangup_handler(event)
-      FSR::Log.info "*** [#{event.content[:unique_id]}] Channel hangup. The event:"
-      pp event
-    end
+  # EXAMPLE 2
+  # Define a method to handle CHANNEL_HANGUP events.
+  def custom_channel_hangup_handler(event)
+    FSR::Log.info "*** [#{event.content[:unique_id]}] Channel hangup. The event:"
+    pp event
+  end
 
-    # This adds a hook for EXAMPLE 2
-    FSL::Inbound.add_event_hook(:CHANNEL_HANGUP) {|event| custom_channel_hangup_handler(event) }
+  # This adds a hook for EXAMPLE 2
+  FSL::Inbound.add_event_hook(:CHANNEL_HANGUP) {|event| custom_channel_hangup_handler(event) }
 
 
-    # Start FSR Inbound Listener
-    FSR.start_ies!(FSL::Inbound, :host => "localhost", :port => 8021)
+  # Start FSR Inbound Listener
+  FSR.start_ies!(FSL::Inbound, :host => "localhost", :port => 8021)
 
 
 An Inbound Event Socket Listener example using the on_event callback method instead of hooks:
 ---------------------------------------------------------------------------------------------
 
-    require 'pp'
-    require 'fsr'
-    require "fsr/listener/inbound"
+  #!/usr/bin/ruby
+  require 'pp'
+  require 'fsr'
+  require "fsr/listener/inbound"
 
 
-    class IesDemo < FSR::Listener::Inbound
+  class IesDemo < FSR::Listener::Inbound
 
-      def on_event(event)
-        pp event.headers
-        pp event.content[:event_name]
-      end
-
+    def on_event(event)
+      pp event.headers
+      pp event.content[:event_name]
     end
 
-    FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+  end
+
+  FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
 
 
 An example of using FSR::CommandSocket to originate a new call in irb:
 ----------------------------------------------------------------------
 
-    irb(main):001:0> require 'fsr'
-    => true
+  irb(main):001:0> require 'fsr'
+  => true
 
-    irb(main):002:0> FSR.load_all_commands
-    => [:sofia, :originate]
+  irb(main):002:0> FSR.load_all_commands
+  => [:sofia, :originate]
 
-    irb(main):003:0> sock = FSR::CommandSocket.new
-    => #<FSR::CommandSocket:0xb7a89104 @server="127.0.0.1", @socket=#<TCPSocket:0xb7a8908c>, @port="8021", @auth="ClueCon">
+  irb(main):003:0> sock = FSR::CommandSocket.new
+  => #<FSR::CommandSocket:0xb7a89104 @server="127.0.0.1", @socket=#<TCPSocket:0xb7a8908c>, @port="8021", @auth="ClueCon">
 
-    irb(main):007:0> sock.originate(:target => 'sofia/gateway/carlos/8179395222', :endpoint => FSR::App::Bridge.new("user/bougyman")).run
-    => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
+  irb(main):007:0> sock.originate(:target => 'sofia/gateway/carlos/8179395222', :endpoint => FSR::App::Bridge.new("user/bougyman")).run
+  => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
 
 
 
