@@ -17,9 +17,9 @@ module FSR
       end
       SENDMSG_METHOD = %q|
         def read(*args, &block)
-          r = FSR::App::Read.new(*args)
-          @read_var = "variable_#{r.chan_var}"
-          r.sendmsg
+          me = super(*args)
+          @read_var = "variable_#{me.chan_var}"
+          sendmsg me
           @queue.unshift Proc.new { update_session } 
           @queue.unshift block if block_given?
         end

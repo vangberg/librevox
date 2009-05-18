@@ -12,12 +12,9 @@ class OutboundDemo < FSR::Listener::Outbound
 
     answer do
       FSR::Log.info "***Reading DTMF from #{exten}"
-      read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do
-        FSR::Log.info "*** Updating session for #{exten}"
-        update_session do
-          FSR::Log.info "***Success, grabbed #{@session.headers[:variable_input].strip} from #{exten}"
+      read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
+          FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
           hangup #Hangup the call
-        end
       end
     end
 

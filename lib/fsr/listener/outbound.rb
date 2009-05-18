@@ -120,7 +120,7 @@ module FSR
         if @queue.size > 0
           if @read_var and session.headers[@read_var.to_sym]
             r, @read_var = @read_var.to_sym, nil
-            @queue.pop.call(session[r])
+            @queue.pop.call(session.headers[r])
           else
             @queue.pop.call
           end

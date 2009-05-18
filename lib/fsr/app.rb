@@ -23,11 +23,9 @@ module FSR
     LOAD_PATH = [FSR::ROOT.join("fsr/app")]
     REGISTER_CODE = "def %s(*args, &block); APPLICATIONS[%p].new(*args, &block); end"
 
-    def self.register(application, obj, code = nil)
+    def self.register(application, obj)
       APPLICATIONS[application.to_sym] = obj
-
-      code = REGISTER_CODE
-      App.module_eval(code % [application, application])
+      App.module_eval(REGISTER_CODE % [application, application])
     end
      
     def self.list
