@@ -6,14 +6,6 @@ MANIFEST
 NEWS
 README
 Rakefile
-examples/bin/cmd_demo.rb
-examples/bin/dtmf_test.rb
-examples/bin/ies_demo.rb
-examples/bin/ies_demo_with_hook.rb
-examples/bin/oes_demo.rb
-examples/dtmf_test.rb
-examples/ies_demo.rb
-examples/ies_demo_with_hook.rb
 examples/inbound_event_socket.rb
 examples/inbound_socket_events.rb
 examples/outbound_event_socket.rb
@@ -61,7 +53,6 @@ lib/fsr/listener/header_and_content_response.rb
 lib/fsr/listener/inbound.rb
 lib/fsr/listener/inbound/event.rb
 lib/fsr/listener/outbound.rb
-lib/fsr/listener/outbound.rb.orig
 lib/fsr/model/call.rb
 lib/fsr/version.rb
 tasks/authors.rake
@@ -80,9 +71,12 @@ tasks/spec.rake
 tasks/yard.rake
 spec/helper.rb
 spec/fsr/app.rb
+spec/fsr/app/answer.rb
 spec/fsr/app/bridge.rb
 spec/fsr/app/conference.rb
 spec/fsr/app/fifo.rb
+spec/fsr/app/fs_break.rb
+spec/fsr/app/fs_sleep.rb
 spec/fsr/app/hangup.rb
 spec/fsr/app/limit.rb
 spec/fsr/app/log.rb

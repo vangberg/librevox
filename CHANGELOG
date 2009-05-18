@@ -1,3 +1,122 @@
+[bf6befa | Mon May 18 23:22:36 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * functionality for receiving variables passed to a block complete.  README updated.  Convert Rakefile file options to Pathname
+
+[7b0bf11 | Mon May 18 20:31:48 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Added yardoc comments
+
+[7b7efa7 | Mon May 18 20:10:30 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Removed FSR::Log.info debugging line from uuid_getvar and setvar
+
+[fda2ff4 | Mon May 18 19:55:19 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * Added FSR::App::UuidGetVar and UuidSetVar
+
+[39338cd | Mon May 18 18:55:17 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Corrected typo s/header_and_content/header_and_content_hash
+
+[cb4d1cc | Mon May 18 18:54:08 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * And also it seems I need to include a parameter for hash_header in
+
+[a818d62 | Mon May 18 18:51:25 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Need to add a second paremeter to check_for_updated_session that
+
+
+
+[6302892 | Mon May 18 18:49:17 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Changed session_header_and_content to header_and_content_hash
+
+[5b8d9a4 | Mon May 18 18:47:57 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Corrected some typos in previous refactor of Outbound#receive_reply
+
+[12a13eb | Mon May 18 18:41:40 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Refactored Outbound#receive_request to decouple it a tad.  Still could
+
+
+
+[6a95fa1 | Mon May 18 18:16:43 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+
+  * Refactored FSR::App::PlayAndGetDigits to now yeild the read_var in a
+
+
+
+[5093e71 | Mon May 18 15:08:39 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * Read will now yield the read variable in a block
+
+    Updated README
+
+[e71a1a5 | Mon May 18 01:55:43 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * reverted design error, putting SENDMSG_METHOD into Read attaching to Outbound, not App
+
+[273bdaf | Mon May 18 01:34:02 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * removed &block from read method definition after failing spec
+
+[ad1bbd1 | Mon May 18 00:37:44 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * left out another to_sym
+
+[19f8581 | Mon May 18 00:32:23 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * left out a to_sym
+
+[f445058 | Mon May 18 00:31:43 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * typos galore, fixed wrong constant name in Read.  created the queue_pop method to handle popping procs, adding the session.headers[@read_var] if it exist to the proc called
+
+[93ecad2 | Mon May 18 00:19:16 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * TEST push to test changes, read/outbound test needed
+
+[30a39ad | Sat May 16 20:41:41 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * Added specs for originate, defaults to Cmd
+
+     * Added specs for failing cases of Cmd::Originate
+     * Move DEFAULT_OPTIONS to FSR::Cmd::Command so commands inherit this
+     * Move default_options method to FSR::Cmd::Command as well.
+     * Used default_options block in Originate for options population
+
+[865d177 | Sat May 16 17:56:45 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * filling out originate specs, testing options and argument types
+
+[19b81ff | Wed May 13 16:03:35 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * refactored to a new default_options
+
+[081112a | Wed May 13 15:32:20 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * changed handling of :ignore_early_media in target_options of originate to behave properly.  Added argument checks for some originate arguments
+
+[55ec1c5 | Mon May 11 17:14:34 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * New specs now pass
+
+[ab262c9 | Mon May 11 17:13:48 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Added specs for FSR::App::Answer, FSBreak, and FSSleep
+
+[1faf55f | Mon May 11 16:44:51 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Updated gemspec for 0.1.4
+
+[011a3e6 | Mon May 11 16:43:14 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Sync changes with Master
+
+
+
 [f036509 | Mon May 11 16:36:04 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Version 0.1.4
