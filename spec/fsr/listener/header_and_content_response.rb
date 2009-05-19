@@ -20,17 +20,24 @@ describe FSL::HeaderAndContentResponse do
     hcr.headers.should == {:a => 'b', :c => 'd'}
   end
 
-  it "knows it's event_name" do
+  it "returns an empty string if there's no event-name" do
     hcr = HCR.from_raw("", "")
+    hcr.class.should == HCR
     hcr.event_name.should == ''
+  end
+
+  it "returns the event-name if there is one" do
     hcr = HCR.from_raw("", "event-name: foo")
     hcr.event_name.should == 'foo'
+    hcr.class.should == HCR::ParsedContent
   end
 
   it "can check for an event name in content" do
     hcr = HCR.new(:content => {:event_name => ' YAY', :stuff => "d"})
+    hcr.class.should == HCR
+
     hcr.has_event_name?('YAY').should != nil
     hcr.content[:event_name] = 'NOES'
-    hcr.has_event_name?('YAY').should == nil
+    hcr.has_event_name?('YAY').should == false
   end
 end
