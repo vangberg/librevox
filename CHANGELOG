@@ -1,3 +1,7 @@
+[9451ba8 | Tue May 19 00:26:26 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * Version 0.3.1 fixes bug in FS_ROOT not being populated properly
+
 [fbaf84c | Mon May 18 23:24:58 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Version 0.3.0
