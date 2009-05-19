@@ -13,7 +13,7 @@ module FSR
       def self.from_raw(headers, content)
         hash_headers = headers_2_hash(headers)
 
-        if content.find{|line| line  =~ /:/ }
+        if content.find{|line| line  =~ /\S:\s+\S/ }
           hash_content = headers_2_hash(content)
           ParsedContent.new(:headers => hash_headers, :content => hash_content)
         else
