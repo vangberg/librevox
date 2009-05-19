@@ -42,7 +42,7 @@ describe "Testing FSR::Listener::Outbound" do
     l.receive_request "foo: bar\n\nx: y", "nothing special"
     l.history.should == [ "connect\n\n" ]
     l.session.headers.should == {:foo => 'bar', :x => 'y'}
-    l.session.should.not.respond_to :event_name
+    l.session.event_name.should == ''
   end
 
   it 'receives requests and puts them into a plain ParsedContent' do
