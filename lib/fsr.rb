@@ -1,4 +1,3 @@
-require 'logger'
 require 'socket'
 require 'pathname'
 require 'pp'
@@ -15,14 +14,19 @@ module FSR
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FSR"
 
-  # Usage:
-  #
-  #   Log.info('foo')
-  #   Log.debug('bar')
-  #   Log.warn('foobar')
-  #   Log.error('barfoo')
-  Log = Logger.new($stdout)
-  Log.level = Logger::INFO
+  #  attempt to require log4r.  
+  #  if log4r is not available, load logger from stdlib
+  begin
+    require 'log4r'
+    Log = Log4r::Logger.new('FSR')
+    Log.outputters = Log4r::Outputter.stdout
+    Log.level = Log4r::INFO
+  rescue LoadError
+    $stderr.puts "No log4r found, falling back to standard ruby library Logger"
+    require 'logger'
+    Log = Logger.new(STDOUT)
+    Log.level = Logger::INFO
+  end
 
   ROOT = Pathname(__FILE__).dirname.expand_path.freeze
   $LOAD_PATH.unshift(FSR::ROOT)
