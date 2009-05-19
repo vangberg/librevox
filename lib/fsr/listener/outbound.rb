@@ -20,7 +20,7 @@ module FSR
                                    "end"
                                   ].join("\n")
 
-      APPLICATIONS.each do |app, obj|
+      APPLICATIONS.each do |app, obj| 
         if obj.const_defined?("SENDMSG_METHOD")
           module_eval(obj::SENDMSG_METHOD)
         else
@@ -33,7 +33,7 @@ module FSR
       # handling logic you desire
       def session_initiated
         FSR::Log.warn "#{self.class.name}#session_initiated not overwritten"
-        FSR::Log.debug session.inspect
+        FSR::Log.debug session_data.inspect
       end
 
       # receive_reply is called when a response is received.
@@ -48,14 +48,14 @@ module FSR
 
       # sendmsg sends data to the EM app socket via #send_data, or
       # returns the string it would send if #send_data is not defined.
-      # It expects an object which responds to either #sendmsg or #to_s,
+      # It expects an object which responds to either #sendmsg or #to_s, 
       # which should return a EM Outbound Event Socket formatted instruction
-
+      
       def sendmsg(message)
         text = message.respond_to?(:sendmsg) ? message.sendmsg : message.to_s
         FSR::Log.debug "sending #{text}"
         message = "sendmsg\n%s\n" % text
-        send_data(message) if respond_to?(:send_data)
+        self.respond_to?(:send_data) ? send_data(message) : message
       end
 
       # Update_session
@@ -70,41 +70,6 @@ module FSR
         receive_reply(@session)
       end
 
-      # receive_request is called each time data is received by the event
-      # machine it will manipulate the received data into either a new session
-      # or a reply, to be picked up by #session_initiated or #receive_reply.
-      #
-      # If your listener is listening for events, this will also renew your
-      # @session each time you receive a CHANNEL_DATA event.
-      #
-      # @param [String, #each_line] headers
-      #   The headers of the request, as passed by HeaderAndContentProtocol
-      # @param [String, #each_line] content
-      #   The content of the request, as passed by HeaderAndContentProtocol
-      #
-      # @return [HeaderAndContentResponse]
-      def receive_request(headers, content)
-        hcr = HeaderAndContentResponse.from_raw(headers, content)
-
-        # If we're a new session, call session initiate
-        if session.nil?
-          establish_new_session(hcr)
-        elsif @uuid_var && hcr.content_type == "api/response"
-          Log.info("@uuid_var is set => %p : %s" % [hcr, content])
-
-          @uuid_var = nil
-          stripped_content = hcr.content.strip
-
-          @queue.pop.call(stripped_content) unless @queue.empty?
-        elsif hcr.event?
-          # If content includes an event_name, it must be a response from an
-          # api command
-          check_for_updated_session(hcr, hash_content, hash_header)
-        else
-          update_state_machine(hcr)
-        end
-      end
-
       protected
       def post_init
         @read_var = nil
@@ -114,6 +79,39 @@ module FSR
         FSR::Log.debug "Accepting connections."
       end
 
+      # receive_request is called each time data is received by the event machine
+      #  it will manipulate the received data into either a new session or a reply,
+      #  to be picked up by #session_initiated or #receive_reply.
+      #  If your listener is listening for events, this will also renew your @session
+      #  each time you receive a CHANNEL_DATA event.
+      #
+      # @param header The header of the request, as passed by HeaderAndContentProtocol
+      # @param content The content of the request, as passed by HeaderAndContentProtocol
+      #
+      # @return [HeaderAndContentResponse] An EventMachine HeaderAndContentResponse
+      def receive_request(header, content)
+        hash_header = headers_2_hash(header)
+        if content.to_s.match(/:/)
+          hash_content = headers_2_hash(content)
+        else
+          hash_content = content
+        end
+        session_header_and_content = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
+        # If we're a new session, call session initiate
+        if session.nil?
+          establish_new_session(session_header_and_content)
+        elsif @uuid_var  and session_header_and_content.headers[:content_type] == "api/response"
+          FSR::Log.info("@uuid_var is set => #{session_header_and_content.inspect} : #{content}")
+          r, @uuid_var = session_header_and_content.content.strip, nil
+          @queue.pop.call(r) if @queue.size > 0
+        elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
+          check_for_updated_session(session_header_and_content, hash_content, hash_header)
+        else
+          update_state_machine(session_header_and_content)
+        end
+      end
+
+      protected
       def queue_pop
         if @queue.size > 0
           if @read_var and session.headers[@read_var.to_sym]
@@ -127,7 +125,7 @@ module FSR
 
       private
       # establish_new_session is called once during a new session.
-      # This establishes and sets up the variables used to hold state.
+      # This establishes and sets up the variables used to hold state.  
       # Called from #receive_request
       #
       # @param header_and_content_hash HeaderAndContentProtocol object representing the session
@@ -137,27 +135,26 @@ module FSR
         @session = header_and_content_hash
         @step = 0
         @state = [:uninitiated]
-        session_initiated
+        session_initiated 
         @state << :initiated
         header_and_content_hash
       end
-
+      
       # check_for_updated_session is called from #receive_request if a session has already been established
-      # This will overwrite @session with the new variables representing state.
+      # This will overwrite @session with the new variables representing state.  
       #
-      # @param [HeaderAndContentResponse] header_and_content_hash object
+      # @param header_and_content_hash HeaderAndContentProtocol object
       # @param hash_content hash of content from standard Header and Content Protocol
       # @param hash_header hash of headers from standard Header and Content Protocol
       def check_for_updated_session(header_and_content_hash, hash_content, hash_header)
-        # Anytime we see CHANNEL_DATA event, we want to update our @session
-        return unless header_and_content_hash.has_event_name?('CHANNEL_DATA')
-
-        @session = HeaderAndContentResponse.new(
-          :headers => hash_header.merge(hash_content))
-        update_state_machine(@session.headers)
+        if header_and_content_hash.content[:event_name].to_s.match(/CHANNEL_DATA/i) # Anytime we see CHANNEL_DATA event, we want to update our @session
+          header_and_content_hash = HeaderAndContentResponse.new({:headers => hash_header.merge(hash_content.strip_value_newlines), :content => {}})
+          @session = header_and_content_hash
+          update_state_machine(header_and_content_hash.headers)
+        end
       end
 
-      # update_state_machine when called will increment @step,
+      # update_state_machine when called will increment @step, 
       # call the next block from @queue and dispatch the callback method
       # #receive_reply
       # @param response_header Response sent to #recieve_reply callback method
@@ -168,5 +165,11 @@ module FSR
       end
 
     end
+  end
+end
+
+class Hash
+  def strip_value_newlines
+    Hash[*(self.map { |k,v| v.respond_to?(:to_s) ? [k, v.to_s.strip] : [k, v] }.flatten)]
   end
 end

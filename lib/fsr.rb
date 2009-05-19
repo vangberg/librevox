@@ -11,8 +11,7 @@ require 'pp'
 ## Any constants will be defined here, as well as methods for loading commands and applications
 module FSR
   # Global configuration options
-  FS_INSTALL_PATHS = %w[ /usr/local/freeswitch /opt/freeswitch /usr/freeswitch
-                         /home/freeswitch/freeswitch ]
+  FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch", "/home/freeswitch/freeswitch"]
   DEFAULT_CALLER_ID_NUMBER = '8675309'
   DEFAULT_CALLER_ID_NAME   = "FSR"
 
@@ -34,7 +33,7 @@ module FSR
     load_all_applications
     Cmd.load_all
   end
-
+  
   # Load all FSR::App classes
   def self.load_all_applications
     require "fsr/app"
@@ -51,12 +50,12 @@ module FSR
       FSR::Log.info "*** http://code.rubyists.com/projects/fs"
     end
   end
-
+  
   # Method to start EM for Inbound Event Socket
   # @see FSR::Listener::Inbound
   # @param [FSR::Listener::Inbound] klass An Inbound Listener class, to be started by EM.run
   # @param [::Hash] args A hash of options, may contain
-  #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost")
+  #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost") 
   #                       <tt>:port [Integer]</tt> the port to listen on (Default: 8021)
   def self.start_ies!(klass, args = {})
     port = args[:port] || 8021
