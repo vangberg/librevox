@@ -16,7 +16,7 @@ module FSR
       end
     end
     
-    # Method to authenticate to FreeSWITCH
+    # login - Method to authenticate to FreeSWITCH
     def login
       #Clear buf from initial socket creation/opening
       response 

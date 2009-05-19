@@ -1,4 +1,4 @@
-ydoc/
+ydoc/*
 .[a-zA-Z]*
 web/log/*
 RIDE*

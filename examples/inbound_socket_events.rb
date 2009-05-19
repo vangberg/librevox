@@ -2,7 +2,6 @@
 
 require 'pp'
 require File.join(File.dirname(__FILE__), "..", 'lib', 'fsr')
-puts $LOAD_PATH.inspect
 $stdout.flush
 require "fsr/listener/inbound"
 
@@ -16,6 +15,7 @@ def custom_channel_hangup_handler(event)
   FSR::Log.info "*** [#{event.content[:unique_id]}] Channel hangup. The event:"
   pp event
 end
+
 # This adds a hook for EXAMPLE 2
 FSL::Inbound.add_event_hook(:CHANNEL_HANGUP) {|event| custom_channel_hangup_handler(event) }
 

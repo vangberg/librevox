@@ -4,23 +4,100 @@ Copyright (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel, Michael Fellinger
 Distributed under the terms of the MIT License.
 ==========================================================
 
-About
+ABOUT
 -----
-*** STILL UNDER HEAVY DEVELOPMENT ***
-
 A ruby library for interacting with the "FreeSWITCH" (http://www.freeswitch.org) opensource telephony platform
 
-*** STILL UNDER HEAVY DEVELOPMENT ***
-
-Requirements
+REQUIREMENTS
 ------------
-- ruby (>= 1.8)
-- eventmachine (If you wish to use Outbound and Inbound listener)
+* ruby (>= 1.8)
+* eventmachine (If you wish to use Outbound and Inbound listener)
 
-Usage
+USAGE
 -----
 
-Example of originating a new call in 'irb' using FSR::CommandSocket#originate:
+An Outbound Event Listener Example that reads and returns DTMF input:
+--------------------------------------------------------------------
+
+Simply just create a subclass of FSR::Listner::Outbound and all
+new calls/sessions will invoke the "session_initiated" callback method.
+ 
+<b>NOTE</b>: FSR uses blocks within the 'session_inititated' method to ensure that the next "freeswich command" is not executed until the previous "Freeswitch command" has finished.  This is kicked off by "answer do"
+
+  #!/usr/bin/ruby
+  require 'fsr'
+  require 'fsr/listener/outbound'
+
+  class OutboundDemo < FSR::Listener::Outbound
+
+    def session_initiated
+      exten = @session.headers[:caller_caller_id_number]
+      FSR::Log.info "*** Answering incoming call from #{exten}"
+
+      answer do
+        FSR::Log.info "***Reading DTMF from #{exten}"
+        read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
+            FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
+            hangup #Hangup the call
+        end
+      end
+
+    end
+
+  end
+
+  FSR.start_oes! OutboundDemo, :port => 8084, :host => "127.0.0.1"
+
+An Inbound Event Socket Listener example using FreeSWITCHeR's hook system:
+--------------------------------------------------------------------------
+
+  #!/usr/bin/ruby
+  require 'pp'
+  require 'fsr'
+  require "fsr/listener/inbound"
+
+  # EXAMPLE 1 
+  # This adds a hook on CHANNEL_CREATE events. You can also create a method to handle the event you're after. See the next example
+  FSL::Inbound.add_event_hook(:CHANNEL_CREATE) {|event| FSR::Log.info "*** [#{event.content[:unique_id]}] Channel created - greetings from the hook!" }
+
+  # EXAMPLE 2
+  # Define a method to handle CHANNEL_HANGUP events.
+  def custom_channel_hangup_handler(event)
+    FSR::Log.info "*** [#{event.content[:unique_id]}] Channel hangup. The event:"
+    pp event
+  end
+
+  # This adds a hook for EXAMPLE 2
+  FSL::Inbound.add_event_hook(:CHANNEL_HANGUP) {|event| custom_channel_hangup_handler(event) }
+
+
+  # Start FSR Inbound Listener
+  FSR.start_ies!(FSL::Inbound, :host => "localhost", :port => 8021)
+
+
+An Inbound Event Socket Listener example using the on_event callback method instead of hooks:
+---------------------------------------------------------------------------------------------
+
+  #!/usr/bin/ruby
+  require 'pp'
+  require 'fsr'
+  require "fsr/listener/inbound"
+
+
+  class IesDemo < FSR::Listener::Inbound
+
+    def on_event(event)
+      pp event.headers
+      pp event.content[:event_name]
+    end
+
+  end
+
+  FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+
+
+An example of using FSR::CommandSocket to originate a new call in irb:
+----------------------------------------------------------------------
 
   irb(main):001:0> require 'fsr'
   => true
@@ -35,92 +112,8 @@ Example of originating a new call in 'irb' using FSR::CommandSocket#originate:
   => {"Job-UUID"=>"732075a4-7dd5-4258-b124-6284a82a5ae7", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7"}
 
 
-Example of creating an Outbound Eventsocket listener:
 
-    #!/usr/bin/env ruby
-
-    require 'fsr'
-    require "fsr/listener/outbound"
-
-    class OesDemo < FSR::Listener::Outbound
-
-      def session_initiated
-        number = @session.headers[:caller_caller_id_number] # Grab the inbound caller id
-        FSR::Log.info "*** Answering incoming call from #{number}"
-        answer # Answer the call
-        set("hangup_after_bridge", "true")# Set a variable
-        speak 'Hello, This is your phone switch.  Have a great day' # use mod_flite to speak
-        hangup # Hangup the call
-      end
-
-    end
-
-    FSR.start_oes!(OesDemo, :port => 1888, :host => "localhost")
-
-
-
-Example of creating an Outbound Eventsocket listener that can read DTMF input and keep state:
-
-    #!/usr/bin/env ruby
-    
-    require 'fsr'
-    require 'fsr/listener/outbound'
-
-    FSR.load_all_applications
-    FSR.load_all_commands
-
-    class DtmfDemo < FSR::Listener::Outbound
-
-      def session_initiated
-        exten = @session.headers[:caller_caller_id_number]
-        FSR::Log.info "*** Answering incoming call from #{exten}"
-        answer # Answer the call
-      end
-
-      def receive_reply(reply)
-        exten = @session.headers[:caller_caller_id_number]
-        case @step
-        when 1
-          FSR::Log.info "*** Reading dtmf for #{exten}"
-          read "/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav",4,10,"test",15000 # read test
-        when 2
-          FSR::Log.info "*** updating session for #{exten}"
-          update_session
-        when 3
-          FSR::Log.info "** Success, grabbed #{@session.headers[:variable_test].strip} from #{exten}"
-          FSR::Log.info "*** Hanging up call"
-          hangup # Hangup the call
-        end
-      end
-
-    end
-
-    FSR.start_oes! DtmfDemo, :port => 8084, :host => "127.0.0.1"
-
-
-
-Example of creating an Inbound Eventsocket listener:
-
-    #!/usr/bin/env ruby
-
-    require 'fsr'
-    require 'fsr/listener/inbound'
-    require 'pp'
-
-    class IesDemo < FSR::Listener::Inbound
-
-      def on_event(event)
-        pp event.headers
-        pp event.content[:event_name]
-      end
-
-    end
-
-    FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
-
-
-
-Support
+SUPPORT
 -------
 Home page at http://code.rubyists.com/projects/fs
 #rubyists on FreeNode
