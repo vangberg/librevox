@@ -40,7 +40,7 @@ describe "Testing FSR::Listener::Inbound" do
 
     l = my_listener
     l.history.should == [ "auth ClueCon\r\n\r\n", "event plain ALL\r\n\r\n" ]
-    l.receive_request("testing: true", "event-name: CHANNEL_CREATE")
+    l.receive_request(["testing: true"], ["event-name: CHANNEL_CREATE"])
 
     history.size.should == 1
     event = history.first
@@ -54,7 +54,7 @@ describe "Testing FSR::Listener::Inbound" do
 
     l = my_listener
     l.history.should == [ "auth ClueCon\r\n\r\n", "event plain ALL\r\n\r\n" ]
-    l.receive_request("testing: true", "event-name: CHANNEL_CREATE")
+    l.receive_request(["testing: true"], ["event-name: CHANNEL_CREATE"])
 
     history.size.should == 0
   end
@@ -71,7 +71,7 @@ describe "Testing FSR::Listener::Inbound" do
 
     l.history.should == [ "auth ClueCon\r\n\r\n", "event plain ALL\r\n\r\n" ]
     lambda{
-      l.receive_request("testing: true", "event-name: CHANNEL_CREATE")
+      l.receive_request(["testing: true"], ["event-name: CHANNEL_CREATE"])
     }.should.raise
 
     l.event.event_name.should == 'CHANNEL_CREATE'

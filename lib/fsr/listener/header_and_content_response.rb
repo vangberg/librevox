@@ -13,7 +13,7 @@ module FSR
       def self.from_raw(headers, content)
         hash_headers = headers_2_hash(headers)
 
-        if content =~ /:/
+        if content.find{|line| line  =~ /:/ }
           hash_content = headers_2_hash(content)
           ParsedContent.new(:headers => hash_headers, :content => hash_content)
         else
@@ -46,16 +46,9 @@ module FSR
         ''
       end
 
-      # Ported from EventMachine and made 1.9-safe
       def self.headers_2_hash(headers)
-        hash = {}
-        headers.each_line do |line|
-          if /\A([^\s:]+)\s*:\s*/ =~ line
-            tail = $'.dup
-            hash[ $1.downcase.tr('-', '_').to_sym ] = tail
-          end
-        end
-        hash
+        require 'eventmachine'
+        EventMachine::Protocols::HeaderAndContentProtocol.headers_2_hash(headers)
       end
 
       class ParsedContent < self

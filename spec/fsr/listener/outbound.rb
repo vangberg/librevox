@@ -39,7 +39,7 @@ describe "Testing FSR::Listener::Outbound" do
 
   it 'receives requests and puts them into a plain HeaderAndContentResponse' do
     l = my_listener
-    l.receive_request "foo: bar\n\nx: y", "nothing special"
+    l.receive_request ["foo: bar", "x: y"], ["nothing special"]
     l.history.should == [ "connect\n\n" ]
     l.session.headers.should == {:foo => 'bar', :x => 'y'}
     l.session.event_name.should == ''
@@ -47,7 +47,7 @@ describe "Testing FSR::Listener::Outbound" do
 
   it 'receives requests and puts them into a plain ParsedContent' do
     l = my_listener
-    l.receive_request "foo: bar\n\nx: y", "nothing: special\nevent_name:foobar"
+    l.receive_request ["foo: bar", "x: y"], ["nothing: special", "event_name:foobar"]
     l.history.should == [ "connect\n\n" ]
     l.session.headers.should == {:foo => 'bar', :x => 'y'}
     l.session.event_name.should == 'foobar'
