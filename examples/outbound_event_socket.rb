@@ -14,7 +14,8 @@ class OutboundDemo < FSR::Listener::Outbound
       FSR::Log.info "***Reading DTMF from #{exten}"
       read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
           FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
-          hangup #Hangup the call
+          # Tell the caller what they entered
+          speak("Got the DTMF of: #{read_var}") { hangup #Hangup the call }
       end
     end
 

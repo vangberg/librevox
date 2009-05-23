@@ -37,8 +37,12 @@ new calls/sessions will invoke the "session_initiated" callback method.
       answer do
         FSR::Log.info "***Reading DTMF from #{exten}"
         read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
-            FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
-            hangup #Hangup the call
+          FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
+          # Tell the caller what they entered
+          speak("Got the DTMF of: #{read_var}") do 
+            #Hangup the call
+            hangup 
+          end
         end
       end
 
