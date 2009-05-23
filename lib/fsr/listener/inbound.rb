@@ -19,23 +19,18 @@ module FSR
         say('event plain ALL')
       end
 
-      # receive_request is the callback method when data is recieved from the
-      # socket.
+      # receive_request is the callback method when data is recieved from the socket
       #
-      # @param [#each_line] headers
-      #   headers from HeaderAndContentProtocol
-      # @param [#each_line] content
-      #   content from HeaderAndContentProtocol
-      def receive_request(headers, content)
-        event = HeaderAndContentResponse.from_raw(headers, content)
-        event_name = event.event_name
-
+      # param header headers from standard Header and Content protocol
+      # param content content from standard Header and Content protocol
+      def receive_request(header, content)
+        hash_header = headers_2_hash(header)
+        hash_content = headers_2_hash(content)
+        event = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
+        event_name = event.content[:event_name].to_s.strip
         unless event_name.empty?
-          hook = HOOKS[event_name.to_sym]
-          hook.call(event) if hook
+          HOOKS[event_name.to_sym].call(event) unless HOOKS[event_name.to_sym].nil?
         end
-
-      ensure
         on_event(event)
       end
 
@@ -45,34 +40,28 @@ module FSR
       def say(line)
         send_data("#{line}\r\n\r\n")
       end
-
-      # on_event is the callback method when an event is triggered.
-      # It will be triggered even if an hook fails with an exception.
+      
+      # on_event is the callback method when an event is triggered
       #
       # param event The triggered event object
       # return event The triggered event object
       def on_event(event)
+        event
       end
 
-      # add_event_hook adds an Event to listen for. When that Event is
-      # triggered, it will call the defined block
+      # add_event_hook adds an Event to listen for.  When that Event is triggered, it will call the defined block
       #
-      # @return [Proc, nil] depending on what +&block+ was
-      #
-      # @param [Symbol, #to_sym] event
-      #   The event to trigger the block on.  Examples are :CHANNEL_CREATE,
-      #   :CHANNEL_DESTROY, etc
-      # @param [Proc] block
-      #   The block to execute when the event is triggered
+      # @param event The event to trigger the block on.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
+      # @param block The block to execute when the event is triggered
       def self.add_event_hook(event, &block)
-        HOOKS[event.to_sym] = block
+        HOOKS[event] = block 
       end
 
       # del_event_hook removes an Event.
       #
       # @param event The event to remove.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
       def self.del_event_hook(event)
-        HOOKS.delete(event.to_sym)
+        HOOKS.delete(event)  
       end
 
     end
