@@ -4,11 +4,14 @@ require 'fsr/listener/header_and_content_response'
 describe FSL::HeaderAndContentResponse do
   HCR = FSL::HeaderAndContentResponse
 
-  it "is initializable without arguments" do
-    hcr = HCR.new
-    hcr.headers.should.be.empty
-    hcr.content.should.be.empty
+  it "is initializable with 2 hash arguments" do
+    header = {:foo => "bar", :jumbo => "shrimp"}
+    content = {:response => "w00t"}
+    hcr = HCR.new({:headers => header, :content => content})
+    hcr.headers.should.include? :foo
+    hcr.content.should.include? :response
   end
+=begin manveru's future specs
 
   it "can be created with headers" do
     hcr = HCR.new(:headers => {:a => 'b', :c => 'd'})
@@ -40,4 +43,6 @@ describe FSL::HeaderAndContentResponse do
     hcr.content[:event_name] = 'NOES'
     hcr.has_event_name?('YAY').should == false
   end
+
+=end
 end
