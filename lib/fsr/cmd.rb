@@ -62,7 +62,7 @@ module FSR
     # Load all of the commands we find in Cmd::LOAD_PATH
     def self.load_all(force_reload = false)
       LOAD_PATH.each do |load_path|
-        Dir[load_path.join("*.rb")].each { |command_file| load_command(command_file, force_reload) }
+        Dir[load_path.join("*.rb").to_s].each { |command_file| load_command(command_file, force_reload) }
       end
       list
     end
