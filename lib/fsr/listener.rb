@@ -7,4 +7,7 @@ module FSR
 
   end
 end
+class String
+  alias :each :each_line
+end
 FSL = FSR::Listener

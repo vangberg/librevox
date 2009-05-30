@@ -104,8 +104,10 @@ module FSR
           FSR::Log.info("@uuid_var is set => #{session_header_and_content.inspect} : #{content}")
           r, @uuid_var = session_header_and_content.content.strip, nil
           @queue.pop.call(r) if @queue.size > 0
-        elsif session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
-          check_for_updated_session(session_header_and_content, hash_content, hash_header)
+        elsif session_header_and_content.content.class == Hash
+          if session_header_and_content.content[:event_name] # If content includes an event_name, it must be a response from an api command
+            check_for_updated_session(session_header_and_content, hash_content, hash_header)
+          end
         else
           update_state_machine(session_header_and_content)
         end
