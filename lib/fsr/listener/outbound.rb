@@ -16,7 +16,7 @@ module FSR
       SENDMSG_METHOD_DEFINITION = [
                                    "def %s(*args, &block)",
                                    "  sendmsg super",
-                                   "  @queue << block if block_given?",
+                                   "  @queue.unshift block if block_given?",
                                    "end"
                                   ].join("\n")
 
@@ -68,7 +68,7 @@ module FSR
 
       def update_session(&block)
         send_data("api uuid_dump #{@session.headers[:unique_id]}\n\n")
-        @queue << block if block_given?
+        @queue.unshift block if block_given?
       end
 
       def next_step

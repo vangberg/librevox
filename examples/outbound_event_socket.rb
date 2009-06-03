@@ -19,7 +19,7 @@ class OutboundDemo < FSR::Listener::Outbound
           FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
           # Tell the caller what they entered
           # If you have mod_flite installed you should hear speech
-          speak("Got the DTMF of: #{read_var}") 
+          speak("Got the DTMF of: #{read_var}") { hangup }
       end
     end
 
