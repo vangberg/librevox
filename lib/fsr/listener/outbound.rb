@@ -58,6 +58,12 @@ module FSR
         self.respond_to?(:send_data) ? send_data(message) : message
       end
 
+      # API
+      def api(command, &block)
+        send_data("api #{command}\r\n\r\n")
+        @queue.unshift block if block_given?
+      end
+
       # Update_session
 
       def update_session(&block)
