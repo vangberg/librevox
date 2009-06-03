@@ -4,7 +4,7 @@ require 'spec/helper'
 describe "Testing FSR module loading methods" do
   # When you add applications  you must modify the expected apps_loaded behavior
   it "Loads all applications" do
-    all_apps = [:play_and_get_digits, :uuid_dump, :uuid_setvar, :uuid_getvar, :read, :set, :transfer, :speak, :fs_sleep, :playback, :answer, :fifo, :bridge, :hangup, :conference, :fs_break, :log, :limit]
+    all_apps = [:api, :play_and_get_digits, :uuid_dump, :uuid_setvar, :uuid_getvar, :read, :set, :transfer, :speak, :fs_sleep, :playback, :answer, :fifo, :bridge, :hangup, :conference, :fs_break, :log, :limit]
     # Add any apps which will load to this set
     apps_loaded = FSR.load_all_applications
     apps_loaded.kind_of?(Array).should == true
