@@ -12,10 +12,14 @@ class OutboundDemo < FSR::Listener::Outbound
 
     answer do
       FSR::Log.info "***Reading DTMF from #{exten}"
-      read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
+      #######################################################
+      ## NOTE YOU MUST MAKE SURE YOU PASS A VALID WAV FILE ##
+      #######################################################
+      read("/usr/local/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
           FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
           # Tell the caller what they entered
-          speak("Got the DTMF of: #{read_var}") { hangup }
+          # If you have mod_flite installed you should hear speech
+          speak("Got the DTMF of: #{read_var}") 
       end
     end
 
