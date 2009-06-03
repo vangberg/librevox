@@ -14,6 +14,8 @@ task :authors do
       name, email = "Tim Morgan", "riscfuture@gmail.com"
     when "Michael Fellinger m.fellinger@gmail.com"
       name, email = "Michael Fellinger", "m.fellinger@gmail.com"
+    when /jayson/i
+      name, email = "Jayson Vaughn", "vaughn.jayson@gmail.com"
     end
 
     authors[[name, email]] += count.to_i

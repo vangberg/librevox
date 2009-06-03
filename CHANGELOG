@@ -1,3 +1,11 @@
+[26c4f0c | Wed Jun 03 23:42:52 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * s/queue << block/queue.unshift block/g
+
+[6b589a3 | Wed Jun 03 23:13:15 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Version 0.4.0
+
 [55753af | Wed Jun 03 23:10:22 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Updated outbound_event_socket.rb example
