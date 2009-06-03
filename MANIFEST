@@ -90,6 +90,7 @@ spec/fsr/cmd/originate.rb
 spec/fsr/cmd/sofia.rb
 spec/fsr/cmd/sofia/profile.rb
 spec/fsr/listener.rb
+spec/fsr/listener/header_and_content_response.rb
 spec/fsr/listener/inbound.rb
 spec/fsr/listener/outbound.rb
 spec/fsr/loading.rb

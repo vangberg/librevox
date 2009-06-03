@@ -1,3 +1,92 @@
+[55753af | Wed Jun 03 23:10:22 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Updated outbound_event_socket.rb example
+
+[234a17e | Wed Jun 03 23:01:56 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Refactored api to be a method of FSR::Listener::Outbound
+
+[0bc8973 | Wed Jun 03 21:55:02 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added FSR::App::Api
+
+[9d2cc41 | Sat May 30 18:49:08 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Made some changes so FSR is Ruby 1.9.1 compat
+
+      * Monkey patched, unfortunately, String class with alias :each
+      * :each_line compat with EventMachine
+
+[a40e1ed | Sat May 30 18:10:35 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Corrected typo in examples/outbound_event_socket.rb
+
+[0a3f680 | Fri May 29 16:15:15 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Added .to_s at end of Dir[load_path.join("*.rb").to_s] for Ruby 1.9.1
+
+
+
+[f267c17 | Wed May 27 20:49:27 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Updated header_and_content specs
+
+[19ee736 | Sat May 23 18:34:18 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * Change example and readme to match what is demoed at sip:8084@falcon.rubyists.com
+
+[5be4271 | Tue May 19 21:02:09 UTC 2009] freeswitch <freeswitch@falcon.(none)>
+
+  * try to load log4r for logging (Logger buffers, bugs with runit services), fall back to Logger from stdlib if log4r not found
+
+[921251a | Tue May 19 20:13:47 UTC 2009] freeswitch <freeswitch@falcon.(none)>
+
+  * reverted regression to listeners, back to functional
+
+[eb72db4 | Tue May 19 15:15:04 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * changed spacing in content#find
+
+[c275898 | Tue May 19 15:12:39 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * improve the regex for matching a header: value in content of HeaderAndContentResponse
+
+[4bfaf24 | Wed May 20 05:05:07 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * headers/content come in as Array
+
+[5640b6f | Wed May 20 04:54:42 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Fix the listener/outbound spec
+
+[29527e2 | Tue May 19 23:20:24 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Minor cleanup
+
+[38b98fa | Tue May 19 21:04:41 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add some more outbound specs and refactor
+
+[817e731 | Tue May 19 21:04:22 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Add HeaderAndContentResponse subclass that will take care of parsing the content if it should be parsed
+
+[d44c3f0 | Tue May 19 20:45:48 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Minor refactor and some more specs for inbound listener
+
+[4f945e5 | Tue May 19 20:28:53 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Refactor and basic specs of HeaderAndContentResponse, integration with inbound/outbound follow
+
+[e3c3142 | Tue May 19 19:29:21 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * A little bit less annoying require_relative look-alike
+
+[e80cbc1 | Tue May 19 00:27:53 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * updated authors and changelog
+
 [9451ba8 | Tue May 19 00:26:26 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Version 0.3.1 fixes bug in FS_ROOT not being populated properly
@@ -515,6 +604,10 @@
   * Updated bin/oes_demo.rb and README to correctly describe how to use
 
 
+
+[ab373dd | Tue Mar 24 00:52:38 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+
+  * Remove cruft from form helper
 
 [0464d4e | Thu Mar 19 19:17:41 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
 
