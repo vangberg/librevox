@@ -46,10 +46,10 @@ module FSR
 
   # Method to start EM for Outbound Event Socket
   def self.start_oes!(klass, args = {})
-    port = args[:port] || "8084"
-    host = args[:host] || "localhost"
+    port = args.delete(:port) || "8084"
+    host = args.delete(:host) || "localhost"
     EM.run do
-      EventMachine::start_server(host, port, klass)
+      EventMachine::start_server(host, port, klass, args)
       FSR::Log.info "*** FreeSWITCHer Outbound EventSocket Listener on #{host}:#{port} ***"
       FSR::Log.info "*** http://code.rubyists.com/projects/fs"
     end
@@ -62,10 +62,10 @@ module FSR
   #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost") 
   #                       <tt>:port [Integer]</tt> the port to listen on (Default: 8021)
   def self.start_ies!(klass, args = {})
-    port = args[:port] || 8021
-    host = args[:host] || "localhost"
+    port = args.delete(:port) || "8084"
+    host = args.delete(:host) || "localhost"
     EM.run do
-      EventMachine::connect(host, port, klass)
+      EventMachine::connect(host, port, klass, args)
       FSR::Log.info "*** FreeSWITCHer Inbound EventSocket Listener connected to #{host}:#{port} ***"
       FSR::Log.info "*** http://code.rubyists.com/projects/fs"
     end
