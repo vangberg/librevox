@@ -1,3 +1,7 @@
+[840dfa1 | Wed Jun 03 23:46:14 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Version 0.4.1
+
 [26c4f0c | Wed Jun 03 23:42:52 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * s/queue << block/queue.unshift block/g
