@@ -53,7 +53,6 @@ module FSR
       
       def sendmsg(message)
         text = message.respond_to?(:sendmsg) ? message.sendmsg : message.to_s
-        FSR::Log.debug "sending #{text}"
         message = "sendmsg\n%s\n" % text
         self.respond_to?(:send_data) ? send_data(message) : message
       end

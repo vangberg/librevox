@@ -8,6 +8,11 @@ require 'pp'
 
 ## This module declares the namespace under which the freeswitcher framework
 ## Any constants will be defined here, as well as methods for loading commands and applications
+class Pathname
+  def /(other)
+    join(other.to_s)
+  end
+end
 module FSR
   # Global configuration options
   FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch", "/home/freeswitch/freeswitch"]
