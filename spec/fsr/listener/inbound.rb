@@ -1,13 +1,25 @@
 require 'spec/helper'
 require "fsr/listener/inbound"
+gem "tmm1-em-spec"
+require "em/spec"
 
 # Bare class to use for testing
 class MyListener < FSR::Listener::Inbound
-end
+  attr_accessor :test_event
 
-# helper to instantiate a new MyListener
-def my_listener
-  MyListener.new
+  def initialize(*args)
+    super(*args)
+    @test_event = nil
+  end
+
+  def on_event(event)
+    recvd_event << event
+  end
+
+  def recvd_event
+    @recvd_event ||= []
+  end
+
 end
 
 describe "Testing FSR::Listener::Inbound" do
@@ -21,6 +33,28 @@ describe "Testing FSR::Listener::Inbound" do
     FSL::Inbound::HOOKS.size.should == 1
     FSL::Inbound.del_event_hook(:CHANNEL_CREATE)
     FSL::Inbound::HOOKS.size.should == 0
+  end
+
+end
+
+EM.describe MyListener do
+
+  before do
+    @listener = MyListener.new("test")
+  end
+
+  should "be able to receive and event and dispatch on_event callback method" do
+    @listener.receive_data("Content-Length: 22\n\nEvent-Name: test_event\n\n")
+    @listener.recvd_event.first.content[:event_name].should.equal "test_event"
+    done
+  end
+
+  should "be able to add event hooks" do
+    FSL::Inbound.add_event_hook(:HANGUP_EVENT) {|event| @listener.test_event = event}
+    @listener.test_event.should.equal nil
+    @listener.receive_data("Content-Length: 24\n\nEvent-Name: HANGUP_EVENT\n\n")
+    @listener.test_event.content[:event_name].should.equal "HANGUP_EVENT"
+    done
   end
 
 end

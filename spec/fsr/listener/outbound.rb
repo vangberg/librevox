@@ -48,7 +48,7 @@ class MyListener < FSR::Listener::Outbound
 
 end
 
-
+# Begin testing MyListener
 EM.describe MyListener do
 
   before do
@@ -104,7 +104,6 @@ EM.describe MyListener do
     @listener.receive_data("Content-Length: 3\n\nOk\n\n")
     @listener.state_machine_test.should.equal "three"
     done
-
   end
 
 end
