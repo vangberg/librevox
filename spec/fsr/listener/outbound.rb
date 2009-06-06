@@ -28,7 +28,7 @@ class MyListener < FSR::Listener::Outbound
   end
 
   def do_something(&block)
-    @queue << block if block_given? 
+    @queue.unshift block if block_given? 
   end
 
   def test_state_machine
