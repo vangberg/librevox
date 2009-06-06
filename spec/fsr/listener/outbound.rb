@@ -6,12 +6,7 @@ require "em/spec"
 
 # Bare class to use for testing
 class MyListener < FSR::Listener::Outbound
-  attr_accessor :recvd_reply
-
-  def initialize(*args)
-    super(*args)
-    @recvd_reply = []
-  end
+  attr_accessor :recvd_reply, :state_machine_test
 
   def session_initiated
   end
@@ -25,7 +20,30 @@ class MyListener < FSR::Listener::Outbound
   end
 
   def receive_reply(reply)
-    @recvd_reply << reply
+    recvd_reply << reply
+  end
+
+  def recvd_reply
+    @recvd_reply ||= []
+  end
+
+  def do_something(&block)
+    @queue << block if block_given? 
+  end
+
+  def test_state_machine
+    @state_machine_test = nil
+    do_something do 
+      @state_machine_test = "one"
+
+      do_something do
+        @state_machine_test = "two"
+
+        do_something do
+          @state_machine_test = "three"
+        end
+      end
+    end
   end
 
 end
@@ -73,6 +91,20 @@ EM.describe MyListener do
     @listener.session.headers[:test_data].should.equal 'foo'
     @listener.recvd_reply.first.headers[:test_reply].should.equal 'bar'
     done
+  end
+
+  should "use procs to 'fake' I/O blocking and wait for a response before calling the next proc" do
+    @listener.receive_data("Content-Length: 0\nEstablished-Session: session\n\n")
+    @listener.test_state_machine
+    @listener.state_machine_test.should.equal nil
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.state_machine_test.should.equal "one"
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.state_machine_test.should.equal "two"
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.state_machine_test.should.equal "three"
+    done
+
   end
 
 end
