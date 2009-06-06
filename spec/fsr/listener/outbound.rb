@@ -109,6 +109,7 @@ EM.describe MyListener do
   should "be able to update an existing session" do
     @listener.receive_data("Content-Length: 0\nUnique-ID: abcd-1234-efgh-5678\n\n")
     @listener.session.headers[:unique_id].should.equal "abcd-1234-efgh-5678"
+    @listener.session.headers[:test_var].should.equal nil
     @listener.update_session
     @listener.receive_data("Content-Length: 74\n\nEvent-Name: CHANNEL_DATA\nUnique-ID: abcd-1234-efgh-5678\nTest-Var: foobar\n\n")
     @listener.session.headers[:test_var].should.equal "foobar"
