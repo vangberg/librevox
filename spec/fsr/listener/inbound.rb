@@ -1,10 +1,11 @@
 require 'spec/helper'
+require "fsr/listener"
 require "fsr/listener/inbound"
 gem "tmm1-em-spec"
 require "em/spec"
 
 # Bare class to use for testing
-class MyListener < FSR::Listener::Inbound
+class InboundListener < FSR::Listener::Inbound
   attr_accessor :test_event
 
   def initialize(*args)
@@ -37,10 +38,10 @@ describe "Testing FSR::Listener::Inbound" do
 
 end
 
-EM.describe MyListener do
+EM.describe InboundListener do
 
   before do
-    @listener = MyListener.new("test")
+    @listener = InboundListener.new("test", {:auth => 'SecretPassword'})
   end
 
   should "be able to receive an event and call the on_event callback method" do
@@ -54,6 +55,11 @@ EM.describe MyListener do
     @listener.test_event.should.equal nil
     @listener.receive_data("Content-Length: 24\n\nEvent-Name: HANGUP_EVENT\n\n")
     @listener.test_event.content[:event_name].should.equal "HANGUP_EVENT"
+    done
+  end
+
+  should "be able to change Freeswitch auth" do
+    @listener.auth.should.equal 'SecretPassword'
     done
   end
 

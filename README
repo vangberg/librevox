@@ -97,7 +97,7 @@ An Inbound Event Socket Listener example using the on_event callback method inst
 
   end
 
-  FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+  FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021, :auth => "ClueCon")
 
 
 An example of using FSR::CommandSocket to originate a new call in irb:

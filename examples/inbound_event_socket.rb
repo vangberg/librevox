@@ -15,4 +15,4 @@ class IesDemo < FSR::Listener::Inbound
 
 end
 
-FSR.start_ies!(IesDemo, :host => "localhost", :port => 8021)
+FSR.start_ies!(IesDemo, :host => "pip", :port => 8021, :auth => "ClueCon")

@@ -6,6 +6,8 @@ require 'fsr/listener/header_and_content_response.rb'
 module FSR
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
+      attr_reader :auth
+
       HOOKS = {}
 
       def initialize(args = {})
