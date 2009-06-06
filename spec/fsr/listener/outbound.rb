@@ -106,7 +106,7 @@ EM.describe MyListener do
     done
   end
 
-  should "be able to update an existing session with that reflects new freeswitch state" do
+  should "be able to update an existing session" do
     @listener.receive_data("Content-Length: 0\nUnique-ID: abcd-1234-efgh-5678\n\n")
     @listener.session.headers[:unique_id].should.equal "abcd-1234-efgh-5678"
     @listener.update_session
