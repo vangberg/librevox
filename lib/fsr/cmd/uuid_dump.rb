@@ -4,7 +4,7 @@ module FSR
     class UuidDump < Command
       attr_reader :uuid
 
-      def initialize(fs_socket = nil, unique_id)
+      def initialize(fs_socket = nil, unique_id = nil)
         @fs_socket = fs_socket # FSR::CommandSocket obj
         @uuid = unique_id # Freeswitch Unique ID to dump
       end
