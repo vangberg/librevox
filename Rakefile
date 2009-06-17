@@ -10,6 +10,7 @@ RELEASE_FILES  = PROJECT_FILES.reject { |f| f.match(/^(?:contrib)(?:\/|$)/) }
 GEM_FILES      = RELEASE_FILES.reject { |f| f.match(/^(?:spec)(?:\/|$)/) }
 PROJECT_SPECS  = (RELEASE_FILES - GEM_FILES).reject { |d| d.match(/(?:helper.rb)$/) }
 GEM_FILES << "spec/helper.rb" if Pathname("spec/helper.rb").file?
+GEM_FILES << "spec/fsr_listener_helper.rb" if Pathname("spec/helper.rb").file?
 
 
 GEMSPEC = Gem::Specification.new do |spec|
