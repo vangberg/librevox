@@ -8,7 +8,7 @@ module FSR
       end
       
       def sent_data
-        @sent_data ||= ''
+        @sent_data ||= []
       end
       
       def receive_reply(reply)
