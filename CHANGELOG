@@ -1,193 +1,275 @@
-[840dfa1 | Wed Jun 03 23:46:14 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[360c877 | 2009-06-22 01:45:56 UTC] bougyman <bougyman@gotdebt.nationwide-recovery.com>
+
+  * removed rcov dependency, added setup_spec task (for tmm1-em-spec)
+
+[684ce82 | 2009-06-20 17:00:01 UTC] TJ Vanderpoel <bougyman@zero.(none)>
+
+  * made sent_data an array like replies
+
+[f27b71d | 2009-06-17 18:09:17 UTC] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Added spec/fsr_listener_helper.rb to gemspec list
+
+[52ef44b | 2009-06-16 20:26:30 UTC] TJ Vanderpoel <Jayson Vaughn jv@rubyists.com>
+
+  * added some helpers for speccing listener apps
+
+[dcd2125 | 2009-06-15 14:12:12 UTC] Jayson Vaughn <jayson@onedrop.(none)>
+
+  * Changed uuid_dump params to have default assignment for 1.8.x compat
+
+[d427e58 | 2009-06-06 23:21:20 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * In outbound listener spec, made sure to test variable is nil in update session test for a more complete test
+
+[c47ffc2 | 2009-06-06 22:17:17 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * changed spec description for update_session
+
+[d741758 | 2009-06-06 22:15:41 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added spec for FSR::Listener::Outbound#update_session
+
+[6936e80 | 2009-06-06 21:55:33 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added FSR::Cmd::UuidDump and specs
+
+[bf386f6 | 2009-06-06 21:33:16 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * added spec to FSR::Listener:Inbound for auth
+
+[a458fbf | 2009-06-06 21:09:47 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * s/@queue << block/@queue.unshift block
+
+[c2219d2 | 2009-06-06 21:05:37 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * corrected spec description typos
+
+[78053cc | 2009-06-06 21:02:13 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added em-specs for FSR::Listener::Inbound class
+
+      * Added spec to test FSL::Inbound.add_event_hook
+
+[2d56635 | 2009-06-06 20:11:58 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added specs to test our proc based state machine
+
+[214be2b | 2009-06-06 18:16:29 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Added em-epecs to test basic functionality of the Outbound Event Socket
+
+      * Test we can process a response sent in multiple transmissions
+      * Test we can receive a reply after a session is created
+      * Test that we send connect to freeswitch upon a new connection
+    
+      TODO:  Need to test Outbound Event socket state machine
+
+[48ffd21 | 2009-06-05 19:36:20 UTC] TJ Vanderpoel <Jayson Vaughn jv@rubyists.com>
+
+  * Added em-spec capabilities
+
+
+
+[76e6798 | 2009-06-04 17:24:29 UTC] TJ Vanderpoel <bougy.man@gmail.com>
+
+  * re-added ability to send auth to the inbound/outbound listeners. (thanks, lewdsilver)
+
+[a724963 | 2009-06-04 00:04:24 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
+
+  * Forgot to include these... woops
+
+[840dfa1 | 2009-06-03 23:46:14 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Version 0.4.1
 
-[26c4f0c | Wed Jun 03 23:42:52 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[26c4f0c | 2009-06-03 23:42:52 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * s/queue << block/queue.unshift block/g
 
-[6b589a3 | Wed Jun 03 23:13:15 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[6b589a3 | 2009-06-03 23:13:15 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Version 0.4.0
 
-[55753af | Wed Jun 03 23:10:22 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[55753af | 2009-06-03 23:10:22 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Updated outbound_event_socket.rb example
 
-[234a17e | Wed Jun 03 23:01:56 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[234a17e | 2009-06-03 23:01:56 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Refactored api to be a method of FSR::Listener::Outbound
 
-[0bc8973 | Wed Jun 03 21:55:02 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[0bc8973 | 2009-06-03 21:55:02 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Added FSR::App::Api
 
-[9d2cc41 | Sat May 30 18:49:08 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[9d2cc41 | 2009-05-30 18:49:08 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Made some changes so FSR is Ruby 1.9.1 compat
 
       * Monkey patched, unfortunately, String class with alias :each
       * :each_line compat with EventMachine
 
-[a40e1ed | Sat May 30 18:10:35 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[a40e1ed | 2009-05-30 18:10:35 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Corrected typo in examples/outbound_event_socket.rb
 
-[0a3f680 | Fri May 29 16:15:15 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[0a3f680 | 2009-05-29 16:15:15 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Added .to_s at end of Dir[load_path.join("*.rb").to_s] for Ruby 1.9.1
 
 
 
-[f267c17 | Wed May 27 20:49:27 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[f267c17 | 2009-05-27 20:49:27 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Updated header_and_content specs
 
-[19ee736 | Sat May 23 18:34:18 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[19ee736 | 2009-05-23 18:34:18 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Change example and readme to match what is demoed at sip:8084@falcon.rubyists.com
 
-[5be4271 | Tue May 19 21:02:09 UTC 2009] freeswitch <freeswitch@falcon.(none)>
+[5be4271 | 2009-05-19 21:02:09 UTC] freeswitch <freeswitch@falcon.(none)>
 
   * try to load log4r for logging (Logger buffers, bugs with runit services), fall back to Logger from stdlib if log4r not found
 
-[921251a | Tue May 19 20:13:47 UTC 2009] freeswitch <freeswitch@falcon.(none)>
+[921251a | 2009-05-19 20:13:47 UTC] freeswitch <freeswitch@falcon.(none)>
 
   * reverted regression to listeners, back to functional
 
-[eb72db4 | Tue May 19 15:15:04 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[eb72db4 | 2009-05-19 15:15:04 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * changed spacing in content#find
 
-[c275898 | Tue May 19 15:12:39 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[c275898 | 2009-05-19 15:12:39 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * improve the regex for matching a header: value in content of HeaderAndContentResponse
 
-[4bfaf24 | Wed May 20 05:05:07 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[4bfaf24 | 2009-05-20 05:05:07 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * headers/content come in as Array
 
-[5640b6f | Wed May 20 04:54:42 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[5640b6f | 2009-05-20 04:54:42 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Fix the listener/outbound spec
 
-[29527e2 | Tue May 19 23:20:24 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[29527e2 | 2009-05-19 23:20:24 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Minor cleanup
 
-[38b98fa | Tue May 19 21:04:41 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[38b98fa | 2009-05-19 21:04:41 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Add some more outbound specs and refactor
 
-[817e731 | Tue May 19 21:04:22 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[817e731 | 2009-05-19 21:04:22 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Add HeaderAndContentResponse subclass that will take care of parsing the content if it should be parsed
 
-[d44c3f0 | Tue May 19 20:45:48 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[d44c3f0 | 2009-05-19 20:45:48 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Minor refactor and some more specs for inbound listener
 
-[4f945e5 | Tue May 19 20:28:53 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[4f945e5 | 2009-05-19 20:28:53 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Refactor and basic specs of HeaderAndContentResponse, integration with inbound/outbound follow
 
-[e3c3142 | Tue May 19 19:29:21 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[e3c3142 | 2009-05-19 19:29:21 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * A little bit less annoying require_relative look-alike
 
-[e80cbc1 | Tue May 19 00:27:53 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[e80cbc1 | 2009-05-19 00:27:53 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * updated authors and changelog
 
-[9451ba8 | Tue May 19 00:26:26 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[9451ba8 | 2009-05-19 00:26:26 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Version 0.3.1 fixes bug in FS_ROOT not being populated properly
 
-[fbaf84c | Mon May 18 23:24:58 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[fbaf84c | 2009-05-18 23:24:58 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Version 0.3.0
 
-[bf6befa | Mon May 18 23:22:36 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[bf6befa | 2009-05-18 23:22:36 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * functionality for receiving variables passed to a block complete.  README updated.  Convert Rakefile file options to Pathname
 
-[7b0bf11 | Mon May 18 20:31:48 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[7b0bf11 | 2009-05-18 20:31:48 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Added yardoc comments
 
-[7b7efa7 | Mon May 18 20:10:30 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[7b7efa7 | 2009-05-18 20:10:30 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Removed FSR::Log.info debugging line from uuid_getvar and setvar
 
-[fda2ff4 | Mon May 18 19:55:19 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[fda2ff4 | 2009-05-18 19:55:19 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Added FSR::App::UuidGetVar and UuidSetVar
 
-[39338cd | Mon May 18 18:55:17 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[39338cd | 2009-05-18 18:55:17 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Corrected typo s/header_and_content/header_and_content_hash
 
-[cb4d1cc | Mon May 18 18:54:08 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[cb4d1cc | 2009-05-18 18:54:08 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * And also it seems I need to include a parameter for hash_header in
 
-[a818d62 | Mon May 18 18:51:25 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[a818d62 | 2009-05-18 18:51:25 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Need to add a second paremeter to check_for_updated_session that
 
 
 
-[6302892 | Mon May 18 18:49:17 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[6302892 | 2009-05-18 18:49:17 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Changed session_header_and_content to header_and_content_hash
 
-[5b8d9a4 | Mon May 18 18:47:57 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[5b8d9a4 | 2009-05-18 18:47:57 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Corrected some typos in previous refactor of Outbound#receive_reply
 
-[12a13eb | Mon May 18 18:41:40 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[12a13eb | 2009-05-18 18:41:40 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Refactored Outbound#receive_request to decouple it a tad.  Still could
 
 
 
-[6a95fa1 | Mon May 18 18:16:43 UTC 2009] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
+[6a95fa1 | 2009-05-18 18:16:43 UTC] Jayson Vaughn <jayson@onedrop.nationwide-recovery.com>
 
   * Refactored FSR::App::PlayAndGetDigits to now yeild the read_var in a
 
 
 
-[5093e71 | Mon May 18 15:08:39 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[5093e71 | 2009-05-18 15:08:39 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Read will now yield the read variable in a block
 
     Updated README
 
-[e71a1a5 | Mon May 18 01:55:43 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[e71a1a5 | 2009-05-18 01:55:43 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * reverted design error, putting SENDMSG_METHOD into Read attaching to Outbound, not App
 
-[273bdaf | Mon May 18 01:34:02 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[273bdaf | 2009-05-18 01:34:02 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * removed &block from read method definition after failing spec
 
-[ad1bbd1 | Mon May 18 00:37:44 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[ad1bbd1 | 2009-05-18 00:37:44 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * left out another to_sym
 
-[19f8581 | Mon May 18 00:32:23 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[19f8581 | 2009-05-18 00:32:23 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * left out a to_sym
 
-[f445058 | Mon May 18 00:31:43 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[f445058 | 2009-05-18 00:31:43 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * typos galore, fixed wrong constant name in Read.  created the queue_pop method to handle popping procs, adding the session.headers[@read_var] if it exist to the proc called
 
-[93ecad2 | Mon May 18 00:19:16 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[93ecad2 | 2009-05-18 00:19:16 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * TEST push to test changes, read/outbound test needed
 
-[30a39ad | Sat May 16 20:41:41 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[30a39ad | 2009-05-16 20:41:41 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Added specs for originate, defaults to Cmd
 
@@ -196,91 +278,91 @@
      * Move default_options method to FSR::Cmd::Command as well.
      * Used default_options block in Originate for options population
 
-[865d177 | Sat May 16 17:56:45 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[865d177 | 2009-05-16 17:56:45 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * filling out originate specs, testing options and argument types
 
-[19b81ff | Wed May 13 16:03:35 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[19b81ff | 2009-05-13 16:03:35 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * refactored to a new default_options
 
-[081112a | Wed May 13 15:32:20 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[081112a | 2009-05-13 15:32:20 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * changed handling of :ignore_early_media in target_options of originate to behave properly.  Added argument checks for some originate arguments
 
-[55ec1c5 | Mon May 11 17:14:34 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[55ec1c5 | 2009-05-11 17:14:34 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * New specs now pass
 
-[ab262c9 | Mon May 11 17:13:48 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[ab262c9 | 2009-05-11 17:13:48 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Added specs for FSR::App::Answer, FSBreak, and FSSleep
 
-[1faf55f | Mon May 11 16:44:51 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[1faf55f | 2009-05-11 16:44:51 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Updated gemspec for 0.1.4
 
-[011a3e6 | Mon May 11 16:43:14 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[011a3e6 | 2009-05-11 16:43:14 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Sync changes with Master
 
 
 
-[f036509 | Mon May 11 16:36:04 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[f036509 | 2009-05-11 16:36:04 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Version 0.1.4
 
-[a110dc6 | Mon May 11 16:12:17 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[a110dc6 | 2009-05-11 16:12:17 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Corrected typos in README
 
-[da6d963 | Mon May 11 16:00:35 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[da6d963 | 2009-05-11 16:00:35 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Removed 'puts $LOAD_PATH.inspect'
 
-[5fd154d | Mon May 11 15:57:36 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[5fd154d | 2009-05-11 15:57:36 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Updated README
 
 
 
-[981d6bb | Mon May 11 15:42:27 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[981d6bb | 2009-05-11 15:42:27 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Updating README
 
 
 
-[2d2fdb5 | Tue May 05 12:32:35 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[2d2fdb5 | 2009-05-05 12:32:35 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added some yard documentation
 
-[0e72f02 | Mon May 04 22:15:48 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[0e72f02 | 2009-05-04 22:15:48 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * fixed broken tasks, tested all tasks
 
-[8e6f7e8 | Mon May 04 21:38:28 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[8e6f7e8 | 2009-05-04 21:38:28 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * updated package building and added a bunch of convenience tasks
 
-[8b94e17 | Mon May 04 20:31:56 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[8b94e17 | 2009-05-04 20:31:56 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed @state to @queue.
 
 
 
-[54e2702 | Mon May 04 20:04:25 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[54e2702 | 2009-05-04 20:04:25 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Changed state machine
 
 
 
-[0f134f2 | Sun May 03 20:07:27 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[0f134f2 | 2009-05-03 20:07:27 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * No longer 100% necessary to override receive_reply method so I removed
 
 
 
-[f70a43c | Sun May 03 19:53:06 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[f70a43c | 2009-05-03 19:53:06 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added a different way to keep state.
 
@@ -290,219 +372,219 @@
        end
     end
 
-[a4b9832 | Sat May 02 22:00:37 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[a4b9832 | 2009-05-02 22:00:37 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * upped version and built new gemspec
 
-[202d05b | Sat May 02 22:00:05 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[202d05b | 2009-05-02 22:00:05 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * moved limit to FSR::App where it belonged
 
-[17fa4e6 | Sat May 02 21:46:50 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[17fa4e6 | 2009-05-02 21:46:50 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * upped version and built new gem
 
-[93220f3 | Sat May 02 21:46:16 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[93220f3 | 2009-05-02 21:46:16 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added limit command
 
-[4b918cd | Sat May 02 21:12:18 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[4b918cd | 2009-05-02 21:12:18 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * upped version and built new gemspec
 
-[159f978 | Sat May 02 21:11:40 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[159f978 | 2009-05-02 21:11:40 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added #next_step to manually increment state machine
 
-[738e6da | Sat May 02 21:02:46 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[738e6da | 2009-05-02 21:02:46 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * upped version and made new gemspec
 
-[faf4c5a | Sat May 02 21:00:53 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[faf4c5a | 2009-05-02 21:00:53 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added Cmd::Calls and a Model::Call to describe call data
 
-[8ef6196 | Thu Apr 30 20:48:12 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[8ef6196 | 2009-04-30 20:48:12 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Added FSR::App::PlayAndGetDigits
 
     1.9.1
     Updated specs for FSR::App::PlayAndGetDigits
 
-[426ea94 | Thu Apr 16 15:12:54 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[426ea94 | 2009-04-16 15:12:54 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Version bump 0.0.13
 
 
 
-[1b81841 | Thu Apr 16 15:11:37 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[1b81841 | 2009-04-16 15:11:37 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated README to reflect refactor in FSR::Listener::Outbound
 
     Version bump 0.0.13
 
-[8bc8cdc | Thu Apr 16 15:08:31 UTC 2009] foo <jvaughn@hellspass.nationwide-recovery.com>
+[8bc8cdc | 2009-04-16 15:08:31 UTC] foo <jvaughn@hellspass.nationwide-recovery.com>
 
   * Added Hash#strip_new_newlines helper
 
-[5da2747 | Thu Apr 16 14:48:26 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[5da2747 | 2009-04-16 14:48:26 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated examples/dtmf_test.rb and oes_demo.rb
 
       * This reflects the new changes to FSR::Listener::Outbound
 
-[8465069 | Thu Apr 16 14:43:50 UTC 2009] foo <jvaughn@hellspass.nationwide-recovery.com>
+[8465069 | 2009-04-16 14:43:50 UTC] foo <jvaughn@hellspass.nationwide-recovery.com>
 
   * Refactored FSR::Listener::Outbound
 
     session object
       #update_session now fully updates @session
 
-[0fa32ea | Thu Apr 16 13:14:08 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[0fa32ea | 2009-04-16 13:14:08 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated README
 
     Updated examples/dtm_read.rb
     Bumped version to 0.0.12
 
-[24ff9bd | Thu Apr 16 13:00:54 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[24ff9bd | 2009-04-16 13:00:54 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Moved bin to examples
 
     Updated README to show how to use 'step'
 
-[5394612 | Thu Apr 16 12:51:32 UTC 2009] foo <jvaughn@hellspass.nationwide-recovery.com>
+[5394612 | 2009-04-16 12:51:32 UTC] foo <jvaughn@hellspass.nationwide-recovery.com>
 
   * Added the ability for receive_reply to keep state.
 
     Please look at bin/dtmf_test.rb for example
 
-[4cb5002 | Wed Apr 15 14:51:13 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[4cb5002 | 2009-04-15 14:51:13 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Removed #wait_for_reply
 
-[c63fce9 | Wed Apr 15 14:37:21 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[c63fce9 | 2009-04-15 14:37:21 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added Fsr::Listener::Outbound#wait_for_reply
 
-[b09939b | Wed Apr 15 14:15:29 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[b09939b | 2009-04-15 14:15:29 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Made sure to use #to_s on session.headers[:event_calling_function] incase it is nil
 
-[8b75ddc | Wed Apr 15 14:12:51 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[8b75ddc | 2009-04-15 14:12:51 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added FSR::Listener::Outbound#update_session to update session variables
 
-[ea36a2f | Wed Apr 15 13:45:02 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[ea36a2f | 2009-04-15 13:45:02 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Corrected typo in FSR::App::UuidDump#initialize
 
-[85086b6 | Wed Apr 15 13:41:46 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[85086b6 | 2009-04-15 13:41:46 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added FSR::App::UuidSetVar
 
 
 
-[7ab8727 | Wed Apr 15 13:29:34 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[7ab8727 | 2009-04-15 13:29:34 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Corrected typo in FSR::App::UuidGetVar
 
-[e732be4 | Wed Apr 15 13:09:10 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[e732be4 | 2009-04-15 13:09:10 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added FSR::App::UuidGetVar
 
       * use uuid_getvar("uuid", "varaible") to retreive a channel variable
 
-[8b3b3a4 | Tue Apr 14 21:47:05 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[8b3b3a4 | 2009-04-14 21:47:05 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * FSR::App::Read#sendmsg now joins arguments using " " not "|" :)
 
-[01d9867 | Tue Apr 14 20:47:35 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[01d9867 | 2009-04-14 20:47:35 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added event-lock to FSR::App::Read by default to #sendmsg
 
-[654f036 | Tue Apr 14 20:39:49 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[654f036 | 2009-04-14 20:39:49 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added FSR::App::Read to read DTMF input
 
-[fd827b6 | Tue Apr 14 19:23:43 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[fd827b6 | 2009-04-14 19:23:43 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * We should inherit the dialplan and context we had before
 
 
 
-[c093ad3 | Tue Apr 14 15:08:11 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[c093ad3 | 2009-04-14 15:08:11 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * Small clean-ups
 
 
 
-[ad46f8a | Sat Apr 11 21:39:04 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[ad46f8a | 2009-04-11 21:39:04 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added spec for FSA::Set
 
-[123bdaf | Sat Apr 11 21:25:37 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[123bdaf | 2009-04-11 21:25:37 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Version Bump to 0.0.10
 
-[4e6abe7 | Sat Apr 11 21:22:12 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[4e6abe7 | 2009-04-11 21:22:12 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated README to reflect new api of #set
 
-[de358d9 | Thu Apr 09 15:45:54 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[de358d9 | 2009-04-09 15:45:54 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed gem name to all lowercase.  Camel case can be annoying
 
-[f0c6fa4 | Wed Apr 08 20:50:08 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[f0c6fa4 | 2009-04-08 20:50:08 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * upped the version to generate a new gem
 
-[e413b96 | Wed Apr 08 20:46:15 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[e413b96 | 2009-04-08 20:46:15 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added EM dependency to gemspec, updated news
 
-[0abbdd6 | Wed Apr 08 20:37:23 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[0abbdd6 | 2009-04-08 20:37:23 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed VERSION
 
-[b6a8137 | Wed Apr 08 20:36:59 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[b6a8137 | 2009-04-08 20:36:59 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Up'd version
 
-[736a88d | Tue Apr 07 13:22:11 UTC 2009] jayson vaughn <jayson@falcon.(none)>
+[736a88d | 2009-04-07 13:22:11 UTC] jayson vaughn <jayson@falcon.(none)>
 
   * Changed FSR::App::Log#initiailize to make sure both parameters have a default setting.  Can not have an optional parameter as your first one in Ruby it seems.
 
     Updated spec/fsr/loading.rb to include FSR::App::Log
 
-[e253698 | Tue Apr 07 18:26:35 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[e253698 | 2009-04-07 18:26:35 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * Set now takes two arguments (like #set in Adhearsion)
 
-[38181ce | Tue Apr 07 18:18:43 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[38181ce | 2009-04-07 18:18:43 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * Added Log functionality to (OES)
 
     Small documentation change in Set (OES)
     oes_demo.rb now also demonstrates Log
 
-[ab2ca12 | Tue Apr 07 14:39:02 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[ab2ca12 | 2009-04-07 14:39:02 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * A few more examples
 
-[c3b2df3 | Mon Apr 06 20:25:22 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[c3b2df3 | 2009-04-06 20:25:22 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated specs
 
 
 
-[9e761f9 | Mon Apr 06 20:47:11 UTC 2009] Mikael Bjerkeland <mikael@consoll.no>
+[9e761f9 | 2009-04-06 20:47:11 UTC] Mikael Bjerkeland <mikael@consoll.no>
 
   * Added a few more commands. If anything looks stupid please correct it :-
 
 
 
-[7ec04a5 | Fri Apr 03 19:31:35 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[7ec04a5 | 2009-04-03 19:31:35 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Refactored FSR::Listener::Outbound to be a subclass of
 
@@ -515,20 +597,20 @@
     
     *** NOTE session.headers's keys are now symbols! ***
 
-[00f0919 | Fri Apr 03 18:27:42 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[00f0919 | 2009-04-03 18:27:42 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated bin/ies_demo.rb and README to show
 
 
 
-[c1108d7 | Fri Apr 03 18:14:10 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[c1108d7 | 2009-04-03 18:14:10 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Playing catchup - Made sure FSR::Listener::Inbound is now a subclass of
 
     
     Made sure inspired's hook system still works
 
-[4ac5698 | Fri Apr 03 17:57:00 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[4ac5698 | 2009-04-03 17:57:00 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Fixing conflict
 
@@ -536,7 +618,7 @@
     bougyman added NEWS
     inspiried added bin/ies_demo_with_hook.rb
 
-[86db618 | Fri Apr 03 13:37:38 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[86db618 | 2009-04-03 13:37:38 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed FSR::Listner::Inbound to be a subclass of
 
@@ -547,113 +629,113 @@
     
     Updated README
 
-[803bfbc | Tue Mar 31 15:49:30 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[803bfbc | 2009-03-31 15:49:30 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added some comments to the code
 
-[d36c2e0 | Tue Mar 31 15:21:44 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[d36c2e0 | 2009-03-31 15:21:44 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Made sure Reply checks for "Control" vs :control
 
-[08e49f7 | Tue Mar 31 15:12:38 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[08e49f7 | 2009-03-31 15:12:38 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Reverted back to using strings as hash keys.  This ensures that custom
 
 
 
-[a698d18 | Tue Mar 31 14:51:24 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[a698d18 | 2009-03-31 14:51:24 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Corrected issue, now headers and body hash work with symbols
 
-[b8cbcb0 | Tue Mar 31 14:45:42 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[b8cbcb0 | 2009-03-31 14:45:42 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Trying .to_sym once more in Inbound::Event
 
-[1a48504 | Tue Mar 31 14:44:12 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[1a48504 | 2009-03-31 14:44:12 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed back to original
 
-[7c1d26c | Tue Mar 31 14:42:36 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[7c1d26c | 2009-03-31 14:42:36 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * typo
 
-[792311e | Tue Mar 31 14:36:57 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[792311e | 2009-03-31 14:36:57 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * s/.to.s_gsub/.to_s.gsub/
 
-[90a757c | Tue Mar 31 14:31:28 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[90a757c | 2009-03-31 14:31:28 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed FSR::Listener::Inbound::Event to use symbols for hash keys
 
-[239dba6 | Tue Mar 31 14:28:29 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[239dba6 | 2009-03-31 14:28:29 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated README and sample bin/oes_demo.rb to reflect changes in headers
 
 
 
-[7b75019 | Tue Mar 31 14:24:49 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[7b75019 | 2009-03-31 14:24:49 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Needed to check against @headers[:control] instead of
 
 
 
-[bdb5444 | Tue Mar 31 14:22:06 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[bdb5444 | 2009-03-31 14:22:06 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added #to_s to correct bug with value
 
-[845623a | Tue Mar 31 14:17:45 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[845623a | 2009-03-31 14:17:45 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed SocketResponse#headers to now use a symbol as the hash key
 
-[431cd2c | Mon Mar 30 22:05:03 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[431cd2c | 2009-03-30 22:05:03 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * Added FSBreak to send a 'break' command during an Outbound Event
 
 
 
-[cf77986 | Wed Mar 25 21:58:02 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[cf77986 | 2009-03-25 21:58:02 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated bin/oes_demo.rb and README to correctly describe how to use
 
 
 
-[ab373dd | Tue Mar 24 00:52:38 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[ab373dd | 2009-03-24 00:52:38 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Remove cruft from form helper
 
-[0464d4e | Thu Mar 19 19:17:41 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[0464d4e | 2009-03-19 19:17:41 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Updated specs to include new apps
 
-[045ffe8 | Thu Mar 12 01:38:02 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[045ffe8 | 2009-03-12 01:38:02 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Update style for auth forms
 
-[41e87ef | Thu Mar 12 01:33:28 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[41e87ef | 2009-03-12 01:33:28 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Put the label/input from join/start into a table for nicer listing
 
-[8815d88 | Thu Mar 12 01:32:49 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[8815d88 | 2009-03-12 01:32:49 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Add auth related links to layout
 
-[abd4506 | Thu Mar 12 01:32:21 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[abd4506 | 2009-03-12 01:32:21 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Fix two minor issues
 
-[c15f39d | Thu Mar 12 01:31:59 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[c15f39d | 2009-03-12 01:31:59 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Refactor MainController a bit and suggest alternate random conference id generation
 
-[d2d42f6 | Thu Mar 12 01:31:22 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[d2d42f6 | 2009-03-12 01:31:22 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Finish up auth, still needs some testing for openid and a profile page
 
-[04bff23 | Sat Mar 07 15:07:35 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[04bff23 | 2009-03-07 15:07:35 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * removed contrib from the gemspec, unneeded.  JV added a bunch of applications
 
-[1cf0e5a | Wed Mar 04 22:29:20 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[1cf0e5a | 2009-03-04 22:29:20 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * Abstracted how to start listeners.
 
@@ -663,75 +745,75 @@
      * changed default log level to Logger::INFO
      * Updated README
 
-[c525445 | Wed Mar 04 21:30:24 UTC 2009] Jayson Vaughn <jayson@onedrop.(none)>
+[c525445 | 2009-03-04 21:30:24 UTC] Jayson Vaughn <jayson@onedrop.(none)>
 
   * added some String#strip magic
 
-[b8d70b7 | Wed Feb 25 22:49:51 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[b8d70b7 | 2009-02-25 22:49:51 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Fix some stuff around auth, needs more
 
-[e9ef028 | Wed Feb 25 22:41:53 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[e9ef028 | 2009-02-25 22:41:53 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Remove the model/account
 
-[88f58f8 | Wed Feb 25 22:39:36 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[88f58f8 | 2009-02-25 22:39:36 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Default engine is Haml
 
-[f41c42b | Wed Feb 25 04:27:45 UTC 2009] bougyman <bougyman@Esther.(none)>
+[f41c42b | 2009-02-25 04:27:45 UTC] bougyman <bougyman@Esther.(none)>
 
   * fixed FreeSWITCHeR link
 
-[bfd7482 | Wed Feb 25 04:16:12 UTC 2009] bougyman <bougyman@Esther.(none)>
+[bfd7482 | 2009-02-25 04:16:12 UTC] bougyman <bougyman@Esther.(none)>
 
   * changed spec to match new 30 second default timeout
 
-[033cb6b | Wed Feb 25 04:12:44 UTC 2009] bougyman <bougyman@Esther.(none)>
+[033cb6b | 2009-02-25 04:12:44 UTC] bougyman <bougyman@Esther.(none)>
 
   * wrapped user-supplied vars in h(), moved conference logic into model/conference.rb
 
-[f55194b | Wed Feb 25 18:31:33 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[f55194b | 2009-02-25 18:31:33 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * A little cleanup
 
-[d1c5fc0 | Wed Feb 25 18:30:01 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[d1c5fc0 | 2009-02-25 18:30:01 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Rough cut of auth system
 
-[fe4e9e8 | Wed Feb 25 03:27:42 UTC 2009] bougyman <bougyman@Esther.(none)>
+[fe4e9e8 | 2009-02-25 03:27:42 UTC] bougyman <bougyman@Esther.(none)>
 
   * Use 8k (default) conferences instead of 32kHz.  Make link show up in joined_conference view (style.css change)
 
-[74bb49a | Wed Feb 25 02:49:31 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[74bb49a | 2009-02-25 02:49:31 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * make sure ignore_early_media has a default (true)
 
-[d18c622 | Wed Feb 25 02:42:49 UTC 2009] bougyman <bougyman@Esther.(none)>
+[d18c622 | 2009-02-25 02:42:49 UTC] bougyman <bougyman@Esther.(none)>
 
   * corrected the legend
 
-[b243a82 | Wed Feb 25 02:31:51 UTC 2009] bougyman <bougyman@Esther.(none)>
+[b243a82 | 2009-02-25 02:31:51 UTC] bougyman <bougyman@Esther.(none)>
 
   * added call control legend to conference_joined view
 
-[55dfdae | Tue Feb 24 21:11:46 UTC 2009] bougyman <bougyman@Esther.(none)>
+[55dfdae | 2009-02-24 21:11:46 UTC] bougyman <bougyman@Esther.(none)>
 
   * removed unneeded index file
 
-[1127bbb | Tue Feb 24 21:11:27 UTC 2009] bougyman <bougyman@Esther.(none)>
+[1127bbb | 2009-02-24 21:11:27 UTC] bougyman <bougyman@Esther.(none)>
 
   * added a gitignore for ride in the sample app
 
-[c053826 | Tue Feb 24 21:09:12 UTC 2009] bougyman <bougyman@Esther.(none)>
+[c053826 | 2009-02-24 21:09:12 UTC] bougyman <bougyman@Esther.(none)>
 
   * got sample app deployed and fixed a couple bugs
 
-[e2a64eb | Tue Feb 24 18:49:34 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[e2a64eb | 2009-02-24 18:49:34 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added a little sample app, will be confme.com
 
-[f971037 | Tue Feb 24 18:11:05 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[f971037 | 2009-02-24 18:11:05 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Moved FSR::Event to FSR::Listener::Inbound::Event namespace
 
@@ -739,11 +821,11 @@
       * Added specs for FSR::Listener::Inbound
       * Updated bin/ies_demo.rb with on_event hook
 
-[05a7acc | Tue Feb 24 17:59:39 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[05a7acc | 2009-02-24 17:59:39 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * change ies_demo.rb to default to localhost
 
-[f1987ab | Tue Feb 24 17:57:16 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[f1987ab | 2009-02-24 17:57:16 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Started work on FSR::Listener::Inbound
 
@@ -753,38 +835,38 @@
       * namesspace FSR::Listener::Inbound::Event
       * Created bin/ies_demo.rb to demo how to use the refactor
 
-[bd15285 | Tue Feb 24 14:52:17 UTC 2009] U-Paul-PC\Paul <Paul@Paul-PC.(none)>
+[bd15285 | 2009-02-24 14:52:17 UTC] U-Paul-PC\Paul <Paul@Paul-PC.(none)>
 
   * Make specs work in Win32.  No pretty green colors, though. :(
 
-[d9ee68e | Mon Feb 23 02:21:56 UTC 2009] Kevin Berry <kevin@opensourcealchemist.com>
+[d9ee68e | 2009-02-23 02:21:56 UTC] Kevin Berry <kevin@opensourcealchemist.com>
 
   * Version 0.0.4:
 
      * functionality can still be used.
 
-[52a9570 | Mon Feb 23 01:12:51 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[52a9570 | 2009-02-23 01:12:51 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * updated version to get a new GH gem
 
-[21e0ea5 | Sun Feb 22 19:03:09 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[21e0ea5 | 2009-02-22 19:03:09 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Modified bin/oes_demo.rb to use session_initiated method instead of
 
     
     Removed on_call alias from FSR::Listener::Outbound
 
-[0257bcc | Mon Feb 23 00:51:20 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0257bcc | 2009-02-23 00:51:20 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * fixed spec
 
-[8df4a28 | Sun Feb 22 18:45:01 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[8df4a28 | 2009-02-22 18:45:01 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added a test to ensure on_call is always called after a session is
 
 
 
-[1300fbe | Mon Feb 23 00:39:00 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1300fbe | 2009-02-23 00:39:00 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Made all FSR::App classes have an #arguments array
 
@@ -794,11 +876,11 @@
      * Removed the #caller test in Application#to_s, now defaults to
        #sendmsg
 
-[5f152a3 | Sun Feb 22 19:12:05 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[5f152a3 | 2009-02-22 19:12:05 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * fixed the else side of data handling to be the same as the if side
 
-[0827e9f | Sun Feb 22 19:05:36 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0827e9f | 2009-02-22 19:05:36 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Fixed receive_data to be able to handle incomlete responses/lines
 
@@ -806,24 +888,24 @@
        parsing any data received
      * Added specs for testing this case
 
-[fb5ec1e | Sun Feb 22 18:39:06 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[fb5ec1e | 2009-02-22 18:39:06 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added spec to make sure "on_call" hook is called after a session is
 
 
 
-[0fc1d6d | Sun Feb 22 17:42:11 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0fc1d6d | 2009-02-22 17:42:11 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added a check of the @data array on a Command Reply to the outbound spec
 
-[f5c5931 | Sun Feb 22 17:37:58 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[f5c5931 | 2009-02-22 17:37:58 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Made Session more specific, changed @data to an array.
 
      * Fixed bug where new session headers were not being added to @headers
      * Modified specs to use more of the bacon dsl and fewer == test
 
-[7461cbc | Sun Feb 22 16:32:30 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[7461cbc | 2009-02-22 16:32:30 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Made CommandReply instances an array instance variable on Session
 
@@ -833,7 +915,7 @@
        fire on #initiated? Sessions or a Session getting a #complete? reply
      * TODO #complete? needs logic to decide whether or not it's complete
 
-[c516f24 | Sun Feb 22 16:04:22 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[c516f24 | 2009-02-22 16:04:22 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Modified outbound to know less about Session, made Session more
 
@@ -844,11 +926,11 @@
        case it's split across receive_data calls
      * Rewrote Outbond spec to check for a valid Session
 
-[2fd2d22 | Sun Feb 22 01:06:23 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[2fd2d22 | 2009-02-22 01:06:23 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added more comments explaining outbound.rb
 
-[7bf1a6f | Sun Feb 22 00:53:24 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[7bf1a6f | 2009-02-22 00:53:24 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Heavy Refactor of FSR::Listener::Outbound
 
@@ -861,19 +943,19 @@
       TODO:  Now that we can chain multipule commands, need to work in
     responses to commands so we can peform condition logic
 
-[b6c51f5 | Sat Feb 21 17:53:13 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b6c51f5 | 2009-02-21 17:53:13 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * a little magic to get the proper string, based on sendmsg being in the caller stack
 
-[767cfb2 | Fri Feb 20 23:27:59 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[767cfb2 | 2009-02-20 23:27:59 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * ignore the .gemspec.erb file in spec_files for gem building
 
-[412e65a | Fri Feb 20 23:14:54 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[412e65a | 2009-02-20 23:14:54 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Removed the gemspec.erb from the spec.files list
 
-[6c8d46a | Fri Feb 20 23:11:23 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[6c8d46a | 2009-02-20 23:11:23 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Added rake tasks for package building
 
@@ -882,23 +964,23 @@
        to built a compliant gemspec
      * Added FSR::VERSION constant to keep track of current version
 
-[0fcc86f | Fri Feb 20 22:21:07 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0fcc86f | 2009-02-20 22:21:07 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * bumped version number to try and force a GH gem build
 
-[9b7dc90 | Fri Feb 20 22:14:58 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[9b7dc90 | 2009-02-20 22:14:58 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * renamed gemspec so GH builds the gem
 
-[444ed09 | Fri Feb 20 22:14:26 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[444ed09 | 2009-02-20 22:14:26 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * did not need gem in tree, GH builds on-the-fly from .gemspec
 
-[b2565a7 | Fri Feb 20 22:10:32 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b2565a7 | 2009-02-20 22:10:32 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Renamed demo listener
 
-[1ef570b | Fri Feb 20 22:08:37 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1ef570b | 2009-02-20 22:08:37 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * First gem release, added minor docs to README
 
@@ -907,7 +989,7 @@
      * Added docs to README
      * Include current version gem in pkg/ for GH
 
-[38c8615 | Fri Feb 20 21:12:10 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[38c8615 | 2009-02-20 21:12:10 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Added specs for FSR::Listener::Outbound, removed unused methods from FSR::Listener
 
@@ -916,7 +998,7 @@
        FSR::Listener::Outbound::CommandReply
      * Added new Top-Level constant FSL which references FSR::Listener.
 
-[575455a | Fri Feb 20 17:27:32 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[575455a | 2009-02-20 17:27:32 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Refactored FSR::Listener::Outbound, now a module instead of a class
 
@@ -928,15 +1010,15 @@
        session_initiated(FSR::Listener::Outbound::Session.new) and
        command_reply(FSR::Listener::Outbound::CommandReply.new)
 
-[a1a7a5a | Fri Feb 20 15:58:24 UTC 2009] bougyman <bougyman@jimmy.nationwide-recovery.com>
+[a1a7a5a | 2009-02-20 15:58:24 UTC] bougyman <bougyman@jimmy.nationwide-recovery.com>
 
   * fixed error when no freeswitch install is available
 
-[99f328d | Thu Feb 19 23:09:22 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[99f328d | 2009-02-19 23:09:22 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * this commit breaks everything done thus far.  have fun
 
-[22023cc | Wed Feb 18 23:28:32 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[22023cc | 2009-02-18 23:28:32 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Changed Listener base class to a subclass of EventMachine::Connection
 
@@ -944,38 +1026,38 @@
     every new connection
      * Created simple bin/oes_listener.rb to test new class
 
-[1cb04d1 | Wed Feb 18 19:50:34 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1cb04d1 | 2009-02-18 19:50:34 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added FSC and FSA top-level constants, pointing to FSR::App and FSR::Cmd
 
-[7c68537 | Thu Feb 19 08:09:44 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[7c68537 | 2009-02-19 08:09:44 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Add FSR::Listener
 
-[45984f9 | Wed Feb 18 01:38:34 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[45984f9 | 2009-02-18 01:38:34 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * added homepage ref in README
 
-[5796a3a | Wed Feb 18 01:37:13 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[5796a3a | 2009-02-18 01:37:13 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * fixed specs to not care about the order of the array, but still only allow commands if they are in the expected command/application set
 
-[af4cda9 | Tue Feb 17 19:45:53 UTC 2009] Kevin Berry <kevin@opensourcealchemist.com>
+[af4cda9 | 2009-02-17 19:45:53 UTC] Kevin Berry <kevin@opensourcealchemist.com>
 
   * Add MIT License.
 
-[36a1227 | Tue Feb 17 19:19:54 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[36a1227 | 2009-02-17 19:19:54 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * removed necessity of local freeswitch install, now gives warning when not running on a machine with a local freeswitch running
 
-[f5b17ca | Tue Feb 17 18:01:27 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[f5b17ca | 2009-02-17 18:01:27 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Moved FSR::Cmd::Sofia::Profile specs to it's own file
 
     
     Updated specs to reflect new options hash
 
-[d87d69d | Tue Feb 17 17:44:26 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[d87d69d | 2009-02-17 17:44:26 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Added class level commands to profile and more argument type handling
 
@@ -984,13 +1066,13 @@
      * Sofia.new.profile(arguments) still works with a string, but now
        also accepts an options hash {:action => :start, :name => "foo"}
 
-[ace59a6 | Tue Feb 17 16:46:47 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[ace59a6 | 2009-02-17 16:46:47 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Refactored profile so that start, stop, etc just create
 
 
 
-[b057b46 | Tue Feb 17 00:40:36 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[b057b46 | 2009-02-17 00:40:36 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Refactored FSR::Cmd::Sofia::Profile and updated specs
 
@@ -1002,7 +1084,7 @@
       sofia.profile.stop("internal").raw
       => "sofia profile internal stop"
 
-[4308560 | Mon Feb 16 23:16:00 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[4308560 | 2009-02-16 23:16:00 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added FSR::Cmd::Sofia::Profile
 
@@ -1013,7 +1095,7 @@
     
     Updated spec/cmd/sofia.rb to test Sofia::Profile
 
-[1e03eba | Mon Feb 16 22:14:30 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1e03eba | 2009-02-16 22:14:30 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Added App::Fifo and specs for it
 
@@ -1021,22 +1103,22 @@
      * Fifo << "myqueue" shortcut for Fifo.new("myqueue", "in")
      * Fifo >> "myqueue" shortcut for Fifo.new("myqueue", "out", :wait => false)
 
-[a8fe3d7 | Mon Feb 16 19:01:22 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[a8fe3d7 | 2009-02-16 19:01:22 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added specs for FSR::Cmd::Sofia
 
-[0c2a106 | Mon Feb 16 18:52:24 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[0c2a106 | 2009-02-16 18:52:24 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added spec for cmd/orignate.rb
 
     Changed Originate#raw to sort the keys on target options before adding
     them to command.  This ensures we can test on raw
 
-[55bf869 | Mon Feb 16 18:29:16 UTC 2009] Kevin Berry <kevin@opensourcealchemist.com>
+[55bf869 | 2009-02-16 18:29:16 UTC] Kevin Berry <kevin@opensourcealchemist.com>
 
   * Get better error messages for FS root path issues.
 
-[b368c5b | Mon Feb 16 18:08:34 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[b368c5b | 2009-02-16 18:08:34 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Refactored sofia command to use composition for it's features
 
@@ -1049,15 +1131,15 @@
     
     TODO:  Need to add cmd/sofia/profile.rb
 
-[33e3bc7 | Mon Feb 16 16:54:31 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[33e3bc7 | 2009-02-16 16:54:31 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * better handling of caller_id
 
-[b0e4442 | Tue Feb 17 07:41:56 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[b0e4442 | 2009-02-17 07:41:56 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * FSR::FakeSocket - to be adapted as we need it
 
-[0405b64 | Mon Feb 16 14:59:22 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0405b64 | 2009-02-16 14:59:22 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Removed fs_socket requirement from commands, refactored Cmd::Originate
 
@@ -1068,17 +1150,17 @@
        a typecheck determines whether endpoint is an App and runs #raw, or
        a string and just sends the string
 
-[32ba63e | Mon Feb 16 17:06:47 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[32ba63e | 2009-02-16 17:06:47 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * A little bit nicer specs
 
-[3373217 | Sun Feb 15 22:04:14 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[3373217 | 2009-02-15 22:04:14 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Added a check for args[:status] parameter to ensure it is either
 
 
 
-[d72c6c0 | Sun Feb 15 21:50:57 UTC 2009] Jayson Vaughn <jayson@onedrop.home>
+[d72c6c0 | 2009-02-15 21:50:57 UTC] Jayson Vaughn <jayson@onedrop.home>
 
   * Created FSR::Cmd::Sofia
 
@@ -1090,27 +1172,27 @@
     TODO: Need to add "sofia profile" command
           Need to add "sofia status" stand alone
 
-[43fccce | Sun Feb 15 15:51:35 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[43fccce | 2009-02-15 15:51:35 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Added specs for a simple application - FSR::App::Conference
 
      * Added convenience method FSR::App::Conference[conf_spec]
 
-[f703128 | Sun Feb 15 15:14:27 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[f703128 | 2009-02-15 15:14:27 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * a decent view of the tree from ride-console, use with
 
 
 
-[818d52b | Sun Feb 15 15:14:27 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[818d52b | 2009-02-15 15:14:27 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * a decent view of the tree from ride-console
 
-[00cfbd6 | Sun Feb 15 15:08:56 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[00cfbd6 | 2009-02-15 15:08:56 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * fixed some straggling old-namespace files that were missed in the namespace refactor
 
-[4ccf214 | Sun Feb 15 14:58:06 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[4ccf214 | 2009-02-15 14:58:06 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Added rakefile (from rasta) which includes everything in tasks/
 
@@ -1118,7 +1200,7 @@
       * Added some info output to spec/helper when they don't have bacon
         (TODO: add link for bacon source)
 
-[0a6dc32 | Sun Feb 15 14:33:07 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[0a6dc32 | 2009-02-15 14:33:07 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Refactored to shorten/clean namespaces
 
@@ -1127,77 +1209,77 @@
       * Note the spec/fsr/loading.rb, it must be maintained as new apps or
         commands are added
 
-[907d642 | Mon Feb 16 04:54:27 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[907d642 | 2009-02-16 04:54:27 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Require spec/helper and use subdir
 
-[1efbd6d | Sun Feb 15 13:53:27 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1efbd6d | 2009-02-15 13:53:27 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * un-did the lazy rubygems require
 
-[2c4e101 | Sun Feb 15 13:49:57 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[2c4e101 | 2009-02-15 13:49:57 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added rubygems requirement
 
-[1f5fd24 | Sun Feb 15 13:46:16 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[1f5fd24 | 2009-02-15 13:46:16 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added spec for a couple fsR module methods
 
-[6351bab | Mon Feb 16 04:33:09 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[6351bab | 2009-02-16 04:33:09 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Require freeswitcher in spec/helper
 
-[66510ae | Mon Feb 16 04:31:55 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[66510ae | 2009-02-16 04:31:55 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Add spec/helper.rb
 
-[a3f373d | Mon Feb 16 04:30:49 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[a3f373d | 2009-02-16 04:30:49 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * support absolute paths and load all applications
 
-[fb2d4ab | Sun Feb 15 13:01:58 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[fb2d4ab | 2009-02-15 13:01:58 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added conference application, fixed originate when you send an extension instead of application (target_opts)
 
-[0ec0026 | Mon Feb 16 02:36:06 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[0ec0026 | 2009-02-16 02:36:06 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Some more refactoring
 
-[fc399cb | Sun Feb 15 22:14:41 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[fc399cb | 2009-02-15 22:14:41 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Start using Pathname
 
-[70b57a3 | Sun Feb 15 21:03:08 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[70b57a3 | 2009-02-15 21:03:08 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Remove (null).rb
 
-[34421cd | Sun Feb 15 20:57:01 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[34421cd | 2009-02-15 20:57:01 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Easier load methods
 
-[89a7ba5 | Sun Feb 15 05:38:59 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[89a7ba5 | 2009-02-15 05:38:59 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Added Applications module, mimicks Commands module, for
 
      * Refactored Originate to use an Application class
 
-[a02c9a3 | Sat Feb 14 22:29:45 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[a02c9a3 | 2009-02-14 22:29:45 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * renamed #command_text to #raw, shorter and sweeter (thedonvaughn suggestion)
 
-[63762c9 | Sat Feb 14 22:27:36 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[63762c9 | 2009-02-14 22:27:36 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * woops, messed up the conf and db paths, fixed
 
-[49c8bf5 | Sat Feb 14 22:21:17 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[49c8bf5 | 2009-02-14 22:21:17 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added a search for the freeswitch install in FS_INTSALL_PATHS to figure out where freeswitch is installed
 
-[d953804 | Sat Feb 14 22:12:32 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[d953804 | 2009-02-14 22:12:32 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * changed FS_ROOT to standard /usr/local/freeswitch location
 
-[9804dfb | Sat Feb 14 21:13:04 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[9804dfb | 2009-02-14 21:13:04 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Refactored originate to more closely model FS originate,
 
@@ -1205,15 +1287,15 @@
     * Made command_text its own method, so run only sends the command_text
       return string to the fs event socket
 
-[8ae592b | Sat Feb 14 17:41:39 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[8ae592b | 2009-02-14 17:41:39 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added defaults to FreeSwitcher callerid and such
 
-[8797be8 | Sat Feb 14 17:22:31 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[8797be8 | 2009-02-14 17:22:31 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * pulled duplicated code for setting table name
 
-[d0994c7 | Sat Feb 14 17:16:27 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[d0994c7 | 2009-02-14 17:16:27 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Began mapping of Free Switch database
 
@@ -1231,7 +1313,7 @@
     irb(main):003:0> FreeSwitcher::Database::Core::Complete.all.size
     => 51
 
-[9644f6f | Sat Feb 14 16:05:35 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[9644f6f | 2009-02-14 16:05:35 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * db/init is meant to initialize the db, had to sort out permissions on
 
@@ -1261,19 +1343,19 @@
     D, [2009-02-14T10:11:38.093333 #4123] DEBUG -- : saying bgapi originate {ignore_early_media=true,origination_timeout=15}sofia/gateway/carlos/6666 &bridge(user/bougyman)
     => {"Job-UUID"=>"b2677f8a-9ba7-42f6-9422-65f09b9c3762", "body"=>"", "Content-Type"=>"command/reply", "Reply-Text"=>"+OK Job-UUID: b2677f8a-9ba7-42f6-9422-65f09b9c3762"}
 
-[e120547 | Sat Feb 14 02:47:46 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[e120547 | 2009-02-14 02:47:46 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * New Command structure
 
-[b5cc476 | Sat Feb 14 02:21:07 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b5cc476 | 2009-02-14 02:21:07 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Adding FreeSwitcher::Log
 
-[e93e462 | Sat Feb 14 02:20:14 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[e93e462 | 2009-02-14 02:20:14 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Move InboundEventSocket to CommandSocket
 
-[bc83ac5 | Fri Feb 13 18:20:22 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[bc83ac5 | 2009-02-13 18:20:22 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * * Changed order of default requires to put commands last
 
@@ -1281,92 +1363,92 @@
       Originate
     * Renamed the 'send' method to 'say' in EventSocket for clarity
 
-[154e909 | Thu Feb 12 22:36:25 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[154e909 | 2009-02-12 22:36:25 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * refactored includes so they load properly.  rewrote FreeSwitcher::Commands.register and .list
 
-[1c8a642 | Thu Feb 12 17:28:01 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[1c8a642 | 2009-02-12 17:28:01 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Clean up lib/ a bit
 
-[2416d4b | Thu Feb 12 01:15:22 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[2416d4b | 2009-02-12 01:15:22 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * renamed method to include all of its functionality
 
-[290dcc6 | Thu Feb 12 01:11:56 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[290dcc6 | 2009-02-12 01:11:56 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * finished parsing in EventSocket without sending to Event.from
 
-[068f7f3 | Thu Feb 12 00:23:09 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[068f7f3 | 2009-02-12 00:23:09 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Return the body, not just the header in event_socket.rb
 
-[66ccf4f | Wed Feb 11 22:21:05 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[66ccf4f | 2009-02-11 22:21:05 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * removed web branch
 
-[3223431 | Wed Feb 11 21:44:54 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[3223431 | 2009-02-11 21:44:54 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * removed irb history file, added full path spec to library includes
 
-[b889e58 | Wed Feb 11 21:44:18 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b889e58 | 2009-02-11 21:44:18 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * removed irb history file, added full path spec to library includes
 
-[c3798a1 | Wed Feb 11 21:28:49 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[c3798a1 | 2009-02-11 21:28:49 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * added fully qualified path to the require of event
 
-[ef29cea | Wed Feb 11 21:16:06 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[ef29cea | 2009-02-11 21:16:06 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * removed the rest of ride
 
-[6102073 | Wed Feb 11 21:15:18 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[6102073 | 2009-02-11 21:15:18 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * removed ride from tree
 
-[8cdd8f1 | Wed Feb 11 21:13:51 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[8cdd8f1 | 2009-02-11 21:13:51 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * unneded ride files
 
-[b01400e | Wed Feb 11 21:11:44 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b01400e | 2009-02-11 21:11:44 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * should not have been in the tree
 
-[b712888 | Wed Feb 11 21:11:07 UTC 2009] bougyman <bougyman@hellspass.nationwide-recovery.com>
+[b712888 | 2009-02-11 21:11:07 UTC] bougyman <bougyman@hellspass.nationwide-recovery.com>
 
   * Added ramaze tree to hold configurator and sequel models
 
-[cfe4d14 | Wed Feb 11 01:10:27 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[cfe4d14 | 2009-02-11 01:10:27 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * s/return_result/response
 
-[9304554 | Wed Feb 11 01:00:07 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[9304554 | 2009-02-11 01:00:07 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Moved FreeSwitcher::Event into lib
 
     Created FreeSwitcher::EventSocket base class
     Created FreeSwitcher::InboundEventSocket
 
-[2f31803 | Mon Feb 09 18:11:01 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[2f31803 | 2009-02-09 18:11:01 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * More EM, no Threads
 
-[8f20e9c | Mon Feb 09 00:57:08 UTC 2009] Jayson Vaughn <vaughn.jayson@gmail.com>
+[8f20e9c | 2009-02-09 00:57:08 UTC] Jayson Vaughn <vaughn.jayson@gmail.com>
 
   * Added a controller on port 9000.  Anything you send to port 9000 will be
 
 
 
-[303a136 | Mon Feb 09 06:42:24 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[303a136 | 2009-02-09 06:42:24 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * s/Response/Event/
 
-[71fc503 | Mon Feb 09 06:35:33 UTC 2009] Michael Fellinger <m.fellinger@gmail.com>
+[71fc503 | 2009-02-09 06:35:33 UTC] Michael Fellinger <m.fellinger@gmail.com>
 
   * Initial bin/freeswitcher
 
-[966b75f | Sat Feb 07 14:36:57 UTC 2009] TJ Vanderpoel <bougy.man@gmail.com>
+[966b75f | 2009-02-07 14:36:57 UTC] TJ Vanderpoel <bougy.man@gmail.com>
 
   * initial tree
 

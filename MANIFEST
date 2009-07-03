@@ -39,6 +39,7 @@ lib/fsr/cmd/sofia/profile.rb
 lib/fsr/cmd/sofia/status.rb
 lib/fsr/cmd/sofia_contact.rb
 lib/fsr/cmd/status.rb
+lib/fsr/cmd/uuid_dump.rb
 lib/fsr/command_socket.rb
 lib/fsr/database.rb
 lib/fsr/database/call_limit.rb
@@ -52,6 +53,7 @@ lib/fsr/listener.rb
 lib/fsr/listener/header_and_content_response.rb
 lib/fsr/listener/inbound.rb
 lib/fsr/listener/inbound/event.rb
+lib/fsr/listener/mock.rb
 lib/fsr/listener/outbound.rb
 lib/fsr/model/call.rb
 lib/fsr/version.rb
@@ -63,13 +65,13 @@ tasks/gem.rake
 tasks/gem_installer.rake
 tasks/install_dependencies.rake
 tasks/manifest.rake
-tasks/rcov.rake
 tasks/release.rake
 tasks/reversion.rake
 tasks/setup.rake
 tasks/spec.rake
 tasks/yard.rake
 spec/helper.rb
+spec/fsr_listener_helper.rb
 spec/fsr/app.rb
 spec/fsr/app/answer.rb
 spec/fsr/app/bridge.rb
@@ -89,6 +91,7 @@ spec/fsr/cmd/calls.rb
 spec/fsr/cmd/originate.rb
 spec/fsr/cmd/sofia.rb
 spec/fsr/cmd/sofia/profile.rb
+spec/fsr/cmd/uuid_dump.rb
 spec/fsr/listener.rb
 spec/fsr/listener/header_and_content_response.rb
 spec/fsr/listener/inbound.rb
