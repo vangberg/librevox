@@ -9,10 +9,11 @@ module FSR
         # wav file you wish to play, full path 
         @message = message
         @voice = opts[:voice] || "slt"
+        @engine = opts[:engine] || "flite"
       end
 
       def arguments
-        ["flite", @voice, @message]
+        [@engine, @voice, @message]
       end
 
       def sendmsg
