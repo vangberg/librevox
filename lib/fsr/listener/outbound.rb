@@ -73,7 +73,7 @@ module FSR
       # Scheduel Hangup
 
       def sched_hangup(secs, &block)
-        send_data("api +#{secs} #{@session.headers[:unique_id]} alotted_timeout\n\n")
+        send_data("api sched_hangup +#{secs} #{@session.headers[:unique_id]} alotted_timeout\n\n")
         @queue.unshift block if block_given?
       end
 
