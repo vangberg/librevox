@@ -6,19 +6,24 @@ require 'fsr/listener/header_and_content_response.rb'
 module FSR
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
-      attr_reader :auth
+      attr_reader :auth, :hooks
 
       HOOKS = {}
 
       def initialize(args = {})
         super
         @auth = args[:auth] || "ClueCon"
+        @hooks = {}
       end
 
       # post_init is called upon each "new" socket connection
       def post_init
         say("auth #{@auth}")
         say('event plain ALL')
+        before_session
+      end
+
+      def before_session 
       end
 
       # receive_request is the callback method when data is recieved from the socket
@@ -32,6 +37,7 @@ module FSR
         event_name = event.content[:event_name].to_s.strip
         unless event_name.empty?
           HOOKS[event_name.to_sym].call(event) unless HOOKS[event_name.to_sym].nil?
+          @hooks[event_name.to_sym].call(event) unless @hooks[event_name.to_sym].nil?
         end
         on_event(event)
       end
@@ -65,6 +71,23 @@ module FSR
       def self.del_event_hook(event)
         HOOKS.delete(event)  
       end
+
+      # add_event_hook adds an Event to listen for.  When that Event is triggered, it will call the defined block
+      #
+      # @param event The event to trigger the block on.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
+      # @param block The block to execute when the event is triggered
+      def add_event(event, &block)
+        @hooks[event] = block 
+      end
+
+      # del_event_hook removes an Event.
+      #
+      # @param event The event to remove.  Examples, :CHANNEL_CREATE, :CHANNEL_DESTROY, etc
+      def del_event(event)
+        @hooks.delete(event)  
+      end
+
+
 
     end
 

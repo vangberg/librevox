@@ -23,6 +23,24 @@ class InboundListener < FSR::Listener::Inbound
 
 end
 
+class InboundListener2 < FSR::Listener::Inbound
+  attr_accessor :test_event
+
+  def initialize(*args)
+    super(*args)
+    @test_event = nil
+  end
+
+  def before_session
+    add_event(:TEST_EVENT) {|event| recvd_event << event}
+  end
+
+  def recvd_event
+    @recvd_event ||= []
+  end
+
+end
+
 describe "Testing FSR::Listener::Inbound" do
 
   it "defines #post_init" do
@@ -42,11 +60,18 @@ EM.describe InboundListener do
 
   before do
     @listener = InboundListener.new("test", {:auth => 'SecretPassword'})
+    @listener2 = InboundListener2.new("test", {:auth => 'SecretPassword'})
   end
 
   should "be able to receive an event and call the on_event callback method" do
     @listener.receive_data("Content-Length: 22\n\nEvent-Name: test_event\n\n")
     @listener.recvd_event.first.content[:event_name].should.equal "test_event"
+    done
+  end
+
+  should "be able to add custom event hooks in the pre_session" do
+    @listener2.receive_data("Content-Length: 22\n\nEvent-Name: TEST_EVENT\n\n")
+    @listener2.recvd_event.first.content[:event_name].should.equal "TEST_EVENT"
     done
   end
 
