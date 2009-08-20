@@ -48,6 +48,13 @@ module FSR
       def say(line)
         send_data("#{line}\r\n\r\n")
       end
+
+      # api encapsulates #say("api blah") for the user
+      #
+      # param line Line of text to send to the socket proceeding api
+      def api(line)
+        say("api #{line}")
+      end
       
       # on_event is the callback method when an event is triggered
       #
