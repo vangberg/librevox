@@ -22,7 +22,7 @@ An Outbound Event Listener Example that reads and returns DTMF input:
 Simply just create a subclass of FSR::Listner::Outbound and all
 new calls/sessions will invoke the "session_initiated" callback method.
  
-<b>NOTE</b>: FSR uses blocks within the 'session_inititated' method to ensure that the next "freeswich command" is not executed until the previous "Freeswitch command" has finished.  This is kicked off by "answer do"
+<b>NOTE</b>: FSR uses blocks within the 'session_inititated' method to ensure that the next "freeswich command" is not executed until the previous "Freeswitch command" has finished.  (Basically a continuation) This is kicked off by "answer do". 
 
   #!/usr/bin/ruby
   require 'fsr'
@@ -37,9 +37,9 @@ new calls/sessions will invoke the "session_initiated" callback method.
       answer do
         FSR::Log.info "***Reading DTMF from #{exten}"
         read("/home/freeswitch/freeswitch/sounds/music/8000/sweet.wav", 4, 10, "input", 7000) do |read_var|
-          FSR::Log.info "***Success, grabbed #{read_var.strip} from #{exten}"
+          FSR::Log.info "***Success, grabbed #{read_var.to_s.strip} from #{exten}"
           # Tell the caller what they entered
-          speak("Got the DTMF of: #{read_var}") do 
+          speak("Got the DTMF of: #{read_var.to_s.strip}") do 
             #Hangup the call
             hangup 
           end

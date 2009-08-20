@@ -10,7 +10,7 @@ class IesDemo < FSR::Listener::Inbound
 
   def on_event(event)
     pp event.headers
-    pp event.content[:event_name]
+    pp event.content[:event_name].to_s
   end
 
 end
