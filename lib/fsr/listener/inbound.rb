@@ -4,12 +4,10 @@ require 'fsr/listener'
 require 'fsr/listener/header_and_content_response.rb'
 
 module FSR
-  load_all_applications
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
       attr_reader :auth, :hooks
 
-      include FSR::App
 
       HOOKS = {}
 
