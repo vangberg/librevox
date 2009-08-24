@@ -5,14 +5,15 @@ module FSR
     class Bridge < Application
       attr_reader :options
 
-      def initialize(target, opts = {})
-        # These are options that will precede the target address
-        @target = target
-        @options = opts || {}
+      def initialize(*params)
+        @options = params.last.is_a?(Hash) ? params.pop : {}
+        @sequential = @options.delete(:sequential)
+        @targets = params
       end
 
       def arguments
-        [@target]
+        delimeter = @sequential ? "|" : ","
+        [@targets.join(delimeter)]
       end
 
       def modifiers
