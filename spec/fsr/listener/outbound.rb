@@ -6,7 +6,8 @@ require "em/spec"
 
 # Bare class to use for testing
 class MyListener < FSR::Listener::Outbound
-  attr_accessor :recvd_reply, :state_machine_test
+  attr_accessor :recvd_reply, :state_machine_test, :state_machine_test2
+  attr_reader :queue
 
   def session_initiated
   end
@@ -31,6 +32,10 @@ class MyListener < FSR::Listener::Outbound
     @queue.unshift block if block_given? 
   end
 
+  def set(var, value, &block)
+     @queue.unshift(block_given? ? block : lambda {})
+  end
+
   def test_state_machine
     @state_machine_test = nil
     do_something do 
@@ -44,6 +49,12 @@ class MyListener < FSR::Listener::Outbound
         end
       end
     end
+  end
+
+  def test_state_machine_without_blocks
+    answer
+    set("test", "test1")
+    set("another_one", "bites_the_dust")
   end
 
 end
@@ -105,6 +116,20 @@ EM.describe MyListener do
     @listener.state_machine_test.should.equal "three"
     done
   end
+
+  should "use implicit blocks to 'fake' I/O blocking and wait for a response before calling the next implicit block" do
+    @listener.receive_data("Content-Length: 0\nEstablished-Session: session\n\n")
+    @listener.test_state_machine_without_blocks
+    @listener.queue.size.should.equal 3
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.queue.size.should.equal 2
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.queue.size.should.equal 1
+    @listener.receive_data("Content-Length: 3\n\nOk\n\n")
+    @listener.queue.empty?.should.equal true
+    done
+  end
+
 
   should "be able to update an existing session" do
     @listener.receive_data("Content-Length: 0\nUnique-ID: abcd-1234-efgh-5678\n\n")

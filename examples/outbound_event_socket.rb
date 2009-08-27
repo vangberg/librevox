@@ -23,6 +23,10 @@ class OutboundDemo < FSR::Listener::Outbound
       end
     end
 
+    def receive_reply(reply)
+      FSR::Log.info "Received #{reply.inspect}"
+    end
+
   end
 
 end

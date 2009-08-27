@@ -16,7 +16,7 @@ module FSR
       SENDMSG_METHOD_DEFINITION = [
                                    "def %s(*args, &block)",
                                    "  sendmsg super",
-                                   "  @queue.unshift block if block_given?",
+                                   " @queue.unshift(block_given? ? block : lambda {})",
                                    "end"
                                   ].join("\n")
 

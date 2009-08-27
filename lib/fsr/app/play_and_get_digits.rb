@@ -45,7 +45,7 @@ module FSR
           @read_var = "variable_#{me.chan_var}"
           sendmsg me
           @queue.unshift Proc.new { update_session } 
-          @queue.unshift block if block_given?
+          @queue.push(block_given? ? block : lambda {})
         end
       |
     end
