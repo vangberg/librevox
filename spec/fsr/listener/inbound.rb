@@ -13,7 +13,7 @@ class InboundListener < FSR::Listener::Inbound
     @test_event = nil
   end
 
-  def on_event(event)
+  def on_event
     recvd_event << event
   end
 
@@ -32,7 +32,7 @@ class InboundListener2 < FSR::Listener::Inbound
   end
 
   def before_session
-    add_event(:TEST_EVENT) {|event| recvd_event << event}
+    add_event(:TEST_EVENT) {recvd_event << event}
   end
 
   def recvd_event
@@ -76,7 +76,8 @@ EM.describe InboundListener do
   end
 
   should "be able to add custom event hooks" do
-    FSL::Inbound.add_event_hook(:HANGUP_EVENT) {|event| @listener.test_event = event}
+    listener = @listener
+    FSL::Inbound.add_event_hook(:HANGUP_EVENT) {listener.test_event = event}
     @listener.test_event.should.equal nil
     @listener.receive_data("Content-Length: 24\n\nEvent-Name: HANGUP_EVENT\n\n")
     @listener.test_event.content[:event_name].should.equal "HANGUP_EVENT"

@@ -6,8 +6,7 @@ require 'fsr/listener/header_and_content_response.rb'
 module FSR
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
-      attr_reader :auth, :hooks
-
+      attr_reader :auth, :hooks, :event
 
       HOOKS = {}
 
@@ -34,13 +33,13 @@ module FSR
       def receive_request(header, content)
         hash_header = headers_2_hash(header)
         hash_content = headers_2_hash(content)
-        event = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
+        @event = HeaderAndContentResponse.new({:headers => hash_header, :content => hash_content})
         event_name = event.content[:event_name].to_s.strip
         unless event_name.empty?
-          HOOKS[event_name.to_sym].call(event) unless HOOKS[event_name.to_sym].nil?
-          @hooks[event_name.to_sym].call(event) unless @hooks[event_name.to_sym].nil?
+          instance_eval &HOOKS[event_name.to_sym] unless HOOKS[event_name.to_sym].nil?
+          instance_eval &@hooks[event_name.to_sym] unless @hooks[event_name.to_sym].nil?
         end
-        on_event(event)
+        on_event
       end
 
       # say encapsulates #send_data for the user
@@ -61,7 +60,7 @@ module FSR
       #
       # param event The triggered event object
       # return event The triggered event object
-      def on_event(event)
+      def on_event
         event
       end
 
