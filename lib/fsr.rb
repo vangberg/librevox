@@ -67,7 +67,7 @@ module FSR
   #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost") 
   #                       <tt>:port [Integer]</tt> the port to listen on (Default: 8021)
   def self.start_ies!(klass, args = {})
-    port = args.delete(:port) || "8084"
+    port = args.delete(:port) || "8021"
     host = args.delete(:host) || "localhost"
     EM.run do
       EventMachine::connect(host, port, klass, args)
