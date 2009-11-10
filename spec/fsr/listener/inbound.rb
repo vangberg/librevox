@@ -20,29 +20,15 @@ class InboundListener < FSR::Listener::Inbound
   def recvd_event
     @recvd_event ||= []
   end
-
 end
 
-class InboundListener2 < FSR::Listener::Inbound
-  attr_accessor :test_event
-
-  def initialize(*args)
-    super(*args)
-    @test_event = nil
-  end
-
+class InboundListener2 < InboundListener
   def before_session
     add_event(:TEST_EVENT) {recvd_event << event}
   end
-
-  def recvd_event
-    @recvd_event ||= []
-  end
-
 end
 
 describe "Testing FSR::Listener::Inbound" do
-
   it "defines #post_init" do
     FSR::Listener::Inbound.method_defined?(:post_init).should == true
   end
@@ -53,14 +39,12 @@ describe "Testing FSR::Listener::Inbound" do
     FSL::Inbound.del_event_hook(:CHANNEL_CREATE)
     FSL::Inbound::HOOKS.size.should == 0
   end
-
 end
 
 EM.describe InboundListener do
-
   before do
-    @listener = InboundListener.new("test", {:auth => 'SecretPassword'})
-    @listener2 = InboundListener2.new("test", {:auth => 'SecretPassword'})
+    @listener = InboundListener.new(1234, {:auth => 'SecretPassword'})
+    @listener2 = InboundListener2.new(1234, {:auth => 'SecretPassword'})
   end
 
   should "be able to receive an event and call the on_event callback method" do
@@ -88,5 +72,4 @@ EM.describe InboundListener do
     @listener.auth.should.equal 'SecretPassword'
     done
   end
-
 end
