@@ -1,7 +1,7 @@
 require 'spec/helper'
+require 'lib/fsr'
 require "fsr/listener"
 require "fsr/listener/inbound"
-gem "tmm1-em-spec"
 require "em/spec"
 
 # Bare class to use for testing
