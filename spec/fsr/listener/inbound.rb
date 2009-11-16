@@ -8,6 +8,11 @@ require "em/spec"
 class InboundListener < FSR::Listener::Inbound
   attr_accessor :test_event
 
+  # Stub error? out
+  def error?
+    false
+  end
+
   def initialize(*args)
     super(*args)
     @test_event = nil
