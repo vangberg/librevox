@@ -10,7 +10,7 @@ module FSR
       def initialize(fs_socket = nil, contact = {})
         @fs_socket = fs_socket # FSR::CommandSocket obj
         @contact = contact[:contact]
-        puts @contact
+        #puts @contact
       end
 
       # Send the command to the event socket, using api by default.
