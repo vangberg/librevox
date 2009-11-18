@@ -13,8 +13,10 @@ freeswitcher.gemspec
 lib/fsr.rb
 lib/fsr/app.rb
 lib/fsr/app/answer.rb
+lib/fsr/app/bind_meta_app.rb
 lib/fsr/app/bridge.rb
 lib/fsr/app/conference.rb
+lib/fsr/app/execute_app.rb
 lib/fsr/app/fifo.rb
 lib/fsr/app/fs_break.rb
 lib/fsr/app/fs_sleep.rb
@@ -74,8 +76,10 @@ spec/helper.rb
 spec/fsr_listener_helper.rb
 spec/fsr/app.rb
 spec/fsr/app/answer.rb
+spec/fsr/app/bind_meta_app.rb
 spec/fsr/app/bridge.rb
 spec/fsr/app/conference.rb
+spec/fsr/app/execute_app.rb
 spec/fsr/app/fifo.rb
 spec/fsr/app/fs_break.rb
 spec/fsr/app/fs_sleep.rb
