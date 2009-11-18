@@ -1,6 +1,6 @@
 require 'rake/clean'
 require "rubygems"
-require "lib/fsr"
+require "./lib/fsr"
 require "pathname"
 
 PROJECT_COPYRIGHT = Pathname(__FILE__).dirname.join("License.txt").read

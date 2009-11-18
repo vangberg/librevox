@@ -1,3 +1,7 @@
+[fc083ef | 2009-07-03 14:14:17 UTC] TJ Vanderpoel <TJ Vanderpoel tj@rubyists.com>
+
+  * Version 0.4.2
+
 [360c877 | 2009-06-22 01:45:56 UTC] bougyman <bougyman@gotdebt.nationwide-recovery.com>
 
   * removed rcov dependency, added setup_spec task (for tmm1-em-spec)

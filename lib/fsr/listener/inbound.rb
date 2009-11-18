@@ -35,7 +35,7 @@ module FSR
       def reconnect_until_succeeding
         timer = EM::PeriodicTimer.new(5) {
           if error?
-            FSR::Log.info "Couldn't establish connection. Trying again…"
+            FSR::Log.info "Couldn't establish connection. Trying again..."
            reconnect @host, @port
           else
             timer.cancel
@@ -45,7 +45,7 @@ module FSR
       end
 
       def authorize_and_register_for_events
-        FSR::Log.info "Connection established. Authorizing…"
+        FSR::Log.info "Connection established. Authorizing..."
         say("auth #{@auth}")
         say('event plain ALL')
       end
