@@ -9,7 +9,7 @@ module FSR
       # args format for array:
       # sound_file, invalid_file, min = 0, max = 10, tries = 3, timeout = 7000, terminators = ["#"], chan_var = "fsr_read_dtmf", regexp = '\d'
       def initialize(sound_file, invalid_file, *args)
-        puts args.inspect
+        #puts args.inspect
         if args.size == 1 and args.first.kind_of?(Hash)
           arg_hash = DEFAULT_ARGS.merge(args.first)
         elsif args.size > 0
