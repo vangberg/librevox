@@ -1,3 +1,15 @@
+[1f5537d | 2009-11-18 06:43:28 UTC] TJ Vanderpoel <TJ Vanderpoel tj@rubyists.com>
+
+  * commented out more debugging
+
+[4eb4342 | 2009-11-18 06:42:33 UTC] TJ Vanderpoel <TJ Vanderpoel tj@rubyists.com>
+
+  * commented out debugging
+
+[daa5c02 | 2009-11-18 06:03:59 UTC] TJ Vanderpoel <TJ Vanderpoel tj@rubyists.com>
+
+  * upped version to 0.4.3, encompassing harryv bug fixes
+
 [3685cad | 2009-11-18 06:01:06 UTC] TJ Vanderpoel <TJ Vanderpoel tj@rubyists.com>
 
   * removed non-UTF characters from inbound.rb
