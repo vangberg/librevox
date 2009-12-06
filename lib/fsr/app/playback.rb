@@ -9,12 +9,9 @@ module FSR
         @wavfile = wavfile
       end
       def arguments
-        @wavfile
+        [@wavfile]
       end
 
-      def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments] 
-      end
     end
 
     register(:playback, Playback)
