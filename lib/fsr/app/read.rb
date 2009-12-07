@@ -25,7 +25,7 @@ module FSR
         end
       |
     end
-    register(:read, Read)
+    register Read
 
 
   end

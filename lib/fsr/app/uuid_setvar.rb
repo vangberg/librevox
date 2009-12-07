@@ -29,6 +29,6 @@ module FSR
       |
     end
 
-    register(:uuid_setvar, UuidSetVar)
+    register UuidSetVar
   end
 end

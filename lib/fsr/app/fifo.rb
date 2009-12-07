@@ -33,6 +33,6 @@ module FSR
 
     end
 
-    register(:fifo, Fifo)
+    register Fifo
   end
 end

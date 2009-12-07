@@ -17,6 +17,6 @@ module FSR
 
     end
 
-    register(:uuid_dump, UuidDump)
+    register UuidDump
   end
 end

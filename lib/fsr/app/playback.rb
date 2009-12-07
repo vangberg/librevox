@@ -2,21 +2,19 @@ require "fsr/app"
 module FSR
   module App
     class Playback < Application
-      attr_reader :wavfile
-
-      def initialize(wavfile)
-        # wav file you wish to play, full path 
-        @wavfile = wavfile
+      def initialize(file="")
+        @file = file
       end
+
       def arguments
-        [@wavfile]
+        [@file]
       end
 
-      def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % [app_name, arguments.join("|")] 
+      def event_lock
+        true
       end
     end
 
-    register(:playback, Playback)
+    register Playback
   end
 end

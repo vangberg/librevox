@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("fifo")
 
 describe "Testing FSR::App::Fifo" do
   # Utilize the [] shortcut to start a conference

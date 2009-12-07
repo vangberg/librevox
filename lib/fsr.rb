@@ -39,16 +39,9 @@ module FSR
   # Load all FSR::Cmd classes
   def self.load_all_commands(retrying = false)
     require 'fsr/command_socket'
-    load_all_applications
     Cmd.load_all
   end
   
-  # Load all FSR::App classes
-  def self.load_all_applications
-    require "fsr/app"
-    App.load_all
-  end
-
   # Method to start EM for Outbound Event Socket
   def self.start_oes!(klass, args = {})
     port = args.delete(:port) || "8084"

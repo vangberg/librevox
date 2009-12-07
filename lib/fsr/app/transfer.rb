@@ -19,6 +19,6 @@ module FSR
       end
     end
 
-    register(:transfer, Transfer)
+    register Transfer
   end
 end

@@ -10,6 +10,6 @@ module FSR
       end
     end
 
-    register(:execute_app, ExecuteApp)
+    register ExecuteApp
   end
 end

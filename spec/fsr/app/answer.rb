@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("answer")
 
 describe "Testing FSR::App::Answer" do
 

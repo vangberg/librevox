@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("play_and_get_digits")
 
 describe "Testing FSR::App::PlayAndGetDigits" do
   # Utilize the [] shortcut to start a conference

@@ -17,6 +17,6 @@ module FSR
       end
     end
 
-    register(:set, Set)
+    register Set
   end
 end

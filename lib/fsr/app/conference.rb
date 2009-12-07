@@ -24,6 +24,6 @@ module FSR
       end
     end
 
-    register(:conference, Conference)
+    register Conference
   end
 end

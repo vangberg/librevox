@@ -50,6 +50,6 @@ module FSR
       |
     end
 
-    register(:play_and_get_digits, PlayAndGetDigits)
+    register PlayAndGetDigits
   end
 end

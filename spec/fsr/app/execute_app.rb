@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("execute_app")
 
 describe "Testing FSR::App::ExecuteApp" do
   it "executes arbitrary app with one argument" do

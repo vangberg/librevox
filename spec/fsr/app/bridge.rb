@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("bridge")
 
 describe "Testing FSR::App::Bridge" do
   describe "with a single endpoint" do

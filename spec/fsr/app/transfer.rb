@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("transfer")
 
 describe "Testing FSR::App::Transfer" do
   it "Transfers the call" do

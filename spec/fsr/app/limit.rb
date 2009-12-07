@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("limit")
 
 describe "Testing FSR::App::Limit" do
   ## Calls ##

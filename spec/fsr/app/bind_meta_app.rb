@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("bind_meta_app")
 
 describe "Testing FSR::App::BindMetaApp" do
   it "binds a meta app" do

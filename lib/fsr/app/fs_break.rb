@@ -16,6 +16,6 @@ module FSR
 
     end
 
-    register(:fs_break, FSBreak)
+    register FSBreak
   end
 end

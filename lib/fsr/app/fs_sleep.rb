@@ -19,6 +19,6 @@ module FSR
 
     end
 
-    register(:fs_sleep, FSSleep)
+    register FSSleep
   end
 end

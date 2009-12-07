@@ -21,6 +21,6 @@ module FSR
       end
     end
 
-    register(:speak, Speak)
+    register Speak
   end
 end

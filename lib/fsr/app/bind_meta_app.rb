@@ -5,7 +5,7 @@ module FSR
     class BindMetaApp < Application
       attr_reader :options
 
-      def initialize(args)
+      def initialize(args={})
         @options = args
       end
 
@@ -21,6 +21,6 @@ module FSR
       end
     end
 
-    register(:bind_meta_app, BindMetaApp)
+    register BindMetaApp
   end
 end

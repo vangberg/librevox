@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/app"
-FSR::App.load_application("fs_break")
 
 describe "Testing FSR::App::FsBreak" do
 

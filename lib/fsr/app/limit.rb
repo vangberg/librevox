@@ -14,6 +14,6 @@ module FSR
 
     end
 
-    register(:limit, Limit)
+    register Limit
   end
 end
