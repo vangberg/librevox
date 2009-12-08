@@ -21,8 +21,13 @@ module FSR
         @response = Response.new(header, content)
 
         if @response.event?
+          on_event
           find_and_invoke_event @response.event
         end
+      end
+
+      # override
+      def on_event
       end
 
       private
