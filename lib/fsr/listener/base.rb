@@ -27,8 +27,9 @@ module FSR
 
       private
       def find_and_invoke_event(event_name)
-        hooks = self.class.hooks.select {|name,_| name == event_name.to_sym}
-        hooks.each {|_,block| instance_eval(&block)}
+        self.class.hooks.each do |name,block| 
+          instance_eval(&block) if name == event_name.to_sym
+        end
       end
     end
   end
