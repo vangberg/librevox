@@ -3,6 +3,10 @@ require "fsr/app"
 module FSR
   module App
     class FSBreak < Application
+      def self.app_name
+        "fs_break"
+      end
+
       def initialize
       end
 

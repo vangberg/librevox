@@ -7,8 +7,12 @@ module FSR
     end
 
     class Application
+      def self.app_name
+        name.split("::").last.downcase
+      end
+
       def app_name
-        self.class.name.split("::").last.downcase
+        self.class.app_name
       end
 
       def to_s

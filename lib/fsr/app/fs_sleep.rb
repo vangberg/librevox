@@ -3,6 +3,10 @@ require "fsr/app"
 module FSR
   module App
     class FSSleep < Application
+      def self.app_name
+        "fs_sleep"
+      end
+
       attr_reader :milliseconds
 
       def initialize(milliseconds)

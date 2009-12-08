@@ -5,7 +5,7 @@ module FSR
     class Outbound < Base
       def self.register_app(klass)
         class_eval <<-EOF
-          def #{klass.new.app_name}(*args, &block)
+          def #{klass.app_name}(*args, &block)
             run_app(#{klass}, *args, &block)
           end
         EOF

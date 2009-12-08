@@ -3,6 +3,10 @@ module FSR
   #http://wiki.freeswitch.org/wiki/Mod_commands#uuid_setvar
   module App
     class UuidGetVar < Application
+      def self.app_name
+        "uuid_getvar"
+      end
+
       attr_reader :var, :uuid
 
       def initialize(uuid, var)

@@ -2,7 +2,7 @@ require "fsr/app"
 module FSR
   module App
     class Playback < Application
-      def initialize(file="")
+      def initialize(file)
         @file = file
       end
 

@@ -3,14 +3,14 @@ require 'spec/fsr/listener'
 require 'fsr/listener/outbound'
 
 class SampleApp < FSR::App::Application
+  def self.app_name
+    "sample_app"
+  end
+
   attr_reader :arguments
 
   def initialize(*args)
     @arguments = args
-  end
-
-  def app_name
-    "sample_app"
   end
 end
 
@@ -95,12 +95,12 @@ describe "Outbound listener with apps using fake blocks " do
 end
 
 class ReaderApp < FSR::App::Application
-  def read_channel_var
-    "a_reader_var"
+  def self.app_name
+    "reader_app"
   end
 
-  def app_name
-    "reader_app"
+  def read_channel_var
+    "a_reader_var"
   end
 end
 

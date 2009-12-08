@@ -3,6 +3,10 @@ module FSR
   #http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_play_and_get_digits
   module App
     class PlayAndGetDigits < Application
+      def self.app_name
+        "play_and_get_digits"
+      end
+
       attr_reader :chan_var
       DEFAULT_ARGS = {:min => 0, :max => 10, :tries => 3, :timeout => 7000, :terminators => ["#"], :chan_var => "fsr_read_dtmf", :regexp => '\d'}
 
