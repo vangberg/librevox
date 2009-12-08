@@ -65,25 +65,26 @@ describe "Outbound listener" do
   end
 end
 
-class OutboundListenerWithApps < Listener::Outbound
+class OutboundListenerWithNestedApps < Listener::Outbound
   register_app SampleApp
 
   def session_initiated
-    sample_app "foo"
-    sample_app "bar"
+    sample_app "foo" do
+      sample_app "bar"
+    end
   end
 end
 
-describe "Outbound listener with apps" do
+describe "Outbound listener with apps using fake blocks " do
   before do
-    @listener = OutboundListenerWithApps.new(nil)
+    @listener = OutboundListenerWithNestedApps.new(nil)
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nEstablish-Session: OK\n\n")
     3.times {@listener.outgoing_data.shift}
   end
 
-  should "only send one message at a time" do
+  should "only send one app at a time" do
     @listener.read_data.should == SampleApp.new("foo").sendmsg
     @listener.read_data.should == nil
 
@@ -107,8 +108,9 @@ class OutboundListenerWithReader < Listener::Outbound
   register_app ReaderApp
   
   def session_initiated
-    data = reader_app
-    send_data "read this: #{data}"
+    reader_app do |data|
+      send_data "read this: #{data}"
+    end
   end
 end
 
@@ -130,8 +132,49 @@ describe "Outbound listener with app reading data" do
     @listener.session.content[:session_var].should == "Second"
   end
 
-  should "return value of channel variable" do
+  should "pass value of channel variable to block" do
+    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
     @listener.receive_data("Content-Length: 50\n\nEvent-Name: CHANNEL_DATA\na-reader-var: some value\n\n")
     @listener.read_data.should == "read this: some value"
+  end
+end
+
+class OutboundListenerWithNonNestedApps < Listener::Outbound
+  attr_reader :queue
+
+  register_app SampleApp
+  register_app ReaderApp
+
+  def session_initiated
+    sample_app "foo"
+    reader_app do |data|
+      send_data "the end: #{data}"
+    end
+  end
+end
+
+describe "Outbound listener with non-nested apps" do
+  before do
+    @listener = OutboundListenerWithNonNestedApps.new(nil)
+
+    # Establish session and get rid of connect-string
+    @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
+    3.times {@listener.outgoing_data.shift}
+  end
+
+  should "wait for response before calling next proc" do
+    # response to sample_app
+    @listener.read_data.should.not == "read this: some value"
+    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
+
+    # response to reader_app
+    @listener.read_data.should.not == "read this: some value"
+    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
+
+    # response to uuid_dump caused by reader_app
+    @listener.read_data.should.not == "read this: some value"
+    @listener.receive_data("Content-Length: 50\n\nEvent-Name: CHANNEL_DATA\na-reader-var: some value\n\n")
+
+    @listener.read_data.should == "the end: some value"
   end
 end

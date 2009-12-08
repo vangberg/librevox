@@ -1,22 +1,27 @@
 require 'fsr/listener/base'
-require 'fiber'
 
 module FSR
   module Listener
     class Outbound < Base
       def self.register_app(klass)
-        define_method klass.new.app_name do |*args|
-          app = klass.new(*args)
-          send_data app.sendmsg
-
-          if app.read_channel_var
-            @read_channel_var = app.read_channel_var
-            update_session
-          else
-            @read_channel_var = nil
+        class_eval <<-EOF
+          def #{klass.new.app_name}(*args, &block)
+            run_app(#{klass}, *args, &block)
           end
+        EOF
+      end
 
-          Fiber.yield
+      def run_app(klass, *args, &block)
+        app = klass.new(*args)
+        send_data app.sendmsg
+
+        @queue << (block_given? ? block : lambda {})
+
+        if app.read_channel_var
+          @read_channel_var = app.read_channel_var
+          update_session
+        else
+          @read_channel_var = nil
         end
       end
 
@@ -24,6 +29,7 @@ module FSR
 
       def post_init
         @session = nil
+        @queue = []
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
@@ -35,25 +41,25 @@ module FSR
 
         if session.nil?
           @session = response
-          @app = Fiber.new {session_initiated}
-          @app.resume
+          session_initiated
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
           resume_with_channel_var
         else
-          @app.resume if @app.alive?
+          @queue.shift.call if @queue.any?
         end
       end
 
       def resume_with_channel_var
         if @read_channel_var
           value = @session.content[@read_channel_var.to_sym]
-          @app.resume value
+          @queue.shift.call(value)
         end
       end
 
       def update_session
         send_data("api uuid_dump #{session.headers[:unique_id]}\n\n")
+        @queue.unshift(lambda {})
       end
 
       def session_initiated
