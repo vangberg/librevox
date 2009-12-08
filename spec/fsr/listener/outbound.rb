@@ -147,7 +147,7 @@ describe "Outbound listener with app reading data" do
 
   should "pass value of channel variable to block" do
     @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
-    @listener.receive_data("Content-Length: 50\n\nEvent-Name: CHANNEL_DATA\na-reader-var: some value\n\n")
+    @listener.receive_data("Content-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
     @listener.read_data.should == "read this: some value"
   end
 end
@@ -186,7 +186,7 @@ describe "Outbound listener with non-nested apps" do
 
     # response to uuid_dump caused by reader_app
     @listener.read_data.should.not == "read this: some value"
-    @listener.receive_data("Content-Length: 50\n\nEvent-Name: CHANNEL_DATA\na-reader-var: some value\n\n")
+    @listener.receive_data("Content-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
 
     @listener.read_data.should == "the end: some value"
   end

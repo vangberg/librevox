@@ -62,7 +62,8 @@ module FSR
 
       def resume_with_channel_var
         if @read_channel_var
-          value = @session.content[@read_channel_var.to_sym]
+          variable = "variable_#{@read_channel_var}".to_sym
+          value = @session.content[variable]
           @queue.shift.call(value)
         end
       end
