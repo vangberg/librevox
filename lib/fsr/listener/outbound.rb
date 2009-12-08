@@ -12,6 +12,8 @@ module FSR
           if app.read_channel_var
             @read_channel_var = app.read_channel_var
             update_session
+          else
+            @read_channel_var = nil
           end
 
           Fiber.yield
@@ -37,9 +39,16 @@ module FSR
           @app.resume
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
-          @app.resume(@session.content[@read_channel_var.to_sym]) if @read_channel_var
+          resume_with_channel_var
         else
           @app.resume if @app.alive?
+        end
+      end
+
+      def resume_with_channel_var
+        if @read_channel_var
+          value = @session.content[@read_channel_var.to_sym]
+          @app.resume value
         end
       end
 
