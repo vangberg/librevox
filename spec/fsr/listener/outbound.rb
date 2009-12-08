@@ -128,6 +128,7 @@ describe "Outbound listener with app reading data" do
   end
 
   should "update session with new data" do
+    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
     @listener.receive_data("Content-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
     @listener.session.content[:session_var].should == "Second"
   end
