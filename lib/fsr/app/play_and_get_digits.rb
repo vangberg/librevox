@@ -7,7 +7,7 @@ module FSR
         "play_and_get_digits"
       end
 
-      attr_reader :chan_var
+      attr_reader :read_channel_var
       DEFAULT_ARGS = {:min => 0, :max => 10, :tries => 3, :timeout => 7000, :terminators => ["#"], :chan_var => "fsr_read_dtmf", :regexp => '\d'}
 
       # args format for array:
@@ -31,27 +31,18 @@ module FSR
         @max = arg_hash[:max]
         @tries = arg_hash[:tries]
         @timeout = arg_hash[:timeout]
-        @chan_var = arg_hash[:chan_var]
+        @read_channel_var = arg_hash[:chan_var]
         @terminators = arg_hash[:terminators]
         @regexp = arg_hash[:regexp]
       end
 
       def arguments
-        [@min, @max, @tries, @timeout, @terminators.join(","), @sound_file, @invalid_file, @chan_var, @regexp]
+        [@min, @max, @tries, @timeout, @terminators.join(","), @sound_file, @invalid_file, @read_channel_var, @regexp]
       end
 
-      def sendmsg
-        "call-command: execute\nexecute-app-name: %s\nexecute-app-arg: %s\nevent-lock:true\n\n" % ["play_and_get_digits", arguments.join(" ")]
+      def event_lock
+        true
       end
-      SENDMSG_METHOD = %q|
-        def play_and_get_digits(*args, &block)
-          me = super(*args)
-          @read_var = "variable_#{me.chan_var}"
-          sendmsg me
-          @queue.unshift Proc.new { update_session } 
-          @queue.unshift(block_given? ? block : lambda {})
-        end
-      |
     end
 
     register PlayAndGetDigits
