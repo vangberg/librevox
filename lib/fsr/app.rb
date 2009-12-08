@@ -46,7 +46,7 @@ module FSR
   end
 end
 
-Dir["lib/fsr/app/*.rb"].each do |app|
+Dir[File.join(File.dirname(__FILE__), "app", "*.rb")].each do |app|
   require app
 end
 
