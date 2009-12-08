@@ -85,11 +85,11 @@ describe "Outbound listener with apps using fake blocks " do
   end
 
   should "only send one app at a time" do
-    @listener.read_data.should == SampleApp.new("foo").sendmsg
+    @listener.read_data.should == "sendmsg\n" + SampleApp.new("foo").sendmsg
     @listener.read_data.should == nil
 
     @listener.receive_data("Content-Length: 0\n\n")
-    @listener.read_data.should == SampleApp.new("bar").sendmsg
+    @listener.read_data.should == "sendmsg\n" + SampleApp.new("bar").sendmsg
     @listener.read_data.should == nil
   end
 end
@@ -123,7 +123,13 @@ describe "Outbound listener with app reading data" do
     3.times {@listener.outgoing_data.shift}
   end
 
-  should "send uuid_dump to get channel var" do
+  should "not send anything while missing response" do
+    @listener.read_data # the command executing reader_app
+    @listener.read_data.should == nil
+  end
+
+  should "send uuid_dump to get channel var, after getting response" do
+    @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK\n\n")
     @listener.read_data.should == "api uuid_dump 1234\n\n"
   end
 

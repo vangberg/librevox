@@ -18,16 +18,21 @@ module FSR
 
       def run_app(klass, *args, &block)
         app = klass.new(*args)
-        send_data app.sendmsg
-
-        @queue << (block_given? ? block : lambda {})
+        sendmsg app.sendmsg
 
         if app.read_channel_var
           @read_channel_var = app.read_channel_var
-          update_session
+          @queue << lambda {update_session}
         else
           @read_channel_var = nil
         end
+
+        @queue << (block_given? ? block : lambda {})
+      end
+
+      # This should probably be in Application#sendmsg instead.
+      def sendmsg(msg)
+        send_data "sendmsg\n%s" % msg
       end
 
       attr_accessor :session
@@ -64,7 +69,6 @@ module FSR
 
       def update_session
         send_data("api uuid_dump #{session.headers[:unique_id]}\n\n")
-        @queue.unshift(lambda {})
       end
 
       def session_initiated
