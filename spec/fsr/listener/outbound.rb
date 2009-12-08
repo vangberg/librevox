@@ -92,6 +92,12 @@ describe "Outbound listener with apps using fake blocks " do
     @listener.read_data.should == "sendmsg\n" + SampleApp.new("bar").sendmsg
     @listener.read_data.should == nil
   end
+
+  should "not be driven forward by events" do
+    @listener.read_data # sample_app "foo"
+    @listener.receive_data("Content-Length: 45\n\nEvent-Name: CHANNEL_EXECUTE\nSession-Var: Some\n\n")
+    @listener.read_data.should == nil
+  end
 end
 
 class ReaderApp < FSR::App::Application

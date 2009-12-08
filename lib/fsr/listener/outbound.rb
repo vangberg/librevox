@@ -55,7 +55,7 @@ module FSR
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
           resume_with_channel_var
-        else
+        elsif !response.event?
           @queue.shift.call if @queue.any?
         end
       end
