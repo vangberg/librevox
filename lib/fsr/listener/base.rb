@@ -21,7 +21,7 @@ module FSR
         @response = Response.new(header, content)
 
         if @response.event?
-          find_and_invoke_event @response.content[:event_name]
+          find_and_invoke_event @response.event
         end
       end
 
