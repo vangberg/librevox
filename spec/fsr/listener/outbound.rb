@@ -20,9 +20,16 @@ class OutboundTestListener < Listener::Outbound
   end
 end
 
+def send_event_and_linger_replies
+  @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK Events Enabled\n\n")
+  @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK will linger\n\n")
+end
+
 describe "Outbound listener" do
   before do
     @listener = OutboundTestListener.new(nil)
+    @listener.receive_data("Content-Type: command/reply\nCaller-Caller-ID-Number: 8675309\n\n")
+    send_event_and_linger_replies
   end
 
   should "connect to freeswitch and subscribe to events" do
@@ -32,25 +39,14 @@ describe "Outbound listener" do
   end
 
   should "establish a session" do
-    @listener.receive_data("Content-Length: 0\nTest: Testing\n\n")
     @listener.session.class.should.equal FSR::Listener::Response
   end
 
   should "call #session_initated after establishing new session" do
-    @listener.receive_data("Content-Length: 0\nTest: Testing\n\n")
-
     @listener.read_data.should.equal "session was initiated"
   end
 
   should "make channel variables available through session" do
-    @listener.receive_data("Content-Length: 0\nCaller-Caller-ID-Number: 8675309\n\n")
-    @listener.session.headers[:caller_caller_id_number].should.equal "8675309"
-  end
-
-  should "receive and process a response split in multiple transactions" do
-    @listener.receive_data("Content-Length: ")
-    @listener.receive_data("0\nCaller-Caller-")
-    @listener.receive_data("ID-Number: 8675309\n\n")
     @listener.session.headers[:caller_caller_id_number].should.equal "8675309"
   end
 
@@ -81,6 +77,7 @@ describe "Outbound listener with apps using fake blocks " do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nEstablish-Session: OK\n\n")
+    send_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
@@ -126,6 +123,7 @@ describe "Outbound listener with app reading data" do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
+    send_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
@@ -172,6 +170,7 @@ describe "Outbound listener with non-nested apps" do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
+    send_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 

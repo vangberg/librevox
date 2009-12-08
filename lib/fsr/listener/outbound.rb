@@ -43,7 +43,9 @@ module FSR
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
+        @queue << lambda {}
         send_data "linger\n\n"
+        @queue << lambda {}
       end
 
       def receive_request(*args)
