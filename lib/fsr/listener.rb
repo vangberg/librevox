@@ -1,3 +1,6 @@
+require 'fsr/listener/inbound'
+require 'fsr/listener/outbound'
+
 module FSR
   module Listener 
 
