@@ -43,6 +43,12 @@ shared "events" do
     @listener.receive_data("Content-Length: 22\n\nEvent-Name: SOME_EVENT\n\n")
     @listener.read_data.should == "something"
   end
+
+  should "expose response as event" do
+    @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
+    @listener.event.class.should == FSR::Listener::Response
+    @listener.event.content[:event_name].should == "OTHER_EVENT"
+  end
 end
 
 # Stupid hack. How do we make bacon ignore this file?
