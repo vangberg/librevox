@@ -6,48 +6,21 @@ require 'fsr/listener/header_and_content_response.rb'
 module FSR
   module Listener
     class Inbound < EventMachine::Protocols::HeaderAndContentProtocol
-      attr_reader :auth, :hooks, :event, :server, :port
+      attr_reader :auth, :hooks, :event
 
       HOOKS = {}
 
       def initialize(args = {})
         super
         @auth = args[:auth] || "ClueCon"
-        @host = args[:host]
-        @port = args[:port]
         @hooks = {}
       end
 
-      # post_init is called upon each "new" socket connection.
-      #
-      # If Freeswitcher hasn't started listening for inbound socket connections
-      # yet, EventMachine will silently do nothing. A periodic timer is added
-      # to check wether the connection has been initiated yet, otherwise tries
-      # again in five seconds.
+      # post_init is called upon each "new" socket connection
       def post_init
-        if error?
-          reconnect_until_succeeding
-        else
-          authorize_and_register_for_events
-        end
-      end
-
-      def reconnect_until_succeeding
-        timer = EM::PeriodicTimer.new(5) {
-          if error?
-            FSR::Log.info "Couldn't establish connection. Trying again..."
-           reconnect @host, @port
-          else
-            timer.cancel
-            authorize_and_register_for_events
-          end
-        }
-      end
-
-      def authorize_and_register_for_events
-        FSR::Log.info "Connection established. Authorizing..."
         say("auth #{@auth}")
         say('event plain ALL')
+        before_session
       end
 
       def before_session 
