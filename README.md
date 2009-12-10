@@ -125,6 +125,13 @@ Multiple listeners can be started at once by passing a block to `FSR.start`:
 
 ## Writing applications
 
+## Extras
+
+* Website: [http://code.rubyists.com/projects/fs](http://code.rubyists.com/projects/fs)
+* Source: [http://gitorious.org/fsr](http://gitorious.org/fsr)
+* Wiki: [http://gitorious.org/fsr/pages/Home](http://gitorious.org/fsr/pages/Home)
+* IRC: #rubyists @ freenode
+
 ## License
 
 (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel, Michael Fellinger, Kevin Berry) 
