@@ -20,7 +20,7 @@ class OutboundTestListener < Listener::Outbound
   end
 end
 
-def send_event_and_linger_replies
+def receive_event_and_linger_replies
   @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK Events Enabled\n\n")
   @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK will linger\n\n")
 end
@@ -29,7 +29,7 @@ describe "Outbound listener" do
   before do
     @listener = OutboundTestListener.new(nil)
     @listener.receive_data("Content-Type: command/reply\nCaller-Caller-ID-Number: 8675309\n\n")
-    send_event_and_linger_replies
+    receive_event_and_linger_replies
   end
 
   should "connect to freeswitch and subscribe to events" do
@@ -77,7 +77,7 @@ describe "Outbound listener with apps using fake blocks " do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nEstablish-Session: OK\n\n")
-    send_event_and_linger_replies
+    receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
@@ -123,7 +123,7 @@ describe "Outbound listener with app reading data" do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
-    send_event_and_linger_replies
+    receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
@@ -170,7 +170,7 @@ describe "Outbound listener with non-nested apps" do
 
     # Establish session and get rid of connect-string
     @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
-    send_event_and_linger_replies
+    receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
