@@ -19,6 +19,14 @@ module FSR
       def event
         @content[:event_name] if event?
       end
+      
+      def api_response?
+        @headers[:content_type] == "api/response"
+      end
+
+      def command_reply?
+        @headers[:content_type] == "command/reply"
+      end
 
       private
       def headers_2_hash(*args)

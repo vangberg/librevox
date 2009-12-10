@@ -95,6 +95,18 @@ describe "Outbound listener with apps" do
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 45\n\nEvent-Name: CHANNEL_EXECUTE\nSession-Var: Some\n\n")
     @listener.read_data.should == nil
   end
+
+  should "not be driven forward by api responses" do
+    @listener.read_data # sample_app "foo"
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\nFoo")
+    @listener.read_data.should == nil
+  end
+
+  should "not be driven forward by disconnect notifications" do
+    @listener.read_data # sample_app "foo"
+    @listener.receive_data("Content-Type: text/disconnect-notice\nContent-Length: 9\n\nLingering")
+    @listener.read_data.should == nil
+  end
 end
 
 class ReaderApp < FSR::App::Application

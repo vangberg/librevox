@@ -30,11 +30,27 @@ describe Response do
   end
 
   should "check for event" do
-    response = Response.new("", "Event-Name: Hangup")
+    response = Response.new("Content-Type: command/reply", "Event-Name: Hangup")
     response.event?.should.be.true
     response.event.should == "Hangup"
 
-    response = Response.new("", "Foo-Bar: Baz")
+    response = Response.new("Content-Type: command/reply", "Foo-Bar: Baz")
     response.event?.should.be.false
+  end
+
+  should "check for api response" do
+    response = Response.new("Content-Type: api/response", "+OK")
+    response.api_response?.should.be.true
+
+    response = Response.new("Content-Type: command/reply", "Foo-Bar: Baz")
+    response.api_response?.should.be.false
+  end
+
+  should "check for command reply" do
+    response = Response.new("Content-Type: command/reply", "+OK")
+    response.command_reply?.should.be.true
+
+    response = Response.new("Content-Type: api/response", "Foo-Bar: Baz")
+    response.command_reply?.should.be.false
   end
 end

@@ -22,12 +22,12 @@ module FSR
 
         if app.read_channel_var
           @read_channel_var = app.read_channel_var
-          @queue << lambda {update_session}
+          @command_queue << lambda {update_session}
         else
           @read_channel_var = nil
         end
 
-        @queue << (block_given? ? block : lambda {})
+        @command_queue << (block_given? ? block : lambda {})
       end
 
       # This should probably be in Application#sendmsg instead.
@@ -39,26 +39,26 @@ module FSR
 
       def post_init
         @session = nil
-        @queue = []
+        @command_queue = []
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
-        @queue << lambda {}
+        @command_queue << lambda {}
         send_data "linger\n\n"
-        @queue << lambda {}
+        @command_queue << lambda {}
       end
 
       def receive_request(*args)
         super(*args)
-
+        
         if session.nil?
           @session = response
           session_initiated
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
           resume_with_channel_var
-        elsif !response.event?
-          @queue.shift.call if @queue.any?
+        elsif response.command_reply? && !response.event?
+          @command_queue.shift.call if @command_queue.any?
         end
       end
 
@@ -66,7 +66,7 @@ module FSR
         if @read_channel_var
           variable = "variable_#{@read_channel_var}".to_sym
           value = @session.content[variable]
-          @queue.shift.call(value)
+          @command_queue.shift.call(value)
         end
       end
 
