@@ -18,13 +18,26 @@ module FSR
       attr_accessor :response
       alias :event :response
 
+      def post_init
+        @api_queue = []
+      end
+
       def receive_request(header, content)
         @response = Response.new(header, content)
 
         if response.event?
           on_event
           find_and_invoke_event response.event
+        elsif response.api_response? && @api_queue.any?
+          block = @api_queue.shift
+          block.arity == 1 ? block.call(response.content) : block.call
         end
+      end
+
+      def api(command, *args, &block)
+        msg = "api #{command} #{args.join(" ")}".chomp(" ")
+        send_data "#{msg}\n\n"
+        @api_queue << (block_given? ? block : lambda {})
       end
 
       # override

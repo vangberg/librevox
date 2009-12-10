@@ -38,6 +38,7 @@ module FSR
       attr_accessor :session
 
       def post_init
+        super
         @session = nil
         @command_queue = []
 

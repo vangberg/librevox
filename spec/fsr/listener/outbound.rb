@@ -51,6 +51,7 @@ describe "Outbound listener" do
   end
 
   behaves_like "events"
+  behaves_like "api commands"
 
   should "register app" do
     @listener.respond_to?(:sample_app).should.be.false?
@@ -188,17 +189,50 @@ describe "Outbound listener with non-nested apps" do
 
   should "wait for response before calling next proc" do
     # response to sample_app
-    @listener.read_data.should.not == "read this: some value"
+    @listener.read_data.should.not.match /the end/
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
 
     # response to reader_app
-    @listener.read_data.should.not == "read this: some value"
+    @listener.read_data.should.not.match /the end/
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
 
     # response to uuid_dump caused by reader_app
-    @listener.read_data.should.not == "read this: some value"
+    @listener.read_data.should.not.match /the end/
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
 
     @listener.read_data.should == "the end: some value"
+  end
+end
+
+class OutboundListenerWithAppsAndApi < Listener::Outbound
+  register_app SampleApp
+
+  def session_initiated
+    sample_app "foo" do
+      api "bar" do
+        sample_app "baz"
+      end
+    end
+  end
+end
+
+describe "Outbound listener with both apps and api calls" do
+  before do
+    @listener = OutboundListenerWithAppsAndApi.new(nil)
+
+    # Establish session and get rid of connect-string
+    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
+    receive_event_and_linger_replies
+    3.times {@listener.outgoing_data.shift}
+  end
+
+  should "wait for response before calling next proc" do
+    @listener.read_data.should == "sendmsg\n" + SampleApp.new("foo").sendmsg
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+
+    @listener.read_data.should == "api bar\n\n"
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+
+    @listener.read_data.should == "sendmsg\n" + SampleApp.new("baz").sendmsg
   end
 end

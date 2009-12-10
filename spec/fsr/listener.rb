@@ -51,6 +51,80 @@ shared "events" do
   end
 end
 
+shared "api commands" do
+  before do
+    @class = @listener.class
+
+    # Establish session
+    @listener.receive_data("Content-Type: command/reply\nTest: Testing\n\n")
+  end
+
+  describe "multiple api commands" do
+    before do
+      @listener.outgoing_data.clear
+      @class.add_event_hook(:API_TEST) {
+        api "foo" do
+          api "foo", "bar", "baz"
+        end
+      }
+    end
+
+    should "only send one command at a time" do
+      @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
+      @listener.read_data.should == "api foo\n\n"
+      @listener.read_data.should == nil
+
+      @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
+      @listener.read_data.should == "api foo bar baz\n\n"
+      @listener.read_data.should == nil
+    end
+  end
+
+  describe "flat api commands" do
+    before do
+      @listener.outgoing_data.clear
+      @class.add_event_hook(:API_FLAT_TEST) {
+        api "foo"
+        api "bar" do
+          api "baz"
+        end
+      }
+    end
+    
+    should "wait for response before calling next proc" do
+      @listener.receive_data("Content-Type: command/reply\nContent-Length: 27\n\nEvent-Name: API_FLAT_TEST\n\n")
+
+      @listener.read_data.should.not == "api baz\n\n"
+
+      # response to "foo"
+      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+      @listener.read_data.should.not == "api baz\n\n"
+
+      # response to "bar"
+      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+      @listener.read_data.should == "api baz\n\n"
+    end
+  end
+
+  describe "api command with block argument" do
+    before do
+      @listener.outgoing_data.clear
+      @class.add_event_hook(:API_ARG_TEST) {
+        api "foo" do |r|
+          send_data "response: #{r}"
+        end
+      }
+    end
+    
+    should "wait for response before calling next proc" do
+      @listener.receive_data("Content-Type: command/reply\nContent-Length: 26\n\nEvent-Name: API_ARG_TEST\n\n")
+      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+
+      @listener.read_data.should == "response: +OK"
+    end
+  end
+end
+
 # Stupid hack. How do we make bacon ignore this file?
 describe "Listener" do
   should "have empty spec" do
