@@ -71,12 +71,12 @@ class OutboundListenerWithNestedApps < Listener::Outbound
   end
 end
 
-describe "Outbound listener with apps using fake blocks " do
+describe "Outbound listener with apps" do
   before do
     @listener = OutboundListenerWithNestedApps.new(nil)
 
     # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Length: 0\nEstablish-Session: OK\n\n")
+    @listener.receive_data("Content-Type: command/reply\nEstablish-Session: OK\n\n")
     receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
@@ -85,14 +85,14 @@ describe "Outbound listener with apps using fake blocks " do
     @listener.read_data.should == "sendmsg\n" + SampleApp.new("foo").sendmsg
     @listener.read_data.should == nil
 
-    @listener.receive_data("Content-Length: 0\n\n")
+    @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK\n\n")
     @listener.read_data.should == "sendmsg\n" + SampleApp.new("bar").sendmsg
     @listener.read_data.should == nil
   end
 
   should "not be driven forward by events" do
     @listener.read_data # sample_app "foo"
-    @listener.receive_data("Content-Length: 45\n\nEvent-Name: CHANNEL_EXECUTE\nSession-Var: Some\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 45\n\nEvent-Name: CHANNEL_EXECUTE\nSession-Var: Some\n\n")
     @listener.read_data.should == nil
   end
 end
@@ -122,7 +122,7 @@ describe "Outbound listener with app reading data" do
     @listener = OutboundListenerWithReader.new(nil)
 
     # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
+    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
     receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
@@ -138,14 +138,14 @@ describe "Outbound listener with app reading data" do
   end
 
   should "update session with new data" do
-    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
-    @listener.receive_data("Content-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
     @listener.session.content[:session_var].should == "Second"
   end
 
   should "pass value of channel variable to block" do
-    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
-    @listener.receive_data("Content-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
     @listener.read_data.should == "read this: some value"
   end
 end
@@ -169,7 +169,7 @@ describe "Outbound listener with non-nested apps" do
     @listener = OutboundListenerWithNonNestedApps.new(nil)
 
     # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Length: 0\nSession-Var: First\nUnique-ID: 1234\n\n")
+    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
     receive_event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
@@ -177,15 +177,15 @@ describe "Outbound listener with non-nested apps" do
   should "wait for response before calling next proc" do
     # response to sample_app
     @listener.read_data.should.not == "read this: some value"
-    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
 
     # response to reader_app
     @listener.read_data.should.not == "read this: some value"
-    @listener.receive_data("Content-Length: 3\n\n+OK\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
 
     # response to uuid_dump caused by reader_app
     @listener.read_data.should.not == "read this: some value"
-    @listener.receive_data("Content-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
+    @listener.receive_data("Content-Type: command/reply\nContent-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
 
     @listener.read_data.should == "the end: some value"
   end
