@@ -51,7 +51,7 @@ techniques:
 
 ## Outbound listener
 
-You create An outbound listener by subclassing `FSR::Listener::Outbound`. 
+You create an outbound listener by subclassing `FSR::Listener::Outbound`. 
 
 ### Events
 
@@ -59,6 +59,32 @@ An outbound listener has the same event functionality as the inbound listener,
 but it only recieves events related to that given session.
 
 ### Dialplan
+
+When a call is made and Freeswitch connects to the outbound event listener,
+`session_initiated` is called. This is where you set up your dialplan:
+
+    def session_initiated
+      answer
+      set "some_var", "some value"
+      playback "path/to/file"
+      hangup
+    end
+
+When using applications that expects a reply, such as `play_and_get_digits`,
+you have to use callbacks to read the value, as the function itself returns
+immediately due to the async nature of EventMachine:
+
+    def session_initiated
+      answer
+
+      play_and_get_digits "enter-number.wav", "error.wav" do |digit|
+        FSR::Log.info "User pressed #{digit}"
+        playback "thanks-for-the-input.wav"
+        hangup
+      end
+    end
+
+### Available applications
 
 ## Starting listeners
 
@@ -73,10 +99,10 @@ it takes an optional hash with arguments:
 
 Multiple listeners can be started at once by passing a block to `FSR.start`:
 
-   FSR.start do
-     run SomeListener
-     run OtherListener, :port => "8080"
-   end
+    FSR.start do
+      run SomeListener
+      run OtherListener, :port => "8080"
+    end
 
 ## Originating a new call with `FSR::CommandSocket`
 
