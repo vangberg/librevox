@@ -15,13 +15,13 @@ module FSR
         end
       end
 
-      attr_accessor :response, :event
+      attr_accessor :response
+      alias :event :response
 
       def receive_request(header, content)
         @response = Response.new(header, content)
 
         if response.event?
-          @event = response
           on_event
           find_and_invoke_event response.event
         end
