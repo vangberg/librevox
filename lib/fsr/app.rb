@@ -1,9 +1,12 @@
+require 'fsr/listener'
+
 module FSR
   module App
     APPLICATIONS = []
 
     def self.register(app)
       APPLICATIONS << app
+      FSR::Listener::Outbound.register_app(app)
     end
 
     class Application

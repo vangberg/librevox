@@ -1,5 +1,4 @@
 require 'fsr/listener/base'
-require 'fsr/app'
 
 module FSR
   module Listener
@@ -10,10 +9,6 @@ module FSR
             run_app(#{klass}, *args, &block)
           end
         EOF
-      end
-
-      FSR::App::APPLICATIONS.each do |app|
-        register_app(app)
       end
 
       def run_app(klass, *args, &block)

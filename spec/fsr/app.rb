@@ -35,3 +35,23 @@ describe "Boilerplate Application" do
     @app.sendmsg.should == "call-command: execute\nexecute-app-name: application\nevent-lock: true\n\n"
   end
 end
+
+require 'fsr/listener'
+require 'spec/mock_listener'
+
+class FooApp < FSR::App::Application
+end
+
+describe "register" do
+  before do
+    @listener = FSR::Listener::Outbound.new(nil)
+  end
+
+  should "add app to outbound listener" do
+    @listener.should.not.respond_to? :fooapp
+
+    FSR::App.register FooApp
+
+    @listener.should.respond_to? :fooapp
+  end
+end
