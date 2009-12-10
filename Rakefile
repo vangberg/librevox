@@ -4,7 +4,7 @@ require "./lib/fsr"
 require "pathname"
 
 PROJECT_COPYRIGHT = Pathname(__FILE__).dirname.join("License.txt").read
-PROJECT_README = Pathname(__FILE__).dirname.join("README").expand_path.to_s
+PROJECT_README = Pathname(__FILE__).dirname.join("README.md").expand_path.to_s
 PROJECT_FILES  = %x{git ls-files}.split
 RELEASE_FILES  = PROJECT_FILES.reject { |f| f.match(/^(?:contrib)(?:\/|$)/) }
 GEM_FILES      = RELEASE_FILES.reject { |f| f.match(/^(?:spec)(?:\/|$)/) }
