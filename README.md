@@ -60,7 +60,7 @@ but it only recieves events related to that given session.
 
 ### Dialplan
 
-## Starting Freeswitcher
+## Starting listeners
 
 To start a single listener, connection/listening on localhost on the default
 port is quite simple:
@@ -78,7 +78,26 @@ Multiple listeners can be started at once by passing a block to `FSR.start`:
      run OtherListener, :port => "8080"
    end
 
-## Creating applications
+## Originating a new call with `FSR::CommandSocket`
+
+    >> require ‘fsr’
+    => true
+    
+    >> FSR.load_all_commands
+    => [:sofia, :originate]
+    
+    >> sock = FSR::CommandSocket.new
+    => #<FSR::CommandSocket:0xb7a89104 @server=“127.0.0.1”,
+        @socket=#<TCPSocket:0xb7a8908c>, @port=“8021”, @auth=“ClueCon”>
+    
+    >> sock.originate(:target => ‘sofia/gateway/carlos/8179395222’,
+        :endpoint => FSR::App::Bridge.new(“user/bougyman”)).run
+    => {“Job-UUID”=>“732075a4-7dd5-4258-b124-6284a82a5ae7”, “body”=>“”,
+        “Content-Type”=>“command/reply”, 
+        “Reply-Text”=>“+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7”}
+
+
+## Writing applications
 
 ## License
 
