@@ -35,10 +35,19 @@ describe FSR::CommandSocket do
     reply.headers[:some_header].should == "Some value"
   end
 
-  should "not care about non-replies" do
+  should "read command/reply responses" do
     @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
 
     @server.print "Content-Type: command/reply\nSome-Header: New data\n\n"
+    reply = @cmd.command "foo"
+
+    reply.headers[:some_header].should == "New data"
+  end
+
+  should "read api/response responses" do
+    @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
+
+    @server.print "Content-Type: api/response\nSome-Header: New data\n\n"
     reply = @cmd.command "foo"
 
     reply.headers[:some_header].should == "New data"

@@ -27,7 +27,9 @@ module FSR
 
     def read_response
       response = FSR::Response.new
-      response.headers = read_headers until response.command_reply?
+      until response.command_reply? or response.api_response?
+        response.headers = read_headers 
+      end
 
       length = response.headers[:content_length].to_i
       response.content = @socket.read(length) if length > 0
