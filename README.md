@@ -69,7 +69,7 @@ port is quite simple:
 
 it takes an optional hash with arguments:
 
-    FSR.start SomeListener, :host => "1.2.3.4", :port => "8087"
+    FSR.start SomeListener, :host => "1.2.3.4", :port => "8087", :auth => "pwd"
 
 Multiple listeners can be started at once by passing a block to `FSR.start`:
 
