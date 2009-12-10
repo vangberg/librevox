@@ -31,7 +31,7 @@ describe FSR::CommandSocket do
     @server.print "Content-Type: command/reply\nSome-Header: Some value\n\n"
     reply = @cmd.command "foo"
 
-    reply.class.should == FSR::Listener::Response
+    reply.class.should == FSR::Response
     reply.headers[:some_header].should == "Some value"
   end
 

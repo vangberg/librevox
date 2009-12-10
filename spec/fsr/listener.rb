@@ -30,7 +30,7 @@ shared "events" do
 
   should "expose response as event" do
     @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
-    @listener.event.class.should == FSR::Listener::Response
+    @listener.event.class.should == FSR::Response
     @listener.event.content[:event_name].should == "OTHER_EVENT"
   end
 end

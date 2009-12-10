@@ -1,7 +1,7 @@
 require 'spec/helper'
-require 'fsr/listener'
+require 'fsr/response'
 
-include FSR::Listener
+include FSR
 
 describe Response do
   should "parse headers to hash" do

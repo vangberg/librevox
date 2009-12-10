@@ -39,7 +39,7 @@ describe "Outbound listener" do
   end
 
   should "establish a session" do
-    @listener.session.class.should.equal FSR::Listener::Response
+    @listener.session.class.should.equal FSR::Response
   end
 
   should "call #session_initated after establishing new session" do

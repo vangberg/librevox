@@ -1,5 +1,5 @@
 require 'eventmachine'
-require 'fsr/listener/response'
+require 'fsr/response'
 
 module FSR
   module Listener

@@ -26,7 +26,7 @@ module FSR
     end
 
     def read_response
-      response = FSR::Listener::Response.new
+      response = FSR::Response.new
       response.headers = read_headers until response.command_reply?
 
       length = response.headers[:content_length].to_i
