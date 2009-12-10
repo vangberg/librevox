@@ -20,6 +20,6 @@ module FSR
       end
     end
 
-    register(:status, Status)
+    register Status
   end
 end

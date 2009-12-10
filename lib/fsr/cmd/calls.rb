@@ -37,10 +37,10 @@ module FSR
 
       # This method builds the API command to send to the freeswitch event socket
       def raw
-        orig_command = "show calls"
+        orig_command = "api show calls"
       end
     end
 
-    register(:calls, Calls)
+    register Calls
   end
 end

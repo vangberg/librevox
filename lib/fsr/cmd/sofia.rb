@@ -35,6 +35,6 @@ module FSR
       end
     end
 
-  register(:sofia, Sofia) 
+  register Sofia
   end
 end

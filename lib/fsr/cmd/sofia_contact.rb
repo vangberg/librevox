@@ -26,6 +26,6 @@ module FSR
       end
     end
 
-  register(:sofia_contact, SofiaContact)
+  register SofiaContact
   end
 end

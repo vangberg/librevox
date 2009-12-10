@@ -1,4 +1,5 @@
-require "fsr/app"
+require 'fsr/app'
+
 module FSR
   module Cmd
     class UuidDump < Command
@@ -22,6 +23,6 @@ module FSR
       end
     end
 
-    register(:uuid_dump, UuidDump)
+    register UuidDump
   end
 end

@@ -58,6 +58,6 @@ module FSR
 
     end
 
-    register(:originate, Originate)
+    register Originate
   end
 end

@@ -6,10 +6,19 @@ module FSR
     class Response
       attr_accessor :headers, :content
 
-      def initialize(headers, content="")
+      def initialize(headers="", content="")
+        self.headers = headers
+        self.content = content
+      end
+
+      def headers=(headers)
         @headers = headers_2_hash(headers)
+        @headers.each {|k,v| v.chomp! if v.is_a?(String)}
+      end
+
+      def content=(content)
         @content = content.match(/:/) ? headers_2_hash(content) : content
-        strip_newlines
+        @content.each {|k,v| v.chomp! if v.is_a?(String)}
       end
 
       def event?
@@ -31,11 +40,6 @@ module FSR
       private
       def headers_2_hash(*args)
         EM::Protocols::HeaderAndContentProtocol.headers_2_hash *args
-      end
-
-      def strip_newlines
-        @headers.each {|k,v| v.chomp! if v.is_a?(String)}
-        @content.each {|k,v| v.chomp! if v.is_a?(String)}
       end
     end
   end

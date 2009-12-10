@@ -7,10 +7,6 @@ module FSR
     class Fsctl < Command
       attr_reader :command
 
-      def initialize(fs_socket = nil)
-        @fs_socket = fs_socket # FSR::CommandSocket obj
-      end
-
       # Get max sessions
       def max_sessions
         @command = "max_sessions"
@@ -22,20 +18,13 @@ module FSR
         @command = "max_sessions #{sessions}"
         run
       end
-
-      # Send the command to the event socket, using api by default.
-      def run(api_method = :api)
-        orig_command = "%s %s" % [api_method, raw]
-        Log.debug "saying #{orig_command}"
-        @fs_socket.say(orig_command)
-      end
     
       # This method builds the API command to send to the freeswitch event socket
       def raw
-        orig_command = "fsctl #{@command}"
+        orig_command = "api fsctl #{@command}"
       end
     end
 
-  register(:fsctl, Fsctl)
+  register Fsctl
   end
 end
