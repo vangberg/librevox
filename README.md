@@ -56,7 +56,7 @@ You create an outbound listener by subclassing `FSR::Listener::Outbound`.
 ### Events
 
 An outbound listener has the same event functionality as the inbound listener,
-but it only recieves events related to that given session.
+but it only receives events related to that given session.
 
 ### Dialplan
 
@@ -107,8 +107,8 @@ Multiple listeners can be started at once by passing a block to `FSR.start`:
 ## Originating a new call with `FSR::CommandSocket`
 
 Freeswitcher also ships with a CommandSocket class, which allows you to connect
-to the FreeSWITCH management console, from which you can control FreeSWITCH,
-originate calls and more.
+to the FreeSWITCH management console, from which you can originate calls,
+restart FreeSWITCH etc.
 
     >> require ‘fsr’
     => true
