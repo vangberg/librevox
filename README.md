@@ -150,7 +150,7 @@ originate calls and more.
         "some_channel_var"
       end
     end
-
+    
     FSR::App.register MyApp
 
 ## Writing commands
