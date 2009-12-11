@@ -33,6 +33,11 @@ describe FSR::Cmd::Command do
     @cmd.raw.should == "bgapi command"
   end
 
+  should "get/set response" do
+    @cmd.response = 123
+    @cmd.response.should == 123
+  end
+
   describe "register" do
     should "add command to CommandSocket" do
       socket = FSR::CommandSocket.new

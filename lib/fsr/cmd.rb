@@ -10,6 +10,7 @@ module FSR
     end
 
     class Command
+      attr_accessor :response
       attr_writer :background
 
       def self.cmd_name

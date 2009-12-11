@@ -12,6 +12,10 @@ class SampleCmd < FSR::Cmd::Command
   def self.cmd_name
     "sample_cmd"
   end
+
+  def response=(data)
+    @response = "From command: #{data.content}"
+  end
 end
 
 describe FSR::CommandSocket do
@@ -76,6 +80,11 @@ describe FSR::CommandSocket do
       @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
       @cmd.sample_cmd
       @server.gets.should == "api sample_cmd\n"
+    end
+
+    should "return response from command" do
+      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+      @cmd.sample_cmd.should == "From command: +OK"
     end
   end
 end
