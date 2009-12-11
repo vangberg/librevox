@@ -106,24 +106,25 @@ Multiple listeners can be started at once by passing a block to `FSR.start`:
 
 ## Originating a new call with `FSR::CommandSocket`
 
+Freeswitcher also ships with a CommandSocket class, which allows you to connect
+to the FreeSWITCH management console, from which you can control FreeSWITCH,
+originate calls and more.
+
     >> require ‘fsr’
     => true
     
-    >> FSR.load_all_commands
-    => [:sofia, :originate]
-    
-    >> sock = FSR::CommandSocket.new
+    >> socket = FSR::CommandSocket.new
     => #<FSR::CommandSocket:0xb7a89104 @server=“127.0.0.1”,
         @socket=#<TCPSocket:0xb7a8908c>, @port=“8021”, @auth=“ClueCon”>
     
-    >> sock.originate(:target => ‘sofia/gateway/carlos/8179395222’,
-        :endpoint => FSR::App::Bridge.new(“user/bougyman”)).run
-    => {“Job-UUID”=>“732075a4-7dd5-4258-b124-6284a82a5ae7”, “body”=>“”,
-        “Content-Type”=>“command/reply”, 
-        “Reply-Text”=>“+OK Job-UUID: 732075a4-7dd5-4258-b124-6284a82a5ae7”}
+    >> socket.status
+    >> > #<FSR::Response:0x1016acac8 ...>
 
+### Available commands
 
 ## Writing applications
+
+## Writing commands
 
 ## Extras
 

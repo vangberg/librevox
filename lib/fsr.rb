@@ -2,6 +2,9 @@ require 'socket'
 require 'pathname'
 require 'pp'
 
+require 'fsr/listener'
+require 'fsr/command_socket'
+
 # Author::    TJ Vanderpoel (mailto:bougy.man@gmail.com)
 # Copyright:: Copyright (c) 2009 The Rubyists (Jayson Vaughn, TJ Vanderpoel, Michael Fellinger, Kevin Berry)
 # License::   Distributes under the terms of the MIT License http://www.opensource.org/licenses/mit-license.php
