@@ -1,4 +1,5 @@
 require 'fsr/command_socket'
+require 'fsr/response'
 
 module FSR
   module Cmd

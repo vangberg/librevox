@@ -1,7 +1,7 @@
 require "fsr/app"
 module FSR
   module Cmd
-    class Calls < Command
+   class Calls < Command
 
       include Enumerable
       def each(&block)

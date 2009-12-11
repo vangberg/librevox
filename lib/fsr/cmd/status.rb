@@ -1,25 +1,30 @@
-require "fsr/app"
-module FSR
-  module Cmd
-    class Status < Command
+require 'fsr/cmd'
 
-      def initialize(fs_socket = nil)
-        @fs_socket = fs_socket # FSR::CommandSocket obj
-      end
-
-      # Send the command to the event socket, using bgapi by default.
-      def run(api_method = :api)
-        orig_command = "%s %s" % [api_method, raw]
-        Log.debug "saying #{orig_command}"
-        @fs_socket.say(orig_command)
-      end
-
-      # This method builds the API command to send to the freeswitch event socket
-      def raw
-        orig_command = "status"
-      end
+module FSR::Cmd
+  class Status < Command
+    def response=(r)
+      @response = Response.new(r)
     end
 
-    register Status
+    class Response
+      def initialize(res)
+        @response = res
+        @lines = @response.content.lines.to_a
+      end
+
+      def uptime
+        return @uptime if @uptime
+        minutes, seconds = @lines[0].match(/(\d+) minutes, (\d+) seconds/).captures
+        @uptime = minutes.to_i * 60 + seconds.to_i
+      end
+
+      def sessions
+        return @sessions if @sessions
+        current, max = @lines[2].match(/(\d+)\/(\d+)$/).captures
+        @sessions = [current.to_i, max.to_i]
+      end
+    end
   end
+
+  register Status
 end

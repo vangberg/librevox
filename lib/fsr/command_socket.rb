@@ -21,6 +21,9 @@ module FSR
       command "auth #{@auth}"
     end
 
+    def socket
+    end
+
     def command(msg)
       @socket.print "#{msg}\n\n"
       read_response

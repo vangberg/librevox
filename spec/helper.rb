@@ -18,4 +18,14 @@ end
 
 Bacon.summary_on_exit
 
+class BlackHole
+  instance_methods.each { |m| undef_method m unless m =~ /^__/ }
+
+  def initialize(*a) end
+
+  def method_missing(m, *a)
+    BlackHole.new
+  end
+end
+
 require 'fsr'
