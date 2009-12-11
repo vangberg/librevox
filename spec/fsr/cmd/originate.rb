@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/cmd"
-FSR::Cmd.load_command("originate")
 
 describe "Testing FSR::Cmd::Originate" do
   # Invalid originates

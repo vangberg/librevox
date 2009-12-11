@@ -1,3 +1,5 @@
+$LOAD_PATH.unshift 'lib'
+
 begin
   require 'bacon'
 rescue LoadError
@@ -16,4 +18,4 @@ end
 
 Bacon.summary_on_exit
 
-require File.expand_path(File.join(File.dirname(__FILE__), '../lib/fsr'))
+require 'fsr'

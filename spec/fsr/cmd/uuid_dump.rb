@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/cmd"
-FSR::Cmd.load_command("uuid_dump")
 
 describe "Testing FSR::Cmd::UuidDump" do
   ## Calls ##

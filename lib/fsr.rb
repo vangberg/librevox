@@ -16,18 +16,9 @@ def fsr_deprecate(old, new=nil)
   FSR::Log.warn msg
 end
 
-## This module declares the namespace under which the freeswitcher framework
-## Any constants will be defined here, as well as methods for loading commands and applications
-class Pathname
-  def /(other)
-    join(other.to_s)
-  end
-end
 module FSR
   # Global configuration options
   FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch", "/home/freeswitch/freeswitch"]
-  DEFAULT_CALLER_ID_NUMBER = '8675309'
-  DEFAULT_CALLER_ID_NAME   = "FSR"
 
   #  attempt to require log4r.  
   #  if log4r is not available, load logger from stdlib
@@ -43,15 +34,6 @@ module FSR
     Log.level = Logger::INFO
   end
 
-  ROOT = Pathname(__FILE__).dirname.expand_path.freeze
-  $LOAD_PATH.unshift(FSR::ROOT)
-
-  # Load all FSR::Cmd classes
-  def self.load_all_commands(retrying = false)
-    require 'fsr/command_socket'
-    Cmd.load_all
-  end
-  
   # When called without a block, it will start the listener that is passed as
   # first argument:
   #   
@@ -135,5 +117,5 @@ module FSR
     FS_CONFIG_PATH = FS_DB_PATH = nil
   end
 end
-require "fsr/version"
 
+require "fsr/version"

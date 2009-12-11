@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/cmd"
-FSR::Cmd.load_command("calls")
 
 describe "Testing FSR::Cmd::Calls" do
   ## Calls ##

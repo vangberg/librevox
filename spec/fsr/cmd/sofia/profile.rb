@@ -1,6 +1,5 @@
 require 'spec/helper'
 require "fsr/cmd"
-FSR::Cmd.load_command("sofia")
 
 describe "FSR::Cmd::Sofia::Profile" do
 
