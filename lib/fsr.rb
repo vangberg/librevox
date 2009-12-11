@@ -9,13 +9,6 @@ require 'fsr/command_socket'
 # Copyright:: Copyright (c) 2009 The Rubyists (Jayson Vaughn, TJ Vanderpoel, Michael Fellinger, Kevin Berry)
 # License::   Distributes under the terms of the MIT License http://www.opensource.org/licenses/mit-license.php
 
-# This is ugly. But well, it'll eventually be removed.
-def fsr_deprecate(old, new=nil)
-  msg = "DEPRECATED: `#{old}` has been deprecated."
-  msg += " Use `#{new}` instead." if new
-  FSR::Log.warn msg
-end
-
 module FSR
   # Global configuration options
   FS_INSTALL_PATHS = ["/usr/local/freeswitch", "/opt/freeswitch", "/usr/freeswitch", "/home/freeswitch/freeswitch"]
@@ -63,38 +56,6 @@ module FSR
       EM.start_server host, port, klass, args
     end
   end
-
-  # Method to start EM for Outbound Event Socket
-  def self.start_oes!(klass, args = {})
-    fsr_deprecate "FSR.start_oes!", "FSR.start"
-
-    port = args.delete(:port) || "8084"
-    host = args.delete(:host) || "localhost"
-    EM.run do
-      EventMachine::start_server(host, port, klass, args)
-      FSR::Log.info "*** FreeSWITCHer Outbound EventSocket Listener on #{host}:#{port} ***"
-      FSR::Log.info "*** http://code.rubyists.com/projects/fs"
-    end
-  end
-  
-  # Method to start EM for Inbound Event Socket
-  # @see FSR::Listener::Inbound
-  # @param [FSR::Listener::Inbound] klass An Inbound Listener class, to be started by EM.run
-  # @param [::Hash] args A hash of options, may contain
-  #                       <tt>:host [String]</tt> The host/ip to bind to (Default: "localhost") 
-  #                       <tt>:port [Integer]</tt> the port to listen on (Default: 8021)
-  def self.start_ies!(klass, args = {})
-    fsr_deprecate "FSR.start_ies!", "FSR.start"
-
-    port = args.delete(:port) || "8021"
-    host = args.delete(:host) || "localhost"
-    EM.run do
-      EventMachine::connect(host, port, klass, args)
-      FSR::Log.info "*** FreeSWITCHer Inbound EventSocket Listener connected to #{host}:#{port} ***"
-      FSR::Log.info "*** http://code.rubyists.com/projects/fs"
-    end
-  end
-
 
   # Find the FreeSWITCH install path if running FSR on a local box with FreeSWITCH installed.
   # This will enable sqlite db access
