@@ -1,4 +1,5 @@
 require 'spec/helper'
+require 'spec/fsr/listener'
 require 'fsr/app'
 
 describe "Basic FSR::App module" do
@@ -37,7 +38,6 @@ describe "Boilerplate Application" do
 end
 
 require 'fsr/listener'
-require 'spec/mock_listener'
 
 class FooApp < FSR::App::Application
 end
