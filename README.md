@@ -149,9 +149,9 @@ originate calls and more.
       def read_channel_var
         "some_channel_var"
       end
-   end
+    end
 
-   FSR::App.register MyApp
+    FSR::App.register MyApp
 
 ## Writing commands
 
