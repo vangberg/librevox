@@ -1,7 +1,6 @@
 require 'spec/helper'
 require 'rr'
 require 'mocksocket'
-require 'mocksocket/bacon'
 require 'fsr/command_socket'
 
 class Bacon::Context
@@ -21,7 +20,7 @@ end
 describe FSR::CommandSocket do
   before do
     @socket, @server = MockSocket.pipe
-    stub(TCPSocket).open(anything, anything) {@socket}
+    stub(TCPSocket).open(anything, anything).times(any_times) {@socket}
 
     @server.print "Content-Type: command/reply\nReply-Text: +OK\n\n"
     @cmd = FSR::CommandSocket.new
