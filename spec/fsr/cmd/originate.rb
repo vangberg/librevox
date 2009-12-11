@@ -12,6 +12,8 @@ describe "Testing FSR::Cmd::Originate" do
                                         :ignore_early_media => true,
                                         :other_option => "value"
 
-    originate.raw.should == "api originate {ignore_early_media=true,other_option=value}user/bougyman 1234"
+    originate.raw.should.match %r|^api originate \{\S+\}user/bougyman 1234$|
+    originate.raw.should.match /ignore_early_media=true/
+    originate.raw.should.match /other_option=value/
   end
 end
