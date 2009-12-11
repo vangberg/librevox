@@ -124,7 +124,63 @@ originate calls and more.
 
 ## Writing applications
 
+    class MyApp < FSR::App::Application
+      # `self.app_name` should return the name of the application. If not over-
+      # written, it will turn the class name into a string and downcase it.
+      def self.app_name
+        "my_app"
+      end
+
+      # `arguments` should return an array of arguments. Default is an empty
+      # array.
+      def array
+        ["arg1", "arg2"]
+      end
+
+      # `event_lock` determines wether the application is executed with an
+      # event lock. Defaults to `false`.
+      def event_lock
+        false
+      end
+
+      # If this application reads data into a channel variable, such as 
+      # `play_and_get_digits`, this method must return the name of the channel
+      # variable. Defaults to nil.
+      def read_channel_var
+        "some_channel_var"
+      end
+   end
+
+   FSR::App.register MyApp
+
 ## Writing commands
+
+    class MyCommand < FSR::Cmd::Command
+      # The return value of `self.cmd_name` defines the name of the method, as
+      # well as what command is being called over the command socket.
+      def self.cmd_name
+        "some_name"
+      end
+
+      # Arguments passed to the method is passed on to `#initialize`.
+      def initialize(*args)
+        # ...
+      end
+
+      # `#arguments` should return an array of, well, arguments.
+      def arguments
+        ["arg1", "arg2"]
+      end
+
+      # `response=` is called with the response from the command as an instance
+      # of FSR::Response. Whatever @response is set to, is what the command
+      # returns.
+      def response=(r)
+        @response = r
+      end
+    end
+
+    FSR::Cmd.register MyCommand
 
 ## Extras
 

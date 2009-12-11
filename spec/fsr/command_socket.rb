@@ -8,6 +8,14 @@ class Bacon::Context
 end
 
 class SampleCmd < FSR::Cmd::Command
+  def initialize(*args)
+    @args = args
+  end
+
+  def arguments
+    @args
+  end
+
   def self.cmd_name
     "sample_cmd"
   end
@@ -84,6 +92,12 @@ describe FSR::CommandSocket do
     should "return response from command" do
       @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
       @cmd.sample_cmd.should == "From command: +OK"
+    end
+
+    should "pass arguments" do
+      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+      @cmd.sample_cmd("foo", "bar")
+      @server.gets.should == "api sample_cmd foo bar\n"
     end
   end
 end

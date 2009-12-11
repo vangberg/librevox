@@ -10,7 +10,7 @@ module FSR
     end
 
     class Command
-      attr_accessor :response
+      attr_reader :response
       attr_writer :background
 
       def self.cmd_name
@@ -27,6 +27,10 @@ module FSR
 
       def background
         @background ||= false
+      end
+
+      def response=(r)
+        @response = r
       end
 
       # I don't like the look of this method. ~harry
