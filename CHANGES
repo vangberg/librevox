@@ -9,6 +9,8 @@
   * `api` now has the same state-machine approach as applications
     [Harry Vangberg]
 
+  * Rewrite CommandSocket, add a bunch of new commands [Harry Vangberg]
+
 = 0.4.4 / 2009-12-06
 
   * Fix bug in Playback [TJ Vanderpoel]

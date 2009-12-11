@@ -1,11 +1,11 @@
 require 'fsr/cmd'
 
 module FSR::Cmd
-  class FSCTL < Command
+  class Load < Command
     attr_reader :arguments
 
-    def initialize(*args)
-      @arguments = args
+    def initialize(mod)
+      @arguments = [mod]
     end
   end
 end
