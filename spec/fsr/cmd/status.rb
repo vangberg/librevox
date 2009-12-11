@@ -3,10 +3,10 @@ require 'fsr/cmd'
 
 header = <<EOF
 Content-Type: api/response
-Content-Length: 152
+Content-Length: 151
 EOF
 content = <<EOF
-"UP 0 years, 0 days, 0 hours, 27 minutes, 9 seconds, 537 milliseconds, 793 microseconds
+"UP 1 years, 2 days, 3 hours, 4 minutes, 5 seconds, 537 milliseconds, 793 microseconds
 0 session(s) since startup
 0 session(s) 0/30
 1000 session(s) max
@@ -34,7 +34,11 @@ describe FSR::Cmd::Status do
     end
 
     should "have uptime in seconds" do
-      @response.uptime.should == (27 * 60) + 9
+      minute = 60
+      hour = 60 * minute
+      day = 24 * hour
+      year = 365 * day
+      @response.uptime.should == year + 2 * day + 3 * hour + 4 * minute + 5
     end
 
     should "parse sessions" do

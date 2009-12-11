@@ -7,15 +7,21 @@ module FSR::Cmd
     end
 
     class Response
-      def initialize(res)
-        @response = res
+      MINUTE  = 60
+      HOUR    = 60 * MINUTE
+      DAY     = 24 * HOUR
+      YEAR    = 365 * DAY
+
+      def initialize(response)
+        @response = response
         @lines = @response.content.lines.to_a
       end
 
+      # This isn't pretty..
       def uptime
         return @uptime if @uptime
-        minutes, seconds = @lines[0].match(/(\d+) minutes, (\d+) seconds/).captures
-        @uptime = minutes.to_i * 60 + seconds.to_i
+        arr = @lines[0].split.map {|w| w.to_i}
+        @uptime = arr[1] * YEAR + arr[3] * DAY + arr[5] * HOUR + arr[7] * MINUTE + arr[9]
       end
 
       def sessions
