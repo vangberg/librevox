@@ -156,10 +156,16 @@ restart FreeSWITCH etc.
 ## Writing commands
 
     class MyCommand < FSR::Cmd::Command
-      # The return value of `self.cmd_name` defines the name of the method, as
-      # well as what command is being called over the command socket.
+      # The return value of `self.cmd_name` defines the name of the method that
+      # invokes a command of this class.
       def self.cmd_name
         "some_name"
+      end
+
+      # `#cmd_name` is the name of the command that is sent to FreeSWITCH. If
+      # not defined, the value of `Klass.cmd_name` will be used.
+      def cmd_name
+        "this_goes_to_fs"
       end
 
       # Arguments passed to the method is passed on to `#initialize`.

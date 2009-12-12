@@ -13,6 +13,20 @@ module FSR
         def add_event_hook(event, &block)
           hooks << [event, block]
         end
+
+        def register_cmd(klass)
+          class_eval <<-EOF
+            def #{klass.cmd_name}(*args, &block)
+              run_cmd(#{klass}, *args, &block)
+            end
+          EOF
+        end
+      end
+
+      def run_cmd(klass, *args, &block)
+        cmd = klass.new(*args)
+        send_data "#{cmd.raw}\n\n"
+        @api_queue << [cmd, (block_given? ? block : lambda {})]
       end
 
       attr_accessor :response
@@ -29,15 +43,8 @@ module FSR
           on_event
           find_and_invoke_event response.event
         elsif response.api_response? && @api_queue.any?
-          block = @api_queue.shift
-          block.arity == 1 ? block.call(response.content) : block.call
+          invoke_api_queue
         end
-      end
-
-      def api(command, *args, &block)
-        msg = "api #{command} #{args.join(" ")}".chomp(" ")
-        send_data "#{msg}\n\n"
-        @api_queue << (block_given? ? block : lambda {})
       end
 
       # override
@@ -48,6 +55,16 @@ module FSR
       def find_and_invoke_event(event_name)
         self.class.hooks.each do |name,block| 
           instance_eval(&block) if name == event_name.to_sym
+        end
+      end
+
+      def invoke_api_queue
+        cmd, block = @api_queue.shift
+        if block.arity == 1 
+          cmd.response = response
+          block.call(cmd.response)
+        else
+          block.call
         end
       end
     end

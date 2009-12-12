@@ -1,4 +1,5 @@
 require 'fsr/command_socket'
+require 'fsr/listener/base'
 require 'fsr/response'
 
 module FSR
@@ -8,6 +9,7 @@ module FSR
     def self.register(cmd)
       COMMANDS << cmd
       FSR::CommandSocket.register_cmd(cmd)
+      FSR::Listener::Base.register_cmd(cmd)
     end
 
     class Command

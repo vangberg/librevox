@@ -51,6 +51,22 @@ shared "events" do
   end
 end
 
+class SampleCmd < FSR::Cmd::Command
+  def self.cmd_name
+    "sample_cmd"
+  end
+
+  attr_reader :cmd_name, :arguments
+
+  def initialize(cmd, *args)
+    @cmd_name, @arguments = cmd, args
+  end
+
+  def response=(r)
+    @response = "from command: #{r.content}"
+  end
+end
+
 shared "api commands" do
   before do
     @class = @listener.class
@@ -59,68 +75,82 @@ shared "api commands" do
     @listener.receive_data("Content-Type: command/reply\nTest: Testing\n\n")
   end
 
-  describe "multiple api commands" do
-    before do
-      @listener.outgoing_data.clear
-      @class.add_event_hook(:API_TEST) {
-        api "foo" do
-          api "foo", "bar", "baz"
-        end
-      }
-    end
+  should "register command" do
+    @listener.should.not.respond_to? :sample_cmd
 
-    should "only send one command at a time" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
-      @listener.read_data.should == "api foo\n\n"
-      @listener.read_data.should == nil
+    FSR::Listener::Base.register_cmd(SampleCmd)
 
-      @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
-      @listener.read_data.should == "api foo bar baz\n\n"
-      @listener.read_data.should == nil
-    end
+    @listener.should.respond_to? :sample_cmd
   end
 
-  describe "flat api commands" do
+  describe "with registered command" do
     before do
-      @listener.outgoing_data.clear
-      @class.add_event_hook(:API_FLAT_TEST) {
-        api "foo"
-        api "bar" do
-          api "baz"
-        end
-      }
+      FSR::Listener::Base.register_cmd(SampleCmd)
     end
-    
-    should "wait for response before calling next proc" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 27\n\nEvent-Name: API_FLAT_TEST\n\n")
 
-      @listener.read_data.should.not == "api baz\n\n"
+    describe "multiple api commands" do
+      before do
+        @listener.outgoing_data.clear
+        @class.add_event_hook(:API_TEST) {
+          sample_cmd "foo" do
+            sample_cmd "foo", "bar", "baz"
+          end
+        }
+      end
 
-      # response to "foo"
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
-      @listener.read_data.should.not == "api baz\n\n"
+      should "only send one command at a time" do
+        @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
+        @listener.read_data.should == "api foo\n\n"
+        @listener.read_data.should == nil
 
-      # response to "bar"
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
-      @listener.read_data.should == "api baz\n\n"
+        @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
+        @listener.read_data.should == "api foo bar baz\n\n"
+        @listener.read_data.should == nil
+      end
     end
-  end
 
-  describe "api command with block argument" do
-    before do
-      @listener.outgoing_data.clear
-      @class.add_event_hook(:API_ARG_TEST) {
-        api "foo" do |r|
-          send_data "response: #{r}"
-        end
-      }
+    describe "flat api commands" do
+      before do
+        @listener.outgoing_data.clear
+        @class.add_event_hook(:API_FLAT_TEST) {
+          sample_cmd "foo"
+          sample_cmd "bar" do
+            sample_cmd "baz"
+          end
+        }
+      end
+
+      should "wait for response before calling next proc" do
+        @listener.receive_data("Content-Type: command/reply\nContent-Length: 27\n\nEvent-Name: API_FLAT_TEST\n\n")
+
+        @listener.read_data.should.not == "api baz\n\n"
+
+        # response to "foo"
+        @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+        @listener.read_data.should.not == "api baz\n\n"
+
+        # response to "bar"
+        @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+        @listener.read_data.should == "api baz\n\n"
+      end
     end
-    
-    should "wait for response before calling next proc" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 26\n\nEvent-Name: API_ARG_TEST\n\n")
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
 
-      @listener.read_data.should == "response: +OK"
+    describe "api command with block argument" do
+      before do
+        @listener.outgoing_data.clear
+        @class.add_event_hook(:API_ARG_TEST) {
+          sample_cmd "foo" do |r|
+            send_data "response: #{r}"
+          end
+        }
+      end
+
+      should "pass response from command" do
+        @listener.receive_data("Content-Type: command/reply\nContent-Length: 26\n\nEvent-Name: API_ARG_TEST\n\n")
+        @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+
+        @listener.read_data.should == "response: from command: +OK"
+      end
     end
   end
 end

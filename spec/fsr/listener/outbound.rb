@@ -204,12 +204,25 @@ describe "Outbound listener with non-nested apps" do
   end
 end
 
+class SampleCmd < FSR::Cmd::Command
+  def self.cmd_name
+    "sample_cmd"
+  end
+
+  attr_reader :cmd_name, :arguments
+
+  def initialize(cmd, *args)
+    @cmd_name, @arguments = cmd, args
+  end
+end
+
 class OutboundListenerWithAppsAndApi < Listener::Outbound
   register_app SampleApp
+  register_cmd SampleCmd
 
   def session_initiated
     sample_app "foo" do
-      api "bar" do
+      sample_cmd "bar" do
         sample_app "baz"
       end
     end

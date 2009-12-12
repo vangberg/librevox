@@ -1,9 +1,14 @@
 require 'spec/helper'
 require 'fsr/cmd'
+require 'fsr/listener'
 require 'fsr/command_socket'
 
-class SampleCmd < FSR::Cmd::Command
-  def self.cmd_name; "sample_cmd" end
+class SampleCmd1 < FSR::Cmd::Command
+  def self.cmd_name; "sample_cmd1" end
+end
+
+class SampleCmd2 < FSR::Cmd::Command
+  def self.cmd_name; "sample_cmd2" end
 end
 
 describe FSR::Cmd::Command do
@@ -40,11 +45,19 @@ describe FSR::Cmd::Command do
 
   describe "register" do
     should "add command to CommandSocket" do
-      socket = FSR::CommandSocket.new
+      socket = FSR::CommandSocket.new :connect => false
 
-      socket.should.not.respond_to? :sample_cmd
-      FSR::Cmd.register(SampleCmd)
-      socket.should.respond_to? :sample_cmd
+      socket.should.not.respond_to? :sample_cmd1
+      FSR::Cmd.register(SampleCmd1)
+      socket.should.respond_to? :sample_cmd1
+    end
+
+    should "add command to Listener::Base" do
+      listener = FSR::Listener::Base.new(nil)
+
+      listener.should.not.respond_to? :sample_cmd2
+      FSR::Cmd.register(SampleCmd2)
+      listener.should.respond_to? :sample_cmd2
     end
   end
 end
