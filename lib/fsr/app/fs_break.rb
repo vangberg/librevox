@@ -4,20 +4,15 @@ module FSR
   module App
     class FSBreak < Application
       def self.app_name
-        "fs_break"
+        "break"
       end
 
-      def initialize
-      end
+      attr_reader :arguments
 
-      def arguments
-        []
+      def initialize(args={})
+        @arguments = []
+        @arguments << "all" if args[:all]
       end
-
-      def sendmsg
-        "call-command: execute\nexecute-app-name: break\n\n"
-      end
-
     end
 
     register FSBreak

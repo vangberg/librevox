@@ -3,12 +3,10 @@ module FSR
   module App
     # http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_hangup
     class Hangup < Application
-      def initialize(cause=nil)
-        @cause = cause
-      end
+      attr_reader :arguments
 
-      def arguments
-        [@cause]
+      def initialize(cause=nil)
+        @arguments = [cause]
       end
     end
 

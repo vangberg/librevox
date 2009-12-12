@@ -4,23 +4,14 @@ module FSR
   module App
     class FSSleep < Application
       def self.app_name
-        "fs_sleep"
+        "sleep"
       end
 
-      attr_reader :milliseconds
+      attr_reader :arguments
 
-      def initialize(milliseconds)
-        # milliseconds to sleep 
-        @milliseconds = milliseconds
+      def initialize(msec)
+        @arguments = [msec]
       end
-      def arguments
-        [@milliseconds]
-      end
-
-      def sendmsg
-        "call-command: execute\nexecute-app-name: sleep\nexecute-app-arg: %s\n\n" % [arguments.join(" ")]
-      end
-
     end
 
     register FSSleep
