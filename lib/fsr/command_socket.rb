@@ -12,12 +12,15 @@ module FSR
     end
 
     def initialize(args={})
-      @server = args[:server] || "127.0.0.1"
-      @port   = args[:port] || "8021"
-      @auth   = args[:auth] || "ClueCon"
+      @server   = args[:server] || "127.0.0.1"
+      @port     = args[:port] || "8021"
+      @auth     = args[:auth] || "ClueCon"
 
+      connect unless args[:connect] == false
+    end
+
+    def connect
       @socket = TCPSocket.open(@server, @port)
-
       command "auth #{@auth}"
     end
 

@@ -31,73 +31,91 @@ describe FSR::CommandSocket do
     stub(TCPSocket).open(anything, anything).times(any_times) {@socket}
 
     @server.print "Content-Type: command/reply\nReply-Text: +OK\n\n"
-    @cmd = FSR::CommandSocket.new
   end
 
-  should "authenticate" do
-    @server.gets.should == "auth ClueCon\n"
+  # This should be tested with some mocks. How do we use rr + bacon?
+  describe ":connect => false" do
+    should "not connect" do
+      @cmd = FSR::CommandSocket.new(:connect => false)
+      @server.should.be.empty?
+    end
+
+    should "connect when asked" do
+      @cmd.connect
+      @server.gets.should == "auth ClueCon\n"
+    end
   end
 
-  should "read header response" do
-    @server.print "Content-Type: command/reply\nSome-Header: Some value\n\n"
-    reply = @cmd.command "foo"
-
-    reply.class.should == FSR::Response
-    reply.headers[:some_header].should == "Some value"
-  end
-
-  should "read command/reply responses" do
-    @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
-
-    @server.print "Content-Type: command/reply\nSome-Header: New data\n\n"
-    reply = @cmd.command "foo"
-
-    reply.headers[:some_header].should == "New data"
-  end
-
-  should "read api/response responses" do
-    @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
-
-    @server.print "Content-Type: api/response\nSome-Header: New data\n\n"
-    reply = @cmd.command "foo"
-
-    reply.headers[:some_header].should == "New data"
-  end
-
-  should "read content if present" do
-    @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-    reply = @cmd.command "foo"
-
-    reply.content.should == "+OK"
-  end
-
-  should "register command" do
-    @cmd.should.not.respond_to? :sample_cmd
-    FSR::CommandSocket.register_cmd SampleCmd
-    @cmd.should.respond_to? :sample_cmd
-  end
-
-  describe "with commands" do
+  describe "with auto-connect" do
     before do
+      @cmd = FSR::CommandSocket.new
+    end
+
+    should "authenticate" do
+      @server.gets.should == "auth ClueCon\n"
+    end
+
+    should "read header response" do
+      @server.print "Content-Type: command/reply\nSome-Header: Some value\n\n"
+      reply = @cmd.command "foo"
+
+      reply.class.should == FSR::Response
+      reply.headers[:some_header].should == "Some value"
+    end
+
+    should "read command/reply responses" do
+      @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
+
+      @server.print "Content-Type: command/reply\nSome-Header: New data\n\n"
+      reply = @cmd.command "foo"
+
+      reply.headers[:some_header].should == "New data"
+    end
+
+    should "read api/response responses" do
+      @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
+
+      @server.print "Content-Type: api/response\nSome-Header: New data\n\n"
+      reply = @cmd.command "foo"
+
+      reply.headers[:some_header].should == "New data"
+    end
+
+    should "read content if present" do
+      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+      reply = @cmd.command "foo"
+
+      reply.content.should == "+OK"
+    end
+
+    should "register command" do
+      @cmd.should.not.respond_to? :sample_cmd
       FSR::CommandSocket.register_cmd SampleCmd
-      2.times {@server.gets} # get rid of the auth message
+      @cmd.should.respond_to? :sample_cmd
     end
 
-    should "send command" do
-      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-      @cmd.sample_cmd
-      @server.gets.should == "api sample_cmd\n"
-    end
+    describe "with commands" do
+      before do
+        FSR::CommandSocket.register_cmd SampleCmd
+        2.times {@server.gets} # get rid of the auth message
+      end
 
-    should "return response from command" do
-      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-      @cmd.sample_cmd.should == "From command: +OK"
-    end
+      should "send command" do
+        @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+        @cmd.sample_cmd
+        @server.gets.should == "api sample_cmd\n"
+      end
 
-    should "pass arguments" do
-      @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-      @cmd.sample_cmd("foo", "bar")
-      @server.gets.should == "api sample_cmd foo bar\n"
+      should "return response from command" do
+        @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+        @cmd.sample_cmd.should == "From command: +OK"
+      end
+
+      should "pass arguments" do
+        @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+        @cmd.sample_cmd("foo", "bar")
+        @server.gets.should == "api sample_cmd foo bar\n"
+      end
     end
   end
 end
