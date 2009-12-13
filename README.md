@@ -117,7 +117,7 @@ restart FreeSWITCH etc.
 ## Further documentation
 
 All applications and commands are documented in the code. You can run
-`rake yard` from the root of the source tree to generate YARD docs. Look under
+`yardoc` from the root of the source tree to generate YARD docs. Look under
 the `Librevox::Commands` and `Librevox::Applications` modules.
 
 ## Extras
