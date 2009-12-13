@@ -1,8 +1,6 @@
 require 'spec/helper'
-require 'fsr/listener'
-require 'fsr/app'
 
-include Librevoz
+require 'librevoz/listener/base'
 
 class Librevoz::Listener::Base
   attr_accessor :outgoing_data
@@ -51,19 +49,9 @@ shared "events" do
   end
 end
 
-class SampleCmd < Librevoz::Cmd::Command
-  def self.cmd_name
-    "sample_cmd"
-  end
-
-  attr_reader :cmd_name, :arguments
-
-  def initialize(cmd, *args)
-    @cmd_name, @arguments = cmd, args
-  end
-
-  def response=(r)
-    @response = "from command: #{r.content}"
+module Librevoz::Commands
+  def sample_cmd(cmd, *args, &b)
+    execute_cmd cmd, *args, &b
   end
 end
 
@@ -75,40 +63,30 @@ shared "api commands" do
     @listener.receive_data("Content-Type: command/reply\nTest: Testing\n\n")
   end
 
-  should "register command" do
-    @listener.should.not.respond_to? :sample_cmd
-
-    Librevoz::Listener::Base.register_cmd(SampleCmd)
-
+  should "include command" do
     @listener.should.respond_to? :sample_cmd
   end
 
-  describe "with registered command" do
+  describe "multiple api commands" do
     before do
-      Librevoz::Listener::Base.register_cmd(SampleCmd)
+      @listener.outgoing_data.clear
+      @class.add_event_hook(:API_TEST) {
+        sample_cmd "foo" do
+          sample_cmd "foo", "bar", "baz"
+        end
+      }
     end
 
-    describe "multiple api commands" do
-      before do
-        @listener.outgoing_data.clear
-        @class.add_event_hook(:API_TEST) {
-          sample_cmd "foo" do
-            cmd = SampleCmd.new("foo", "bar", "baz")
-            run_cmd(cmd)
-          end
-        }
-      end
+    should "only send one command at a time" do
+      @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
+      @listener.read_data.should == "api foo\n\n"
+      @listener.read_data.should == nil
 
-      should "only send one command at a time" do
-        @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
-        @listener.read_data.should == "api foo\n\n"
-        @listener.read_data.should == nil
-
-        @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
-        @listener.read_data.should == "api foo bar baz\n\n"
-        @listener.read_data.should == nil
-      end
+      @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
+      @listener.read_data.should == "api foo bar baz\n\n"
+      @listener.read_data.should == nil
     end
+  end
 
     describe "flat api commands" do
       before do
