@@ -23,8 +23,8 @@ shared "events" do
   before do
     @class = @listener.class
 
-    @class.add_event_hook(:SOME_EVENT) {send_data "something"}
-    @class.add_event_hook(:OTHER_EVENT) {send_data "something else"}
+    @class.event(:some_event) {send_data "something"}
+    @class.event(:other_event) {send_data "something else"}
 
     # Establish session
     @listener.receive_data("Content-Length: 0\nTest: Testing\n\n")
@@ -70,7 +70,7 @@ shared "api commands" do
   describe "multiple api commands" do
     before do
       @listener.outgoing_data.clear
-      @class.add_event_hook(:API_TEST) {
+      @class.event(:api_test) {
         sample_cmd "foo" do
         sample_cmd "foo", "bar", "baz"
         end
@@ -91,7 +91,7 @@ shared "api commands" do
   describe "flat api commands" do
     before do
       @listener.outgoing_data.clear
-      @class.add_event_hook(:API_FLAT_TEST) {
+      @class.event(:api_flat_test) {
         sample_cmd "foo"
         sample_cmd "bar" do
           sample_cmd "baz"
@@ -117,7 +117,7 @@ shared "api commands" do
   describe "api command with block argument" do
     before do
       @listener.outgoing_data.clear
-      @class.add_event_hook(:API_ARG_TEST) {
+      @class.event(:api_arg_test) {
         sample_cmd "foo" do |r|
           send_data "response: #{r.content}"
         end

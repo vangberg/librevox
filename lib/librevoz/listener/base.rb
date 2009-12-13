@@ -11,7 +11,7 @@ module Librevoz
           @hooks ||= []
         end
 
-        def add_event_hook(event, &block)
+        def event(event, &block)
           hooks << [event, block]
         end
       end
@@ -33,7 +33,7 @@ module Librevoz
 
         if response.event?
           on_event
-          find_and_invoke_event response.event
+          invoke_event response.event
         elsif response.api_response? && @api_queue.any?
           invoke_api_queue
         end
@@ -44,9 +44,9 @@ module Librevoz
       end
 
       private
-      def find_and_invoke_event(event_name)
+      def invoke_event(event_name)
         self.class.hooks.each do |name,block| 
-          instance_eval(&block) if name == event_name.to_sym
+          instance_eval(&block) if name == event_name.downcase.to_sym
         end
       end
 
