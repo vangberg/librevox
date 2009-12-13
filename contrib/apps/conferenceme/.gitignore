@@ -1,6 +1,0 @@
-config/*
-log/*
-script/*
-service/confme-?
-tasks/ride.rake
-tasks/rspec.rake
