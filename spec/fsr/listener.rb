@@ -93,7 +93,8 @@ shared "api commands" do
         @listener.outgoing_data.clear
         @class.add_event_hook(:API_TEST) {
           sample_cmd "foo" do
-            sample_cmd "foo", "bar", "baz"
+            cmd = SampleCmd.new("foo", "bar", "baz")
+            run_cmd(cmd)
           end
         }
       end

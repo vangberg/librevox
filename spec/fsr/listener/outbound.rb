@@ -67,7 +67,8 @@ class OutboundListenerWithNestedApps < Listener::Outbound
 
   def session_initiated
     sample_app "foo" do
-      sample_app "bar"
+      sample = SampleApp.new("bar")
+      run_app(sample)
     end
   end
 end

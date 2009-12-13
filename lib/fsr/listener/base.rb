@@ -17,14 +17,14 @@ module FSR
         def register_cmd(klass)
           class_eval <<-EOF
             def #{klass.cmd_name}(*args, &block)
-              run_cmd(#{klass}, *args, &block)
+              cmd = #{klass}.new(*args)
+              run_cmd(cmd, *args, &block)
             end
           EOF
         end
       end
 
-      def run_cmd(klass, *args, &block)
-        cmd = klass.new(*args)
+      def run_cmd(cmd, *args, &block)
         send_data "#{cmd.raw}\n\n"
         @api_queue << [cmd, (block_given? ? block : lambda {})]
       end

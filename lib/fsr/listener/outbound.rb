@@ -6,13 +6,13 @@ module FSR
       def self.register_app(klass)
         class_eval <<-EOF
           def #{klass.app_name}(*args, &block)
-            run_app(#{klass}, *args, &block)
+            app = #{klass}.new(*args)
+            run_app(app, &block)
           end
         EOF
       end
 
-      def run_app(klass, *args, &block)
-        app = klass.new(*args)
+      def run_app(app, *args, &block)
         sendmsg app.sendmsg
 
         if app.read_channel_var
