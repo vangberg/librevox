@@ -27,7 +27,7 @@ module Librevox
     end
 
     def execute_app(app, args=[], params={})
-      "&#{app}(#{args.join(" ")})"
+      "&#{app}(#{args})"
     end
 
     def read_response

@@ -1,12 +1,11 @@
-require 'fsr'
-require 'fsr/listener/outbound'
+require 'librevox'
  
-class MyApp < FSR::Listener::Outbound
-  add_event_hook :SOME_EVENT do
-    FSR::Log.info "We got an event: #{event}"
+class MyApp < Librevox::Listener::Outbound
+  event :some_event do
+    # React on event. Info available in `event`
   end
 
-  def session_initiated
+  session do
     answer
  
     playback "/path/to/file.wav"
@@ -19,9 +18,12 @@ class MyApp < FSR::Listener::Outbound
       # Set channel variables
       set "playback_terminators", "#"
  
-      # For apps not added to FSR yet (see lib/fsr/app) you can use
-      # `execute_app "app_name", "app arguments"` to execute generic Freeswitch commands
-      # as seen on http://wiki.freeswitch.org/wiki/Category:Dialplan
+      # For apps not added to Librevox yet you can use
+      #
+      # `execute_app "app_name", "app arguments"`
+      #
+      # to execute generic Freeswitch commands as seen on 
+      # http://wiki.freeswitch.org/wiki/Category:Dialplan
       execute_app "record", "/sound-recordings/user-recording-#{digit}.wav"
  
       bridge "sofia/foo/bar", "sofia/foo/baz"
@@ -29,4 +31,4 @@ class MyApp < FSR::Listener::Outbound
   end
 end
 
-FSR.start MyApp
+Librevox.start MyApp

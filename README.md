@@ -19,8 +19,8 @@ from FreeSWITCH, and lets you react on events in two different ways:
 
 1.      By overiding `on_event` which gets called every time an event arrives.
 
-2.      By adding an event hook with `add_event_hook`, which will get called
-        every time an event with the specified name arrives.
+2.      By adding an event hook with `event`, which will get called every time
+        an event with the specified name arrives.
 
 The header and content of the event is accessible through `event`.
 
@@ -29,16 +29,13 @@ techniques:
 
     require 'librevox'
 
-    class MyInbound < ::Listener::Inbound
+    class MyInbound < Librevox::Listener::Inbound
       def on_event
-        # Be sure to check out the content of `event`. It has all the good stuff.
-        Librevox::Log.info "Got event: #{event.content[:event_name]}"
+        puts "Got event: #{event.content[:event_name]}"
       end
      
       # You can add a hook for a certain event:
-      add_event_hook :CHANNEL_HANGUP do
-        Librevox::Log.info "Channel hangup!"
-     
+      event :channel_hangup do
         # It is instance_eval'ed, so you can use your instance methods etc:
         do_something
       end
@@ -60,9 +57,9 @@ but it only receives events related to that given session.
 ### Dialplan
 
 When a call is made and Freeswitch connects to the outbound event listener,
-`session_initiated` is called. This is where you set up your dialplan:
+the `session` callback is executed. This is where you set up your dialplan:
 
-    def session_initiated
+    session do
       answer
       set "some_var", "some value"
       playback "path/to/file"
@@ -73,11 +70,11 @@ When using applications that expects a reply, such as `play_and_get_digits`,
 you have to use callbacks to read the value, as the function itself returns
 immediately due to the async nature of EventMachine:
 
-    def session_initiated
+    session do
       answer
 
       play_and_get_digits "enter-number.wav", "error.wav" do |digit|
-        Librevox::Log.info "User pressed #{digit}"
+        puts "User pressed #{digit}"
         playback "thanks-for-the-input.wav"
         hangup
       end
@@ -105,7 +102,7 @@ Multiple listeners can be started at once by passing a block to `Librevox.start`
 
 ## Originating a new call with `Librevox::CommandSocket`
 
-Freeswitcher also ships with a CommandSocket class, which allows you to connect
+Librevox also ships with a CommandSocket class, which allows you to connect
 to the FreeSWITCH management console, from which you can originate calls,
 restart FreeSWITCH etc.
 

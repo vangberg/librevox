@@ -1,17 +1,14 @@
 require 'fsr'
 require 'fsr/listener/inbound'
  
-class MyInbound < FSR::Listener::Inbound
+class MyInbound < Librevox::Listener::Inbound
   # `on_event` is called every time an event is received.
   def on_event
     # Be sure to check out the content of `event`. It has all the good stuff.
-    FSR::Log.info "Got event: #{event.content[:event_name]}"
   end
  
   # You can add a hook for a certain event:
-  add_event_hook :CHANNEL_HANGUP do
-    FSR::Log.info "Channel hangup!"
- 
+  event :channel_hangup do
     # It is instance_eval'ed, so you can use your instance methods etc:
     do_something
   end
@@ -21,4 +18,4 @@ class MyInbound < FSR::Listener::Inbound
   end
 end
 
-FSR.start MyInbound
+Librevox.start MyInbound

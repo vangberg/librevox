@@ -10,13 +10,13 @@ end
 
 module Librevox
   module Commands
-    def sample_cmd(*args)
-    execute_cmd "sample_cmd", *args
+    def sample_cmd(args="")
+    execute_cmd "sample_cmd", args
     end
   end
 
   module Applications
-    def sample_app(*args)
+    def sample_app(args="")
       execute_app "sample_app", args
     end
   end
@@ -94,7 +94,7 @@ describe Librevox::CommandSocket do
     end
 
     should "return app" do
-      @cmd.sample_app("foo", "bar").should == "&sample_app(foo bar)"
+      @cmd.sample_app("foo bar").should == "&sample_app(foo bar)"
     end
 
     describe "registered" do
@@ -117,7 +117,7 @@ describe Librevox::CommandSocket do
 
       should "pass arguments" do
         @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-        @cmd.sample_cmd("foo", "bar")
+        @cmd.sample_cmd("foo bar")
         @server.gets.should == "api sample_cmd foo bar\n"
       end
     end

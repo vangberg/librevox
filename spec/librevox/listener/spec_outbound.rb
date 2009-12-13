@@ -10,7 +10,7 @@ module Librevox::Applications
 end
 
 class OutboundTestListener < Librevox::Listener::Outbound
-  def session_initiated
+  session do
     send_data "session was initiated"
   end
 end
@@ -37,7 +37,7 @@ describe "Outbound listener" do
     @listener.session.class.should.equal Librevox::Response
   end
 
-  should "call #session_initated after establishing new session" do
+  should "call session callback after establishing new session" do
     @listener.read_data.should.equal "session was initiated"
   end
 
@@ -54,7 +54,7 @@ describe "Outbound listener" do
 end
 
 class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
-  def session_initiated
+  session do
     sample_app "foo" do
       sample_app "bar"
     end
@@ -106,7 +106,7 @@ module Librevox::Applications
 end
 
 class OutboundListenerWithReader < Librevox::Listener::Outbound
-  def session_initiated
+  session do
     reader_app do |data|
       send_data "read this: #{data}"
     end
@@ -148,7 +148,7 @@ end
 
 class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
   attr_reader :queue
-  def session_initiated
+  session do
     sample_app "foo"
     reader_app do |data|
       send_data "the end: #{data}"
@@ -190,7 +190,7 @@ module Librevox::Commands
 end
 
 class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
-  def session_initiated
+  session do
     sample_app "foo" do
       sample_cmd "bar" do
         sample_app "baz"

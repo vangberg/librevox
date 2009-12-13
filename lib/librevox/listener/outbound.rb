@@ -4,6 +4,14 @@ require 'librevox/applications'
 module Librevox
   module Listener
     class Outbound < Base
+      class << self
+        attr_reader :session_callback
+
+        def session(&block)
+          @session_callback = block
+        end
+      end
+
       include Librevox::Applications
 
       def execute_app(app, args="", params={}, &block)
@@ -47,7 +55,7 @@ module Librevox
         
         if session.nil?
           @session = response
-          session_initiated
+          instance_eval &self.class.session_callback
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
           resume_with_channel_var

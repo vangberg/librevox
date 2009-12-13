@@ -41,6 +41,12 @@ describe Librevox::Applications do
     app[:args].should == "some cause"
   end
 
+  should "playback" do
+    app = A.playback("uri://some/file.wav")
+    app[:name].should == "playback"
+    app[:args].should == "uri://some/file.wav"
+  end
+
   describe "play_and_get_digits" do
     should "have defaults" do
       app = A.play_and_get_digits "please-enter", "wrong-try-again"
@@ -62,5 +68,75 @@ describe Librevox::Applications do
       app[:args].should == "2 3 4 10000 0 please-enter invalid-choice other_var [125]"
       app[:params][:read_var].should == "other_var"
     end
+  end
+
+  describe "read" do
+    should "read with defaults" do
+      app = A.read "please-enter.wav"
+      app[:name].should == "read"
+      app[:args].should == "1 2 please-enter.wav read_digits_var 5000 #"
+      app[:params][:read_var].should == "read_digits_var"
+    end
+
+    should "take params" do
+      app = A.read "please-enter.wav",
+        :min          => 2,
+        :max          => 3,
+        :terminators  => "0",
+        :timeout      => 10000,
+        :read_var     => "other_var"
+
+      app[:args].should == "2 3 please-enter.wav other_var 10000 0"
+      app[:params][:read_var].should == "other_var"
+    end
+  end
+
+  should "transfer" do
+    app = A.transfer "new_extension"
+    app[:name].should == "transfer"
+    app[:args].should == "new_extension"
+  end
+
+  describe "record" do
+    should "start recording" do
+      app = A.record "/path/to/file.mp3"
+      app[:name].should == "record"
+      app[:args].should == "/path/to/file.mp3"
+    end
+
+    should "start recording with time limit" do
+      app = A.record "/path/to/file.mp3", :limit => 15
+      app[:name].should == "record"
+      app[:args].should == "/path/to/file.mp3 15"
+    end
+  end
+
+  describe "bind_meta_app" do
+    should "bind meta app" do
+      app = A.bind_meta_app :key => "2",
+                            :listen_to => :a,
+                            :respond_on => :s,
+                            :application => "hangup"
+
+      app[:name].should == "bind_meta_app"
+      app[:args].should == "2 a s hangup"
+    end
+
+    should "bind meta app with parameters" do
+      app = A.bind_meta_app :key => "2",
+                            :listen_to => :a,
+                            :respond_on => :s,
+                            :application => "execute_extension",
+                            :parameters => "dx XML features"
+
+      app[:name].should == "bind_meta_app"
+      app[:args].should == "2 a s execute_extension::dx XML features"
+    end
+  end
+
+  should "set" do
+    app = A.set("foo", "bar")
+    app[:name].should == "set"
+    app[:args].should == "foo=bar"
   end
 end

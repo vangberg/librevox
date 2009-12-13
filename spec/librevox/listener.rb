@@ -50,8 +50,8 @@ shared "events" do
 end
 
 module Librevox::Commands
-  def sample_cmd(cmd, *args, &b)
-    execute_cmd cmd, *args, &b
+  def sample_cmd(cmd, args="", &b)
+    execute_cmd cmd, args, &b
   end
 end
 
@@ -72,7 +72,7 @@ shared "api commands" do
       @listener.outgoing_data.clear
       @class.event(:api_test) {
         sample_cmd "foo" do
-        sample_cmd "foo", "bar", "baz"
+        sample_cmd "foo", "bar baz"
         end
       }
     end

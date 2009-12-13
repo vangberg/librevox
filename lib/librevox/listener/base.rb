@@ -5,7 +5,6 @@ require 'librevox/commands'
 module Librevox
   module Listener
     class Base < EventMachine::Protocols::HeaderAndContentProtocol
-      include Librevox::Commands
       class << self
         def hooks
           @hooks ||= []
@@ -15,6 +14,8 @@ module Librevox
           hooks << [event, block]
         end
       end
+
+      include Librevox::Commands
 
       def run_cmd(cmd, &block)
         send_data "#{cmd}\n\n"

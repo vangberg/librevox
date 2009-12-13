@@ -1,3 +1,4 @@
+require 'eventmachine'
 require 'librevox/listener/inbound'
 require 'librevox/listener/outbound'
 

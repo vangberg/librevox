@@ -1,19 +1,19 @@
 require 'fsr'
 require 'fsr/listener/outbound'
 
-class SomeInbound < FSR::Listener::Inbound
+class SomeInbound < Librevox::Listener::Inbound
   def on_event
     # ...
   end
 end
 
-class SomeOutbound < FSR::Listener::Outbound
-  def session_initiated
+class SomeOutbound < Librevox::Listener::Outbound
+  session do
     # ...
   end
 end
 
-FSR.start do
+Librevox.start do
   run SomeInbound
   run SomeOutbound
 end
