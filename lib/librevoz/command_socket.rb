@@ -1,10 +1,12 @@
 require 'socket'
 require 'librevoz/response'
 require 'librevoz/commands'
+require 'librevoz/applications'
 
 module Librevoz
   class CommandSocket
     include Librevoz::Commands
+    include Librevoz::Applications
 
     def initialize(args={})
       @server   = args[:server] || "127.0.0.1"
@@ -22,6 +24,10 @@ module Librevoz
     def run_cmd(cmd)
       @socket.print "#{cmd}\n\n"
       read_response
+    end
+
+    def run_app(app, args=[], params={})
+      "&#{app}(#{args.join(" ")})"
     end
 
     def read_response

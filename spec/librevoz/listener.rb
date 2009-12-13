@@ -51,7 +51,7 @@ end
 
 module Librevoz::Commands
   def sample_cmd(cmd, *args, &b)
-    make_cmd cmd, *args, &b
+    execute_cmd cmd, *args, &b
   end
 end
 

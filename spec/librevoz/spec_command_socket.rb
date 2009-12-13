@@ -8,9 +8,17 @@ class Bacon::Context
   include RR::Adapters::RRMethods
 end
 
-module Librevoz::Commands
-  def sample_cmd(*args)
-    make_cmd "sample_cmd", *args
+module Librevoz
+  module Commands
+    def sample_cmd(*args)
+    execute_cmd "sample_cmd", *args
+    end
+  end
+
+  module Applications
+    def sample_app(*args)
+      execute_app "sample_app", args
+    end
   end
 end
 
@@ -79,6 +87,14 @@ describe Librevoz::CommandSocket do
 
     should "register command" do
       @cmd.should.respond_to? :sample_cmd
+    end
+
+    should "register application" do
+      @cmd.should.respond_to? :sample_app
+    end
+
+    should "return app" do
+      @cmd.sample_app("foo", "bar").should == "&sample_app(foo bar)"
     end
 
     describe "registered" do

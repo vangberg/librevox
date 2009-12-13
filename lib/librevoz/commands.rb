@@ -1,6 +1,6 @@
 module Librevoz
   module Commands
-    def make_cmd(cmd, *args, &block)
+    def execute_cmd(cmd, *args, &block)
       msg = "api #{cmd}"
       msg += " #{args.join(" ")}" if args.any?
 

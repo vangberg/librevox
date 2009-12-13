@@ -4,8 +4,8 @@ require 'spec/librevoz/listener'
 require 'librevoz/listener/outbound'
 
 module Librevoz::Applications
-  def sample_app(app, *args, &b)
-    execute_app app, args, &b
+  def sample_app(name, *args, &b)
+    execute_app name, args, &b
   end
 end
 
@@ -101,7 +101,7 @@ end
 
 module Librevoz::Applications
   def reader_app(&b)
-    execute_app 'reader_app', [], 'a_reader_var', &b
+    execute_app 'reader_app', [], {:read_var => 'a_reader_var'}, &b
   end
 end
 
@@ -185,7 +185,7 @@ end
 
 module Librevoz::Commands
   def sample_cmd(cmd, *args, &b)
-    make_cmd cmd, *args, &b
+    execute_cmd cmd, *args, &b
   end
 end
 
