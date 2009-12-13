@@ -3,11 +3,12 @@ require 'fsr/response'
 
 module FSR
   class CommandSocket
+    include Cmd
+
     def self.register_cmd(klass)
       define_method klass.cmd_name do |*args|
         cmd = klass.new(*args)
-        cmd.response = command cmd.raw
-        cmd.response
+        run(cmd)
       end
     end
 
@@ -25,6 +26,11 @@ module FSR
     end
 
     def socket
+    end
+
+    def run(cmd)
+      cmd.response = command(cmd.raw)
+      cmd.response
     end
 
     def command(msg)

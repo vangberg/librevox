@@ -117,5 +117,23 @@ describe FSR::CommandSocket do
         @server.gets.should == "api sample_cmd foo bar\n"
       end
     end
+
+    describe "#run" do
+      before do
+        2.times {@server.gets} # get rid of the auth message
+        @sample = SampleCmd.new
+      end
+
+      should "send command" do
+        @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+        @cmd.run @sample
+        @server.gets.should == "api sample_cmd\n"
+      end
+
+      should "return response from command" do
+        @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
+        @cmd.run(@sample).should == "From command: +OK"
+      end
+    end
   end
 end
