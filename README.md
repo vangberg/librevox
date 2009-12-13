@@ -80,8 +80,6 @@ immediately due to the async nature of EventMachine:
       end
     end
 
-### Available applications
-
 ## Starting listeners
 
 To start a single listener, connection/listening on localhost on the default
@@ -116,12 +114,16 @@ restart FreeSWITCH etc.
     >> socket.status
     >> > #<Librevox::Response:0x1016acac8 ...>
 
-### Available commands
+## Further documentation
+
+All applications and commands are documented in the code. You can run
+`rake yard` from the root of the source tree to generate YARD docs. Look under
+the `Librevox::Commands` and `Librevox::Applications` modules.
 
 ## Extras
 
   * Source: [http://github.com/ichverstehe/librevox](http://github.com/ichverstehe/librevox)
-  * Mailing list: 
+  * Mailing list: librevox@librelist.com
   * IRC: #librevox @ irc.freenode.net
 
 ## License

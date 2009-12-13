@@ -24,6 +24,29 @@ describe Librevox::Applications do
     app[:name].should == "answer"
   end
 
+  describe "bind_meta_app" do
+    should "bind meta app" do
+      app = A.bind_meta_app :key => "2",
+                            :listen_to => :a,
+                            :respond_on => :s,
+                            :application => "hangup"
+
+      app[:name].should == "bind_meta_app"
+      app[:args].should == "2 a s hangup"
+    end
+
+    should "bind meta app with parameters" do
+      app = A.bind_meta_app :key => "2",
+                            :listen_to => :a,
+                            :respond_on => :s,
+                            :application => "execute_extension",
+                            :parameters => "dx XML features"
+
+      app[:name].should == "bind_meta_app"
+      app[:args].should == "2 a s execute_extension::dx XML features"
+    end
+  end
+
   should "bridge" do
     app = A.bridge('user/coltrane')
     app[:name].should == "bridge"
@@ -39,12 +62,6 @@ describe Librevox::Applications do
 
     app = A.hangup("some cause")
     app[:args].should == "some cause"
-  end
-
-  should "playback" do
-    app = A.playback("uri://some/file.wav")
-    app[:name].should == "playback"
-    app[:args].should == "uri://some/file.wav"
   end
 
   describe "play_and_get_digits" do
@@ -70,6 +87,12 @@ describe Librevox::Applications do
     end
   end
 
+  should "playback" do
+    app = A.playback("uri://some/file.wav")
+    app[:name].should == "playback"
+    app[:args].should == "uri://some/file.wav"
+  end
+
   describe "read" do
     should "read with defaults" do
       app = A.read "please-enter.wav"
@@ -91,12 +114,6 @@ describe Librevox::Applications do
     end
   end
 
-  should "transfer" do
-    app = A.transfer "new_extension"
-    app[:name].should == "transfer"
-    app[:args].should == "new_extension"
-  end
-
   describe "record" do
     should "start recording" do
       app = A.record "/path/to/file.mp3"
@@ -111,32 +128,15 @@ describe Librevox::Applications do
     end
   end
 
-  describe "bind_meta_app" do
-    should "bind meta app" do
-      app = A.bind_meta_app :key => "2",
-                            :listen_to => :a,
-                            :respond_on => :s,
-                            :application => "hangup"
-
-      app[:name].should == "bind_meta_app"
-      app[:args].should == "2 a s hangup"
-    end
-
-    should "bind meta app with parameters" do
-      app = A.bind_meta_app :key => "2",
-                            :listen_to => :a,
-                            :respond_on => :s,
-                            :application => "execute_extension",
-                            :parameters => "dx XML features"
-
-      app[:name].should == "bind_meta_app"
-      app[:args].should == "2 a s execute_extension::dx XML features"
-    end
-  end
-
   should "set" do
     app = A.set("foo", "bar")
     app[:name].should == "set"
     app[:args].should == "foo=bar"
+  end
+
+  should "transfer" do
+    app = A.transfer "new_extension"
+    app[:name].should == "transfer"
+    app[:args].should == "new_extension"
   end
 end

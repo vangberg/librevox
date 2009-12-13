@@ -10,3 +10,7 @@
 
 - the applications-part of command socket should be rethought. it's
   weird as it is now.
+
+- add logger.
+
+- check command/application input and raise ArgumentError.
