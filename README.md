@@ -1,11 +1,11 @@
-# Freeswitcher
+# Librevox
 
 > An EventMachine-based Ruby library for interacting with the open source 
 > telephony platform [FreeSWITCH](http://www.freeswitch.org).
 
 ## Prerequisites
 
-Freeswitcher lets you interact with FreeSWITCH through mod_event_socket. You
+Librevox lets you interact with FreeSWITCH through mod_event_socket. You
 should know how the event socket works, and the differences between inbound and
 outbound event sockets before proceeding. The
 [wiki page on mod_event_socket](http://wiki.freeswitch.org/wiki/Event_Socket) is
@@ -13,9 +13,9 @@ a good place to start.
 
 ## Inbound listener
 
-To create an inbound listener, you should subclass `FSR::Listener::Inbound` and
-add custom behaviour to it. An inbound listener subscribes to all events from
-FreeSWITCH, and lets you react on events in two different ways:
+To create an inbound listener, you should subclass `Librevox::Listener::Inbound`
+and add custom behaviour to it. An inbound listener subscribes to all events
+from FreeSWITCH, and lets you react on events in two different ways:
 
 1.      By overiding `on_event` which gets called every time an event arrives.
 
@@ -27,18 +27,17 @@ The header and content of the event is accessible through `event`.
 Below is an example of an inbound listener utilising all the aforementioned
 techniques:
 
-    require 'fsr'
-    require 'fsr/listener/inbound'
+    require 'librevox'
 
-    class MyInbound < FSR::Listener::Inbound
+    class MyInbound < ::Listener::Inbound
       def on_event
         # Be sure to check out the content of `event`. It has all the good stuff.
-        FSR::Log.info "Got event: #{event.content[:event_name]}"
+        Librevox::Log.info "Got event: #{event.content[:event_name]}"
       end
      
       # You can add a hook for a certain event:
       add_event_hook :CHANNEL_HANGUP do
-        FSR::Log.info "Channel hangup!"
+        Librevox::Log.info "Channel hangup!"
      
         # It is instance_eval'ed, so you can use your instance methods etc:
         do_something
@@ -51,7 +50,7 @@ techniques:
 
 ## Outbound listener
 
-You create an outbound listener by subclassing `FSR::Listener::Outbound`. 
+You create an outbound listener by subclassing `Librevox::Listener::Outbound`. 
 
 ### Events
 
@@ -78,7 +77,7 @@ immediately due to the async nature of EventMachine:
       answer
 
       play_and_get_digits "enter-number.wav", "error.wav" do |digit|
-        FSR::Log.info "User pressed #{digit}"
+        Librevox::Log.info "User pressed #{digit}"
         playback "thanks-for-the-input.wav"
         hangup
       end
@@ -91,112 +90,49 @@ immediately due to the async nature of EventMachine:
 To start a single listener, connection/listening on localhost on the default
 port is quite simple:
 
-    FSR.start SomeListener
+    Librevox.start SomeListener
 
 it takes an optional hash with arguments:
 
-    FSR.start SomeListener, :host => "1.2.3.4", :port => "8087", :auth => "pwd"
+    Librevox.start SomeListener, :host => "1.2.3.4", :port => "8087", :auth => "pwd"
 
-Multiple listeners can be started at once by passing a block to `FSR.start`:
+Multiple listeners can be started at once by passing a block to `Librevox.start`:
 
-    FSR.start do
+    Librevox.start do
       run SomeListener
       run OtherListener, :port => "8080"
     end
 
-## Originating a new call with `FSR::CommandSocket`
+## Originating a new call with `Librevox::CommandSocket`
 
 Freeswitcher also ships with a CommandSocket class, which allows you to connect
 to the FreeSWITCH management console, from which you can originate calls,
 restart FreeSWITCH etc.
 
-    >> require ‘fsr’
+    >> require ‘librevox’
     => true
     
-    >> socket = FSR::CommandSocket.new
-    => #<FSR::CommandSocket:0xb7a89104 @server=“127.0.0.1”,
+    >> socket = Librevox::CommandSocket.new
+    => #<Librevox::CommandSocket:0xb7a89104 @server=“127.0.0.1”,
         @socket=#<TCPSocket:0xb7a8908c>, @port=“8021”, @auth=“ClueCon”>
     
     >> socket.status
-    >> > #<FSR::Response:0x1016acac8 ...>
+    >> > #<Librevox::Response:0x1016acac8 ...>
 
 ### Available commands
 
-## Writing applications
-
-    class MyApp < FSR::App::Application
-      # `self.app_name` should return the name of the application. If not over-
-      # written, it will turn the class name into a string and downcase it.
-      def self.app_name
-        "my_app"
-      end
-
-      # `arguments` should return an array of arguments. Default is an empty
-      # array.
-      def array
-        ["arg1", "arg2"]
-      end
-
-      # `event_lock` determines wether the application is executed with an
-      # event lock. Defaults to `false`.
-      def event_lock
-        false
-      end
-
-      # If this application reads data into a channel variable, such as 
-      # `play_and_get_digits`, this method must return the name of the channel
-      # variable. Defaults to nil.
-      def read_channel_var
-        "some_channel_var"
-      end
-    end
-    
-    FSR::App.register MyApp
-
-## Writing commands
-
-    class MyCommand < FSR::Cmd::Command
-      # The return value of `self.cmd_name` defines the name of the method that
-      # invokes a command of this class.
-      def self.cmd_name
-        "some_name"
-      end
-
-      # `#cmd_name` is the name of the command that is sent to FreeSWITCH. If
-      # not defined, the value of `Klass.cmd_name` will be used.
-      def cmd_name
-        "this_goes_to_fs"
-      end
-
-      # Arguments passed to the method is passed on to `#initialize`.
-      def initialize(*args)
-        # ...
-      end
-
-      # `#arguments` should return an array of, well, arguments.
-      def arguments
-        ["arg1", "arg2"]
-      end
-
-      # `response=` is called with the response from the command as an instance
-      # of FSR::Response. Whatever @response is set to, is what the command
-      # returns.
-      def response=(r)
-        @response = r
-      end
-    end
-
-    FSR::Cmd.register MyCommand
-
 ## Extras
 
-* Website: [http://code.rubyists.com/projects/fs](http://code.rubyists.com/projects/fs)
-* Source: [http://gitorious.org/fsr](http://gitorious.org/fsr)
-* Wiki: [http://gitorious.org/fsr/pages/Home](http://gitorious.org/fsr/pages/Home)
-* IRC: #rubyists @ freenode
+  * Source: [http://github.com/ichverstehe/librevox](http://github.com/ichverstehe/librevox)
+  * Mailing list: 
+  * IRC: #librevox @ irc.freenode.net
 
 ## License
 
-(c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel, Michael Fellinger, Kevin Berry) 
+(c) 2009 Harry Vangberg <harry@vangberg.name>
+
+Librevox was inspired by and uses code from Freeswitcher, which is distributed
+under the MIT license and (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel,
+Michael Fellinger, Kevin Berry), Harry Vangberg
 
 Distributed under the terms of the MIT license.

@@ -1,6 +1,6 @@
 $:.unshift 'lib'
 
 require 'bacon'
-require 'librevoz'
+require 'librevox'
 
 Bacon.summary_on_exit

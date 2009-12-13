@@ -1,9 +1,9 @@
 require 'spec/helper'
-require 'spec/librevoz/listener'
+require 'spec/librevox/listener'
 
-require 'librevoz/listener/inbound'
+require 'librevox/listener/inbound'
 
-class InboundTestListener < Librevoz::Listener::Inbound
+class InboundTestListener < Librevox::Listener::Inbound
 end
 
 describe "Inbound listener" do

@@ -1,6 +1,6 @@
-require 'librevoz/listener/base'
+require 'librevox/listener/base'
 
-module Librevoz
+module Librevox
   module Listener
     class Inbound < Base
       def initialize(args={})

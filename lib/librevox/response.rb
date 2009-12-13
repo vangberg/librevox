@@ -5,7 +5,7 @@ class String
   alias :each :each_line
 end
 
-module Librevoz
+module Librevox
   class Response
     attr_accessor :headers, :content
 

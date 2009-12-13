@@ -1,12 +1,12 @@
 require 'socket'
-require 'librevoz/response'
-require 'librevoz/commands'
-require 'librevoz/applications'
+require 'librevox/response'
+require 'librevox/commands'
+require 'librevox/applications'
 
-module Librevoz
+module Librevox
   class CommandSocket
-    include Librevoz::Commands
-    include Librevoz::Applications
+    include Librevox::Commands
+    include Librevox::Applications
 
     def initialize(args={})
       @server   = args[:server] || "127.0.0.1"
@@ -31,7 +31,7 @@ module Librevoz
     end
 
     def read_response
-      response = Librevoz::Response.new
+      response = Librevox::Response.new
       until response.command_reply? or response.api_response?
         response.headers = read_headers 
       end

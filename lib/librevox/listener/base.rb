@@ -1,11 +1,11 @@
 require 'eventmachine'
-require 'librevoz/response'
-require 'librevoz/commands'
+require 'librevox/response'
+require 'librevox/commands'
 
-module Librevoz
+module Librevox
   module Listener
     class Base < EventMachine::Protocols::HeaderAndContentProtocol
-      include Librevoz::Commands
+      include Librevox::Commands
       class << self
         def hooks
           @hooks ||= []
@@ -29,7 +29,7 @@ module Librevoz
       end
 
       def receive_request(header, content)
-        @response = Librevoz::Response.new(header, content)
+        @response = Librevox::Response.new(header, content)
 
         if response.event?
           on_event

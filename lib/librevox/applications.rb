@@ -1,4 +1,4 @@
-module Librevoz
+module Librevox
   # All applications should call `execute_app` with the following parameters:
   #
   #   `name` - name of the application

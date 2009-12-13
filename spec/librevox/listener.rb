@@ -1,8 +1,8 @@
 require 'spec/helper'
 
-require 'librevoz/listener/base'
+require 'librevox/listener/base'
 
-class Librevoz::Listener::Base
+class Librevox::Listener::Base
   attr_accessor :outgoing_data
 
   def initialize(*args)
@@ -44,12 +44,12 @@ shared "events" do
 
   should "expose response as event" do
     @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
-    @listener.event.class.should == Librevoz::Response
+    @listener.event.class.should == Librevox::Response
     @listener.event.content[:event_name].should == "OTHER_EVENT"
   end
 end
 
-module Librevoz::Commands
+module Librevox::Commands
   def sample_cmd(cmd, *args, &b)
     execute_cmd cmd, *args, &b
   end

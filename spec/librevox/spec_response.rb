@@ -1,7 +1,7 @@
 require 'spec/helper'
-require 'librevoz/response'
+require 'librevox/response'
 
-include Librevoz
+include Librevox
 
 describe Response do
   should "parse headers to hash" do

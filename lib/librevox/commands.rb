@@ -1,4 +1,4 @@
-module Librevoz
+module Librevox
   module Commands
     def execute_cmd(cmd, *args, &block)
       msg = "api #{cmd}"

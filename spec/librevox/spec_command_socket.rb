@@ -2,13 +2,13 @@ require 'spec/helper'
 require 'rr'
 require 'mocksocket'
 
-require 'librevoz/command_socket'
+require 'librevox/command_socket'
 
 class Bacon::Context
   include RR::Adapters::RRMethods
 end
 
-module Librevoz
+module Librevox
   module Commands
     def sample_cmd(*args)
     execute_cmd "sample_cmd", *args
@@ -22,7 +22,7 @@ module Librevoz
   end
 end
 
-describe Librevoz::CommandSocket do
+describe Librevox::CommandSocket do
   before do
     @socket, @server = MockSocket.pipe
     stub(TCPSocket).open(anything, anything).times(any_times) {@socket}
@@ -33,7 +33,7 @@ describe Librevoz::CommandSocket do
   # This should be tested with some mocks. How do we use rr + bacon?
   describe ":connect => false" do
     should "not connect" do
-      @cmd = Librevoz::CommandSocket.new(:connect => false)
+      @cmd = Librevox::CommandSocket.new(:connect => false)
       @server.should.be.empty?
     end
 
@@ -45,7 +45,7 @@ describe Librevoz::CommandSocket do
 
   describe "with auto-connect" do
     before do
-      @cmd = Librevoz::CommandSocket.new
+      @cmd = Librevox::CommandSocket.new
     end
 
     should "authenticate" do
@@ -56,7 +56,7 @@ describe Librevoz::CommandSocket do
       @server.print "Content-Type: command/reply\nSome-Header: Some value\n\n"
       reply = @cmd.run_cmd "foo"
 
-      reply.class.should == Librevoz::Response
+      reply.class.should == Librevox::Response
       reply.headers[:some_header].should == "Some value"
     end
 
@@ -111,7 +111,7 @@ describe Librevoz::CommandSocket do
       should "return response from command" do
         @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
         response = @cmd.sample_cmd
-        response.class.should == Librevoz::Response
+        response.class.should == Librevox::Response
         response.content.should == "+OK"
       end
 

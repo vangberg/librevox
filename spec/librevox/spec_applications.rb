@@ -1,8 +1,8 @@
 require 'spec/helper'
-require 'librevoz/applications'
+require 'librevox/applications'
 
 module ApplicationTest
-  include Librevoz::Applications
+  include Librevox::Applications
 
   extend self
 
@@ -16,7 +16,7 @@ module ApplicationTest
   end
 end
 
-describe Librevoz::Applications do
+describe Librevox::Applications do
   A = ApplicationTest
 
   should "answer" do

@@ -1,15 +1,15 @@
 require 'spec/helper'
-require 'spec/librevoz/listener'
+require 'spec/librevox/listener'
 
-require 'librevoz/listener/outbound'
+require 'librevox/listener/outbound'
 
-module Librevoz::Applications
+module Librevox::Applications
   def sample_app(name, *args, &b)
     execute_app name, args.join(" "), &b
   end
 end
 
-class OutboundTestListener < Librevoz::Listener::Outbound
+class OutboundTestListener < Librevox::Listener::Outbound
   def session_initiated
     send_data "session was initiated"
   end
@@ -34,7 +34,7 @@ describe "Outbound listener" do
   end
 
   should "establish a session" do
-    @listener.session.class.should.equal Librevoz::Response
+    @listener.session.class.should.equal Librevox::Response
   end
 
   should "call #session_initated after establishing new session" do
@@ -53,7 +53,7 @@ describe "Outbound listener" do
   end
 end
 
-class OutboundListenerWithNestedApps < Librevoz::Listener::Outbound
+class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
   def session_initiated
     sample_app "foo" do
       sample_app "bar"
@@ -99,13 +99,13 @@ describe "Outbound listener with apps" do
   end
 end
 
-module Librevoz::Applications
+module Librevox::Applications
   def reader_app(&b)
     execute_app 'reader_app', [], {:read_var => 'a_reader_var'}, &b
   end
 end
 
-class OutboundListenerWithReader < Librevoz::Listener::Outbound
+class OutboundListenerWithReader < Librevox::Listener::Outbound
   def session_initiated
     reader_app do |data|
       send_data "read this: #{data}"
@@ -146,7 +146,7 @@ describe "Outbound listener with app reading data" do
   end
 end
 
-class OutboundListenerWithNonNestedApps < Librevoz::Listener::Outbound
+class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
   attr_reader :queue
   def session_initiated
     sample_app "foo"
@@ -183,13 +183,13 @@ describe "Outbound listener with non-nested apps" do
   end
 end
 
-module Librevoz::Commands
+module Librevox::Commands
   def sample_cmd(cmd, *args, &b)
     execute_cmd cmd, *args, &b
   end
 end
 
-class OutboundListenerWithAppsAndApi < Librevoz::Listener::Outbound
+class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
   def session_initiated
     sample_app "foo" do
       sample_cmd "bar" do

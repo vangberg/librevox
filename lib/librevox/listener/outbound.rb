@@ -1,10 +1,10 @@
-require 'librevoz/listener/base'
-require 'librevoz/applications'
+require 'librevox/listener/base'
+require 'librevox/applications'
 
-module Librevoz
+module Librevox
   module Listener
     class Outbound < Base
-      include Librevoz::Applications
+      include Librevox::Applications
 
       def execute_app(app, args="", params={}, &block)
         msg = "sendmsg\n"
