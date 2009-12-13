@@ -5,7 +5,7 @@ require 'librevoz/listener/outbound'
 
 module Librevoz::Applications
   def sample_app(name, *args, &b)
-    execute_app name, args, &b
+    execute_app name, args.join(" "), &b
   end
 end
 

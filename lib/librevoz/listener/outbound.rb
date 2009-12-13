@@ -6,11 +6,11 @@ module Librevoz
     class Outbound < Base
       include Librevoz::Applications
 
-      def run_app(app, args=[], params={}, &block)
+      def execute_app(app, args="", params={}, &block)
         msg = "sendmsg\n"
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
-        msg << "execute-app-arg: %s\n" % args.join(" ") if args.any?
+        msg << "execute-app-arg: #{args}\n" unless args.empty?
 
         send_data "#{msg}\n"
 

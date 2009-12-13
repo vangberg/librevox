@@ -26,7 +26,7 @@ module Librevoz
       read_response
     end
 
-    def run_app(app, args=[], params={})
+    def execute_app(app, args=[], params={})
       "&#{app}(#{args.join(" ")})"
     end
 
