@@ -1,3 +1,6 @@
+require 'librevoz/listener/inbound'
+require 'librevoz/listener/outbound'
+
 module Librevoz
   # When called without a block, it will start the listener that is passed as
   # first argument:
