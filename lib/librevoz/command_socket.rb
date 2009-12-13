@@ -1,14 +1,10 @@
 require 'socket'
-require 'fsr/response'
+require 'librevoz/response'
+require 'librevoz/commands'
 
 module Librevoz
   class CommandSocket
-    def self.register_cmd(klass)
-      define_method klass.cmd_name do |*args|
-        cmd = klass.new(*args)
-        run(cmd)
-      end
-    end
+    include Librevoz::Commands
 
     def initialize(args={})
       @server   = args[:server] || "127.0.0.1"
@@ -20,19 +16,11 @@ module Librevoz
 
     def connect
       @socket = TCPSocket.open(@server, @port)
-      command "auth #{@auth}"
+      run_cmd "auth #{@auth}"
     end
 
-    def socket
-    end
-
-    def run(cmd)
-      cmd.response = command(cmd.raw)
-      cmd.response
-    end
-
-    def command(msg)
-      @socket.print "#{msg}\n\n"
+    def run_cmd(cmd)
+      @socket.print "#{cmd}\n\n"
       read_response
     end
 
@@ -59,5 +47,3 @@ module Librevoz
     end
   end
 end
-
-require 'fsr/cmd'

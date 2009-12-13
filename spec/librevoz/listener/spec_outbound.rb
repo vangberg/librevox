@@ -1,20 +1,15 @@
 require 'spec/helper'
-require 'spec/fsr/listener'
-require 'fsr/listener/outbound'
+require 'spec/librevoz/listener'
 
-class SampleApp < Librevoz::App::Application
-  def self.app_name
-    "sample_app"
-  end
+require 'librevoz/listener/outbound'
 
-  attr_reader :arguments
-
-  def initialize(*args)
-    @arguments = args
+module Librevoz::Applications
+  def sample_app(app, *args, &b)
+    execute_app app, args, &b
   end
 end
 
-class OutboundTestListener < Listener::Outbound
+class OutboundTestListener < Librevoz::Listener::Outbound
   def session_initiated
     send_data "session was initiated"
   end
@@ -54,21 +49,14 @@ describe "Outbound listener" do
   behaves_like "api commands"
 
   should "register app" do
-    @listener.respond_to?(:sample_app).should.be.false?
-
-    Librevoz::Listener::Outbound.register_app(SampleApp)
-
     @listener.respond_to?(:sample_app).should.be.true?
   end
 end
 
-class OutboundListenerWithNestedApps < Listener::Outbound
-  register_app SampleApp
-
+class OutboundListenerWithNestedApps < Librevoz::Listener::Outbound
   def session_initiated
     sample_app "foo" do
-      sample = SampleApp.new("bar")
-      run_app(sample)
+      sample_app "bar"
     end
   end
 end
@@ -84,11 +72,11 @@ describe "Outbound listener with apps" do
   end
 
   should "only send one app at a time" do
-    @listener.read_data.should == "sendmsg\n" + SampleApp.new("foo").sendmsg
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: foo\n\n"
     @listener.read_data.should == nil
 
     @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK\n\n")
-    @listener.read_data.should == "sendmsg\n" + SampleApp.new("bar").sendmsg
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: bar\n\n"
     @listener.read_data.should == nil
   end
 
@@ -111,19 +99,13 @@ describe "Outbound listener with apps" do
   end
 end
 
-class ReaderApp < Librevoz::App::Application
-  def self.app_name
-    "reader_app"
-  end
-
-  def read_channel_var
-    "a_reader_var"
+module Librevoz::Applications
+  def reader_app(&b)
+    execute_app 'reader_app', [], 'a_reader_var', &b
   end
 end
 
-class OutboundListenerWithReader < Listener::Outbound
-  register_app ReaderApp
-  
+class OutboundListenerWithReader < Librevoz::Listener::Outbound
   def session_initiated
     reader_app do |data|
       send_data "read this: #{data}"
@@ -164,12 +146,8 @@ describe "Outbound listener with app reading data" do
   end
 end
 
-class OutboundListenerWithNonNestedApps < Listener::Outbound
+class OutboundListenerWithNonNestedApps < Librevoz::Listener::Outbound
   attr_reader :queue
-
-  register_app SampleApp
-  register_app ReaderApp
-
   def session_initiated
     sample_app "foo"
     reader_app do |data|
@@ -205,22 +183,13 @@ describe "Outbound listener with non-nested apps" do
   end
 end
 
-class SampleCmd < Librevoz::Cmd::Command
-  def self.cmd_name
-    "sample_cmd"
-  end
-
-  attr_reader :cmd_name, :arguments
-
-  def initialize(cmd, *args)
-    @cmd_name, @arguments = cmd, args
+module Librevoz::Commands
+  def sample_cmd(cmd, *args, &b)
+    make_cmd cmd, *args, &b
   end
 end
 
-class OutboundListenerWithAppsAndApi < Listener::Outbound
-  register_app SampleApp
-  register_cmd SampleCmd
-
+class OutboundListenerWithAppsAndApi < Librevoz::Listener::Outbound
   def session_initiated
     sample_app "foo" do
       sample_cmd "bar" do
@@ -241,12 +210,12 @@ describe "Outbound listener with both apps and api calls" do
   end
 
   should "wait for response before calling next proc" do
-    @listener.read_data.should == "sendmsg\n" + SampleApp.new("foo").sendmsg
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: foo\n\n"
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
 
     @listener.read_data.should == "api bar\n\n"
     @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
 
-    @listener.read_data.should == "sendmsg\n" + SampleApp.new("baz").sendmsg
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: baz\n\n"
   end
 end

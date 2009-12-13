@@ -1,6 +1,10 @@
 require 'eventmachine'
 require 'em/protocols/header_and_content'
 
+class String
+  alias :each :each_line
+end
+
 module Librevoz
   class Response
     attr_accessor :headers, :content

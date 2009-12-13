@@ -1,5 +1,5 @@
 require 'spec/helper'
-require 'fsr/response'
+require 'librevoz/response'
 
 include Librevoz
 

@@ -1,6 +1,7 @@
 require 'spec/helper'
-require 'fsr/listener/inbound'
-require 'spec/fsr/listener'
+require 'spec/librevoz/listener'
+
+require 'librevoz/listener/inbound'
 
 class InboundTestListener < Librevoz::Listener::Inbound
 end
