@@ -17,10 +17,14 @@ module Librevox
       execute_cmd "status", &b
     end
 
-    def originate(url, ext, vars={})
-      vars = vars.map {|k,v| "#{k}=#{v}"}.join(",")
-      args = "{%s}%s %s" % [vars, url, ext]
-      execute_cmd "originate", args
+    def originate(url, ext, args={})
+      dialplan  = args.delete(:dialplan)
+      context   = args.delete(:context)
+
+      vars = args.map {|k,v| "#{k}=#{v}"}.join(",")
+
+      arg_string = "{#{vars}}" + [url, ext, dialplan, context].compact.join(" ")
+      execute_cmd "originate", arg_string
     end
 
     def fsctl(*args, &b)

@@ -39,6 +39,13 @@ describe Librevox::Commands do
       cmd[:args].should.match /ignore_early_media=true/
       cmd[:args].should.match /other_option=value/
     end
+
+    should "take dialplan and context" do
+      cmd = C.originate "user/coltrane", "4000",
+        :dialplan => "XML", :context => "public"
+      cmd[:name].should == "originate"
+      cmd[:args].should == "{}user/coltrane 4000 XML public"
+    end
   end
 
   should "fsctl" do
