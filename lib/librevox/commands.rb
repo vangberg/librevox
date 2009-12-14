@@ -26,7 +26,7 @@ module Librevox
     #   socket.originate 'sofia/user/coltrane', :extension => "1234"
     # @example With :dialplan and :context
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#originate
-    def originate(url, args={})
+    def originate(url, args={}, &b)
       extension = args.delete(:extension)
       dialplan  = args.delete(:dialplan)
       context   = args.delete(:context)
@@ -35,7 +35,7 @@ module Librevox
 
       arg_string = "{#{vars}}" + 
         [url, extension, dialplan, context].compact.join(" ")
-      execute_cmd "originate", arg_string
+      execute_cmd "originate", arg_string, &b
     end
 
     # FreeSWITCH control messages.
@@ -47,7 +47,7 @@ module Librevox
     end
 
     def hupall(cause=nil, &b)
-      execute_cmd("hupall", cause, &b)
+      execute_cmd "hupall", cause, &b
     end
   end
 end
