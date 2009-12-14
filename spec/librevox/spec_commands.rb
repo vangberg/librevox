@@ -25,13 +25,14 @@ describe Librevox::Commands do
 
   describe "originate" do
     should "originate url to extension" do
-      cmd = C.originate("user/coltrane", "4000")
+      cmd = C.originate "user/coltrane", :extension => 4000
       cmd[:name].should == "originate"
       cmd[:args].should == "{}user/coltrane 4000"
     end
 
     should "send variables" do
-      cmd = C.originate 'user/coltrane', 1234,
+      cmd = C.originate 'user/coltrane',
+                        :extension => 1234,
                         :ignore_early_media => true,
                         :other_option => "value"
 
@@ -41,8 +42,10 @@ describe Librevox::Commands do
     end
 
     should "take dialplan and context" do
-      cmd = C.originate "user/coltrane", "4000",
-        :dialplan => "XML", :context => "public"
+      cmd = C.originate "user/coltrane",
+                        :extension => "4000",
+                        :dialplan => "XML",
+                        :context => "public"
       cmd[:name].should == "originate"
       cmd[:args].should == "{}user/coltrane 4000 XML public"
     end

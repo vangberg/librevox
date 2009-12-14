@@ -6,6 +6,10 @@ module Librevox
   #
   # Commands *must* pass on any eventual block passed to them.
   module Commands
+    # Executes a generic API command, optionally taking arguments as string.
+    # @example
+    #   socket.execute_cmd "fsctl", "hupall normal_clearing"
+    # @see http://wiki.freeswitch.org/wiki/Mod_commands
     def execute_cmd(name, args="", &block)
       msg = "api #{name}"
       msg << " #{args}" unless args.empty?
@@ -17,16 +21,27 @@ module Librevox
       execute_cmd "status", &b
     end
 
-    def originate(url, ext, args={})
+    # Originate a new call.
+    # @example Minimum options
+    #   socket.originate 'sofia/user/coltrane', :extension => "1234"
+    # @example With :dialplan and :context
+    # @see http://wiki.freeswitch.org/wiki/Mod_commands#originate
+    def originate(url, args={})
+      extension = args.delete(:extension)
       dialplan  = args.delete(:dialplan)
       context   = args.delete(:context)
 
       vars = args.map {|k,v| "#{k}=#{v}"}.join(",")
 
-      arg_string = "{#{vars}}" + [url, ext, dialplan, context].compact.join(" ")
+      arg_string = "{#{vars}}" + 
+        [url, extension, dialplan, context].compact.join(" ")
       execute_cmd "originate", arg_string
     end
 
+    # FreeSWITCH control messages.
+    # @example
+    #   socket.fsctl :hupall, :normal_clearing
+    # @see http://wiki.freeswitch.org/wiki/Mod_commands#fsctl
     def fsctl(*args, &b)
       execute_cmd "fsctl", args.join(" "), &b
     end
