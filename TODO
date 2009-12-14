@@ -14,3 +14,9 @@
 - add logger.
 
 - check command/application input and raise ArgumentError.
+
+- maybe let commands handle the response, so something useful could be returned?
+
+- possibly catch all exceptions, so everything doesn't die? or should this be
+  be the users responsibilty?
+

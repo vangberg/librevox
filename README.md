@@ -98,18 +98,21 @@ Multiple listeners can be started at once by passing a block to `Librevox.start`
       run OtherListener, :port => "8080"
     end
 
-## Originating a new call with `Librevox::CommandSocket`
+## Using `Librevox::CommandSocket`
 
 Librevox also ships with a CommandSocket class, which allows you to connect
 to the FreeSWITCH management console, from which you can originate calls,
 restart FreeSWITCH etc.
 
-    >> require ‘librevox’
+    >> require `librevox`
     => true
     
     >> socket = Librevox::CommandSocket.new
     => #<Librevox::CommandSocket:0xb7a89104 @server=“127.0.0.1”,
         @socket=#<TCPSocket:0xb7a8908c>, @port=“8021”, @auth=“ClueCon”>
+
+    >> socket.originate('sofia/user/coltrane', :extension => "1234")
+    >> #<Librevox::Response:0x10179d388 @content="+OK de0ecbbe-e847...">
     
     >> socket.status
     >> > #<Librevox::Response:0x1016acac8 ...>
@@ -122,9 +125,9 @@ the `Librevox::Commands` and `Librevox::Applications` modules.
 
 ## Extras
 
-  * Source: [http://github.com/ichverstehe/librevox](http://github.com/ichverstehe/librevox)
-  * Mailing list: librevox@librelist.com
-  * IRC: #librevox @ irc.freenode.net
+* Source: [http://github.com/ichverstehe/librevox](http://github.com/ichverstehe/librevox)
+* Mailing list: librevox@librelist.com
+* IRC: #librevox @ irc.freenode.net
 
 ## License
 
