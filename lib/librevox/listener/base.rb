@@ -19,7 +19,7 @@ module Librevox
 
       def run_cmd(cmd, &block)
         send_data "#{cmd}\n\n"
-        @api_queue << (block_given? ? block : lambda {})
+        @api_queue << (block || lambda {})
       end
 
       attr_accessor :response

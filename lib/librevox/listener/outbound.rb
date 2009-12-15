@@ -28,7 +28,7 @@ module Librevox
           @command_queue << lambda {update_session}
         end
 
-        @command_queue << (block_given? ? block : lambda {})
+        @command_queue << (block || lambda {})
       end
 
       # This should probably be in Application#sendmsg instead.
