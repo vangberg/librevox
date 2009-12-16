@@ -15,7 +15,26 @@ module Librevox
         end
       end
 
-      include Librevox::Commands
+      # In some cases there are both applications and commands with the same
+      # name, e.g. fifo. But we can't have two `fifo`-methods, so we include
+      # commands in CommandDelegate, and wrap all commands in the `api` call,
+      # which forwards the call to the CommandDelegate instance, which in turn
+      # forwards the #run_cmd-call from the command back to the listener. Yay.
+      class CommandDelegate
+        include Librevox::Commands
+
+        def initialize(listener)
+          @listener = listener
+        end
+
+        def run_cmd(*args, &block)
+          @listener.run_cmd *args, &block
+        end
+      end
+
+      def api(cmd, *args, &block)
+        @command_delegate.send(cmd, *args, &block)
+      end
 
       def run_cmd(cmd, &block)
         send_data "#{cmd}\n\n"
@@ -26,6 +45,7 @@ module Librevox
       alias :event :response
 
       def post_init
+        @command_delegate = CommandDelegate.new(self)
         @api_queue = []
       end
 

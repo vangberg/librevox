@@ -63,16 +63,12 @@ shared "api commands" do
     @listener.receive_data("Content-Type: command/reply\nTest: Testing\n\n")
   end
 
-  should "include command" do
-    @listener.should.respond_to? :sample_cmd
-  end
-
   describe "multiple api commands" do
     before do
       @listener.outgoing_data.clear
       @class.event(:api_test) {
-        sample_cmd "foo" do
-        sample_cmd "foo", "bar baz"
+        api :sample_cmd, "foo" do
+          api :sample_cmd, "foo", "bar baz"
         end
       }
     end
@@ -92,9 +88,9 @@ shared "api commands" do
     before do
       @listener.outgoing_data.clear
       @class.event(:api_flat_test) {
-        sample_cmd "foo"
-        sample_cmd "bar" do
-          sample_cmd "baz"
+        api :sample_cmd, "foo"
+        api :sample_cmd, "bar" do
+          api :sample_cmd, "baz"
         end
       }
     end
@@ -118,7 +114,7 @@ shared "api commands" do
     before do
       @listener.outgoing_data.clear
       @class.event(:api_arg_test) {
-        sample_cmd "foo" do |r|
+        api :sample_cmd, "foo" do |r|
           send_data "response: #{r.content}"
         end
       }
