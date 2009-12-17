@@ -73,7 +73,7 @@ the `session` callback is executed. This is where you set up your dialplan:
       hangup
     end
 
-When using applications that expects a reply, such as `play_and_get_digits`,
+When using applications that expect a reply, such as `play_and_get_digits`,
 you have to use callbacks to read the value, as the function itself returns
 immediately due to the async nature of EventMachine:
 
@@ -86,6 +86,17 @@ immediately due to the async nature of EventMachine:
         hangup
       end
     end
+
+You can also use the commands defined in `Librevox::Command`, which, to avoid
+namespace clashes, are wrapped in the `api` command:
+    
+    session do
+      answer
+      api :status
+    end
+
+They can be used in conjunction with applications, and do also take a block,
+passing the response to an eventual block argument.
 
 ## Starting listeners
 

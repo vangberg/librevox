@@ -8,8 +8,9 @@
 - test how this works in async mode - I imagine that it might mess with
   @command_queue
 
-- the applications-part of command socket should be rethought. it's
-  weird as it is now.
+- how can applications be used w/ command socket? would be nice if you could
+  do e.g.  originate("user/coltrane", :endpoint => bridge("user/davis"))  and
+  it would translate to  "originate user/coltrane &bridge(user/davis)"
 
 - add logger.
 
