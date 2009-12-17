@@ -14,12 +14,6 @@ module Librevox
     execute_cmd "sample_cmd", args
     end
   end
-
-  module Applications
-    def sample_app(args="")
-      execute_app "sample_app", args
-    end
-  end
 end
 
 describe Librevox::CommandSocket do
@@ -87,14 +81,6 @@ describe Librevox::CommandSocket do
 
     should "register command" do
       @cmd.should.respond_to? :sample_cmd
-    end
-
-    should "register application" do
-      @cmd.should.respond_to? :sample_app
-    end
-
-    should "return app" do
-      @cmd.sample_app("foo bar").should == "&sample_app(foo bar)"
     end
 
     describe "registered" do

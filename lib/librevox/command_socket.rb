@@ -6,7 +6,6 @@ require 'librevox/applications'
 module Librevox
   class CommandSocket
     include Librevox::Commands
-    include Librevox::Applications
 
     def initialize(args={})
       @server   = args[:server] || "127.0.0.1"
@@ -24,10 +23,6 @@ module Librevox
     def run_cmd(cmd)
       @socket.print "#{cmd}\n\n"
       read_response
-    end
-
-    def execute_app(app, args=[], params={})
-      "&#{app}(#{args})"
     end
 
     def read_response
