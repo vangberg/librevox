@@ -154,6 +154,6 @@ the `Librevox::Commands` and `Librevox::Applications` modules.
 
 Librevox was inspired by and uses code from Freeswitcher, which is distributed
 under the MIT license and (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel,
-Michael Fellinger, Kevin Berry), Harry Vangberg
+Michael Fellinger, Kevin Berry), Harry Vangberg, see `LICENSE-Freeswitcher`.
 
-Distributed under the terms of the MIT license.
+Librevox is distributed under the terms of the MIT license, see `LICENSE`.
