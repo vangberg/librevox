@@ -3,6 +3,8 @@ require 'librevox/listener/inbound'
 require 'librevox/listener/outbound'
 
 module Librevox
+  VERSION = "0.1.1"
+
   # When called without a block, it will start the listener that is passed as
   # first argument:
   #   

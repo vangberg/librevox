@@ -1,7 +1,7 @@
 Gem::Specification.new do |s|
   s.name     = "librevox"
-  s.version  = "0.1"
-  s.date     = "2009-12-18"
+  s.version  = "0.1.1"
+  s.date     = "2010-01-05"
   s.summary  = "Ruby library for interacting with FreeSWITCH."
   s.email    = "harry@vangberg.name"
   s.homepage = "http://github.com/ichverstehe/librevox"
