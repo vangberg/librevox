@@ -4,14 +4,6 @@ require 'librevox/applications'
 module Librevox
   module Listener
     class Outbound < Base
-      class << self
-        attr_reader :session_callback
-
-        def session(&block)
-          @session_callback = block
-        end
-      end
-
       include Librevox::Applications
 
       def execute_app(app, args="", params={}, &block)
@@ -37,6 +29,10 @@ module Librevox
       end
 
       attr_accessor :session
+      
+      # Called when a new session is initiated.
+      def session_initiated
+      end
 
       def post_init
         super
@@ -55,7 +51,7 @@ module Librevox
         
         if session.nil?
           @session = response
-          instance_eval &self.class.session_callback
+          session_initiated
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response
           resume_with_channel_var
@@ -74,9 +70,6 @@ module Librevox
 
       def update_session
         send_data("api uuid_dump #{session.headers[:unique_id]}\n\n")
-      end
-
-      def session_initiated
       end
     end
   end

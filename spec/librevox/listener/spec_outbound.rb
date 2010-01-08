@@ -10,7 +10,7 @@ module Librevox::Applications
 end
 
 class OutboundTestListener < Librevox::Listener::Outbound
-  session do
+  def session_initiated
     send_data "session was initiated"
   end
 end
@@ -54,7 +54,7 @@ describe "Outbound listener" do
 end
 
 class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
-  session do
+  def session_initiated
     sample_app "foo" do
       sample_app "bar"
     end
@@ -106,7 +106,7 @@ module Librevox::Applications
 end
 
 class OutboundListenerWithReader < Librevox::Listener::Outbound
-  session do
+  def session_initiated
     reader_app do |data|
       send_data "read this: #{data}"
     end
@@ -148,7 +148,7 @@ end
 
 class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
   attr_reader :queue
-  session do
+  def session_initiated
     sample_app "foo"
     reader_app do |data|
       send_data "the end: #{data}"
@@ -190,7 +190,7 @@ module Librevox::Commands
 end
 
 class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
-  session do
+  def session_initiated
     sample_app "foo" do
       api :sample_cmd, "bar" do
         sample_app "baz"

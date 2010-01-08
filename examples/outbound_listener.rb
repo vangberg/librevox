@@ -5,7 +5,7 @@ class MyApp < Librevox::Listener::Outbound
     # React on event. Info available in `event`
   end
 
-  session do
+  def session_initiated
     answer
  
     playback "/path/to/file.wav"

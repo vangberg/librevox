@@ -8,7 +8,7 @@ class SomeInbound < Librevox::Listener::Inbound
 end
 
 class SomeOutbound < Librevox::Listener::Outbound
-  session do
+  def session_initiated
     # ...
   end
 end
