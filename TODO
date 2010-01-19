@@ -22,3 +22,6 @@
   be the users responsibilty?
 
 - filter events
+
+- inbound listener: only subscribe to events w/ hooks, unless `events :all`
+  specified

@@ -33,12 +33,67 @@ module Librevox
       execute_app "bind_meta_app", arg_string, &b
     end
 
-    # Bridges an incoming call to an endpoint
+    # Bridges an incoming call to an endpoint, optionally taking an array of
+    # channel variables to set. If given an array of arrays, each contained
+    # array of endpoints will be called simultaneously, with the next array
+    # of endpoints as failover. See the examples below for different constructs
+    # and the callstring it sends to FreeSWITCH.
     # @example
     #   bridge "user/coltrane", "user/backup-office"
+    #   #=> user/coltrane,user/backup-office
+    # @example With channel variables
+    #   bridge "user/coltrane", "user/backup-office", :some_var => "value"
+    #   #=> {some_var=value}user/coltrane,user/backup-office
+    # @example With failover
+    #   bridge ['user/coltrane', 'user/davis'], ['user/sun-ra', 'user/taylor']
+    #   #=> user/coltrane,user/davis|user/sun-ra,user/taylor
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bridgecall
-    def bridge(*endpoints, &b)
-      execute_app "bridge", endpoints.join(","), &b
+    def bridge(*args, &b)
+      variables = if args.last.is_a? Hash
+                    # We need to sort the key/value pairs to facilitate testing.
+                    # This can be removed once 1.8-compat is dropped.
+                    key_value_pairs = args.pop.sort {|x,y| x.to_s <=> y.to_s}
+                    key_value_pairs.map! {|k,v| "#{k}=#{v}"}
+                    "{#{key_value_pairs.join(",")}}"
+                  else
+                    ""
+                  end
+
+      endpoints = if args.first.is_a? Array
+                    args.map {|e| e.join(",")}.join("|")
+                  else
+                    args.join ","
+                  end
+
+      arg_string = [variables, endpoints].join
+      execute_app "bridge", arg_string, &b
+    end
+
+    # Exports a channel variable from the A leg to the B leg. Variables and
+    # their values will be replicated in any new channels created from the one
+    # export was called.
+    # 
+    # Set :local => false if the variable should only be exported to the B-leg.
+    #
+    # @example
+    #   export "some_var"
+    # @example Only export to B-leg
+    #   export "some_var", :local => false
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_export
+    def export(var, args={})
+      nolocal = args[:local] == false ? "nolocal:" : "" # ugly!!111
+
+      execute_app "export", "#{nolocal}#{var}"
+    end
+
+    # Generate TGML tones
+    # @example Generate a 500ms beep at 800Hz
+    #   gentones "%(500,0,800)"
+    # @example  Generate a DTMF string
+    #   gentones "0800500005"
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_gentones
+    def gentones tgml, &b 
+      execute_app "gentones", tgml, &b
     end
 
     def hangup(cause="", &b)
@@ -78,6 +133,14 @@ module Librevox
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_playback
     def playback(file, &b)
       execute_app "playback", file, &b
+    end
+
+    # Pre-answer establishes early media but does not answer.
+    # @example
+    #   pre_anser
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_pre_answer
+    def pre_answer &b
+      execute_app "pre_answer", &b
     end
 
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_read
@@ -122,6 +185,14 @@ module Librevox
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_transfer
     def transfer(context, &b)
       execute_app "transfer", context, &b
+    end
+
+    # Unbinds a previously bound key with bind_meta_app
+    # @example
+    #   unbind_meta_app 3
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_unbind_meta_app
+    def unbind_meta_app(key, &b)
+      execute_app "unbind_meta_app", key.to_s, &b
     end
   end
 end

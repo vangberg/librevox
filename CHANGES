@@ -1,5 +1,15 @@
 = master / unreleased
 
+  * Use #session_initiated instead of #session.
+
+  * bridge() takes an optional hash with channel variables.
+
+  * bridge() takes an array of arrays as endpoints, each set being failover.
+
+  * New applications: unbind_meta_app, pre_answer, export, gentones
+
+  * Add logger: Librevox::Log.
+
 = 0.1 / 2009-12-18
 
   * Initial development release.

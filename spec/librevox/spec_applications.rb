@@ -1,7 +1,7 @@
 require 'spec/helper'
 require 'librevox/applications'
 
-module ApplicationTest
+module AppTest
   include Librevox::Applications
 
   extend self
@@ -17,16 +17,14 @@ module ApplicationTest
 end
 
 describe Librevox::Applications do
-  A = ApplicationTest
-
   should "answer" do
-    app = A.answer
+    app = AppTest.answer
     app[:name].should == "answer"
   end
 
   describe "bind_meta_app" do
     should "bind meta app" do
-      app = A.bind_meta_app :key => "2",
+      app = AppTest.bind_meta_app :key => "2",
                             :listen_to => :a,
                             :respond_on => :s,
                             :application => "hangup"
@@ -36,7 +34,7 @@ describe Librevox::Applications do
     end
 
     should "bind meta app with parameters" do
-      app = A.bind_meta_app :key => "2",
+      app = AppTest.bind_meta_app :key => "2",
                             :listen_to => :a,
                             :respond_on => :s,
                             :application => "execute_extension",
@@ -47,33 +45,77 @@ describe Librevox::Applications do
     end
   end
 
-  should "bridge" do
-    app = A.bridge('user/coltrane')
-    app[:name].should == "bridge"
-    app[:args].should == 'user/coltrane'
+  describe "bridge" do
+    should "bridge to endpoints" do
+      app = AppTest.bridge('user/coltrane')
+      app[:name].should == "bridge"
+      app[:args].should == 'user/coltrane'
 
-    app = A.bridge('user/coltrane', 'user/davis')
-    app[:args].should == 'user/coltrane,user/davis'
+      app = AppTest.bridge('user/coltrane', 'user/davis')
+      app[:args].should == 'user/coltrane,user/davis'
+    end
+
+    should "bridge with variables" do
+      app = AppTest.bridge('user/coltrane', 'user/davis', :foo => 'bar', :lol => 'cat')
+      app[:name].should == "bridge"
+
+      # fragile. hashes are not ordered in ruby 1.8
+      app[:args].should == "{foo=bar,lol=cat}user/coltrane,user/davis"
+    end
+
+    should "bridge with failover" do
+      app = AppTest.bridge(
+        ['user/coltrane', 'user/davis'], ['user/sun-ra', 'user/taylor']
+      )
+
+      app[:name].should == "bridge"
+      app[:args].should == "user/coltrane,user/davis|user/sun-ra,user/taylor"
+    end
+
+    # should "bridge with per endpoint variables" do
+    # end
+  end
+
+  describe "export" do
+    should "export variable" do
+      app = AppTest.export 'some_var'
+      app[:name].should == "export"
+      app[:args].should == "some_var"
+    end
+
+    should "only export to b-leg " do
+      app = AppTest.export 'some_var', :local => false
+      app[:name].should == "export"
+      app[:args].should == "nolocal:some_var"
+    end
+  end
+
+  describe "gentones" do
+    should "generate tones" do
+      app = AppTest.gentones("%(500,0,800)")
+      app[:name].should == "gentones"
+      app[:args].should == "%(500,0,800)"
+    end
   end
 
   should "hangup" do
-    app = A.hangup
+    app = AppTest.hangup
     app[:name].should == "hangup"
 
-    app = A.hangup("some cause")
+    app = AppTest.hangup("some cause")
     app[:args].should == "some cause"
   end
 
   describe "play_and_get_digits" do
     should "have defaults" do
-      app = A.play_and_get_digits "please-enter", "wrong-try-again"
+      app = AppTest.play_and_get_digits "please-enter", "wrong-try-again"
       app[:name].should == "play_and_get_digits"
       app[:args].should == "1 2 3 5000 # please-enter wrong-try-again read_digits_var \\d+"
       app[:params][:read_var].should == "read_digits_var"
     end
 
     should "take params" do
-      app = A.play_and_get_digits "please-enter", "invalid-choice",
+      app = AppTest.play_and_get_digits "please-enter", "invalid-choice",
         :min          => 2,
         :max          => 3,
         :tries        => 4,
@@ -88,21 +130,28 @@ describe Librevox::Applications do
   end
 
   should "playback" do
-    app = A.playback("uri://some/file.wav")
+    app = AppTest.playback("uri://some/file.wav")
     app[:name].should == "playback"
     app[:args].should == "uri://some/file.wav"
   end
 
+  describe "pre_answer" do
+    should "pre_answer" do
+      app = AppTest.pre_answer
+      app[:name].should == "pre_answer"
+    end
+  end
+
   describe "read" do
     should "read with defaults" do
-      app = A.read "please-enter.wav"
+      app = AppTest.read "please-enter.wav"
       app[:name].should == "read"
       app[:args].should == "1 2 please-enter.wav read_digits_var 5000 #"
       app[:params][:read_var].should == "read_digits_var"
     end
 
     should "take params" do
-      app = A.read "please-enter.wav",
+      app = AppTest.read "please-enter.wav",
         :min          => 2,
         :max          => 3,
         :terminators  => "0",
@@ -116,27 +165,35 @@ describe Librevox::Applications do
 
   describe "record" do
     should "start recording" do
-      app = A.record "/path/to/file.mp3"
+      app = AppTest.record "/path/to/file.mp3"
       app[:name].should == "record"
       app[:args].should == "/path/to/file.mp3"
     end
 
     should "start recording with time limit" do
-      app = A.record "/path/to/file.mp3", :limit => 15
+      app = AppTest.record "/path/to/file.mp3", :limit => 15
       app[:name].should == "record"
       app[:args].should == "/path/to/file.mp3 15"
     end
   end
 
   should "set" do
-    app = A.set("foo", "bar")
+    app = AppTest.set("foo", "bar")
     app[:name].should == "set"
     app[:args].should == "foo=bar"
   end
 
   should "transfer" do
-    app = A.transfer "new_extension"
+    app = AppTest.transfer "new_extension"
     app[:name].should == "transfer"
     app[:args].should == "new_extension"
+  end
+
+  describe "unbind_meta_app" do
+    should "unbind" do
+      app = AppTest.unbind_meta_app 3
+      app[:name].should == "unbind_meta_app"
+      app[:args].should == "3"
+    end
   end
 end
