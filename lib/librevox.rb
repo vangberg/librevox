@@ -1,6 +1,5 @@
-require 'eventmachine'
-require 'optparse'
 require 'logger'
+require 'eventmachine'
 require 'librevox/listener/inbound'
 require 'librevox/listener/outbound'
 
