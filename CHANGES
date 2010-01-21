@@ -11,6 +11,10 @@
 
   * Add logger: Librevox::Log.
 
+= 0.1.1 / 2010-01-05
+
+  * Released to fix Gemcutter weirdness.
+
 = 0.1 / 2009-12-18
 
   * Initial development release.
