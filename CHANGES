@@ -6,7 +6,8 @@
 
   * bridge() takes an array of arrays as endpoints, each set being failover.
 
-  * New applications: unbind_meta_app, pre_answer, export, gentones
+  * New applications: unbind_meta_app, pre_answer, export, gentones, deflect,
+    redirect, unset.
 
   * Add logger: Librevox::Log.
 

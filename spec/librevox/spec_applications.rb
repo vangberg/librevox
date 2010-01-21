@@ -17,9 +17,19 @@ module AppTest
 end
 
 describe Librevox::Applications do
-  should "answer" do
-    app = AppTest.answer
-    app[:name].should == "answer"
+  describe "answer" do
+    should "answer" do
+      app = AppTest.answer
+      app[:name].should == "answer"
+    end
+  end
+
+  describe "att_xfer" do
+    should "transfer to endpoint" do
+      app = AppTest.att_xfer("user/davis")
+      app[:name].should == "att_xfer"
+      app[:args].should == "user/davis"
+    end
   end
 
   describe "bind_meta_app" do
@@ -74,6 +84,14 @@ describe Librevox::Applications do
 
     # should "bridge with per endpoint variables" do
     # end
+  end
+
+  describe "deflect" do
+    should "deflect call" do
+      app = AppTest.deflect "sip:miles@davis.org"
+      app[:name].should == "deflect"
+      app[:args].should == "sip:miles@davis.org"
+    end
   end
 
   describe "export" do
@@ -177,6 +195,14 @@ describe Librevox::Applications do
     end
   end
 
+  describe "redirect" do
+    should "redirect to URI" do
+      app = AppTest.redirect("sip:miles@davis.org")
+      app[:name].should == "redirect"
+      app[:args].should == "sip:miles@davis.org"
+    end
+  end
+
   should "set" do
     app = AppTest.set("foo", "bar")
     app[:name].should == "set"
@@ -194,6 +220,14 @@ describe Librevox::Applications do
       app = AppTest.unbind_meta_app 3
       app[:name].should == "unbind_meta_app"
       app[:args].should == "3"
+    end
+  end
+
+  describe "unset" do
+    should "unset a variable" do
+      app = AppTest.unset('foo')
+      app[:name].should == "unset"
+      app[:args].should == "foo"
     end
   end
 end
