@@ -1,9 +1,16 @@
+- inbound listener: only subscribe to events w/ hooks, unless `events :all`
+  specified
+
+- map more commands/applications.
+
+- check command/application input and raise ArgumentError, possibly.
+
+- filter events
+
 - the execute_app/run_app business might be done better, simpler. e.g.
   having to pass the block for every command becomes a bit tedious.
 
 - move test suite from bacon -> test/unit.
-
-- map more commands/applications.
 
 - test how this works in async mode - I imagine that it might mess with
   @command_queue
@@ -12,16 +19,7 @@
   do e.g.  originate("user/coltrane", :endpoint => bridge("user/davis"))  and
   it would translate to  "originate user/coltrane &bridge(user/davis)"
 
-- add logger.
-
-- check command/application input and raise ArgumentError.
-
 - maybe let commands handle the response, so something useful could be returned?
 
 - possibly catch all exceptions, so everything doesn't die? or should this be
   be the users responsibilty?
-
-- filter events
-
-- inbound listener: only subscribe to events w/ hooks, unless `events :all`
-  specified
