@@ -9,7 +9,7 @@
   * New applications: unbind_meta_app, pre_answer, export, gentones, deflect,
     redirect, unset.
 
-  * Add logger: Librevox::Log.
+  * Add logger: Librevox.logger
 
 = 0.1.1 / 2010-01-05
 
