@@ -34,7 +34,7 @@ describe "Outbound listener" do
   end
 
   should "establish a session" do
-    @listener.session.class.should.equal Librevox::Response
+    @listener.session.class.should.equal Hash
   end
 
   should "call session callback after establishing new session" do
@@ -42,7 +42,7 @@ describe "Outbound listener" do
   end
 
   should "make channel variables available through session" do
-    @listener.session.headers[:caller_caller_id_number].should.equal "8675309"
+    @listener.session[:caller_caller_id_number].should.equal "8675309"
   end
 
   behaves_like "events"
@@ -136,7 +136,7 @@ describe "Outbound listener with app reading data" do
   should "update session with new data" do
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
-    @listener.session.content[:session_var].should == "Second"
+    @listener.session[:session_var].should == "Second"
   end
 
   should "pass value of channel variable to block" do

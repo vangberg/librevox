@@ -50,10 +50,10 @@ module Librevox
         super(*args)
         
         if session.nil?
-          @session = response
+          @session = response.headers
           session_initiated
         elsif response.event? && response.event == "CHANNEL_DATA"
-          @session = response
+          @session = response.content
           resume_with_channel_var
         elsif response.command_reply? && !response.event?
           @command_queue.shift.call if @command_queue.any?
@@ -63,13 +63,13 @@ module Librevox
       def resume_with_channel_var
         if @read_channel_var
           variable = "variable_#{@read_channel_var}".to_sym
-          value = @session.content[variable]
+          value = @session[variable]
           @command_queue.shift.call(value) if @command_queue.any?
         end
       end
 
       def update_session
-        send_data("api uuid_dump #{session.headers[:unique_id]}\n\n")
+        send_data("api uuid_dump #{session[:unique_id]}\n\n")
       end
     end
   end
