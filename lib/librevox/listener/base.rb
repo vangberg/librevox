@@ -54,7 +54,7 @@ module Librevox
 
         if response.event?
           on_event response.dup
-          invoke_event response.event
+          invoke_event_hooks
         elsif response.api_response? && @command_queue.any?
           invoke_command_queue
         end
@@ -67,9 +67,9 @@ module Librevox
       alias :done :close_connection_after_writing
 
       private
-      def invoke_event(event_name)
+      def invoke_event_hooks
         self.class.hooks.each {|name,block| 
-          if name == event_name.downcase.to_sym
+          if name == response.event.downcase.to_sym
             instance_exec response.dup, &block 
           end
         }

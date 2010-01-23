@@ -31,14 +31,9 @@ module Librevox
     #                 :parameters   => "dx XML features"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bind_meta_app
     def bind_meta_app args={}, &b
-      key         = args[:key]
-      listen_to   = args[:listen_to]
-      respond_on  = args[:respond_on]
-      application = args[:application]
-      parameters  = args[:parameters] ? "::#{args[:parameters]}" : ""
-
-      arg_string = "%s %s %s %s%s" % [key, listen_to, respond_on, application,
-        parameters]
+      arg_string =
+        args.values_at(:key, :listen_to, :respond_on, :application).join(" ")
+      arg_string += "::#{args[:parameters]}" if args[:parameters]
 
       execute_app "bind_meta_app", arg_string, &b
     end

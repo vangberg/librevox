@@ -46,11 +46,9 @@ module Librevox
     port = args.delete(:port)
 
     if klass.ancestors.include? Librevox::Listener::Inbound
-      port ||= "8021"
-      EM.connect host, port, klass, args
+      EM.connect host, port || "8021", klass, args
     elsif klass.ancestors.include? Librevox::Listener::Outbound
-      port ||= "8084"
-      EM.start_server host, port, klass, args
+      EM.start_server host, port || "8084", klass, args
     end
   end
 end
