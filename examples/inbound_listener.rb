@@ -3,8 +3,8 @@ require 'fsr/listener/inbound'
  
 class MyInbound < Librevox::Listener::Inbound
   # `on_event` is called every time an event is received.
-  def on_event
-    # Be sure to check out the content of `event`. It has all the good stuff.
+  def on_event e
+    # Be sure to check out the content of `e`. It has all the good stuff.
   end
  
   # You can add a hook for a certain event:

@@ -2,7 +2,7 @@ require 'fsr'
 require 'fsr/listener/outbound'
 
 class SomeInbound < Librevox::Listener::Inbound
-  def on_event
+  def on_event e
     # ...
   end
 end
