@@ -37,14 +37,20 @@ techniques:
     require 'librevox'
 
     class MyInbound < Librevox::Listener::Inbound
-      def on_event
-        puts "Got event: #{event.content[:event_name]}"
+      def on_event e
+        puts "Got event: #{e.content[:event_name]}"
       end
      
       # You can add a hook for a certain event:
       event :channel_hangup do
         # It is instance_eval'ed, so you can use your instance methods etc:
         do_something
+      end
+
+      # If your hook block takes an argument, a Librevox::Response object for
+      # the given event is passed on:
+      event :channel_bridge do |e|
+        ...
       end
      
       def do_something

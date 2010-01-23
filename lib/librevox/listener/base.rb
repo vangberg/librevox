@@ -68,9 +68,11 @@ module Librevox
 
       private
       def invoke_event(event_name)
-        self.class.hooks.each do |name,block| 
-          instance_eval(&block) if name == event_name.downcase.to_sym
-        end
+        self.class.hooks.each {|name,block| 
+          if name == event_name.downcase.to_sym
+            instance_exec response.dup, &block 
+          end
+        }
       end
 
       def invoke_command_queue

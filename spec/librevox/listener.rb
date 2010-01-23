@@ -25,6 +25,7 @@ shared "events" do
 
     @class.event(:some_event) {send_data "something"}
     @class.event(:other_event) {send_data "something else"}
+    @class.event(:hook_with_arg) {|e| send_data "got event arg: #{e.object_id}"}
 
     def @listener.on_event(e)
       send_data "from on_event: #{e.object_id}"
@@ -35,7 +36,7 @@ shared "events" do
   end
 
   should "add event hook" do
-    @class.hooks.size.should == 2
+    @class.hooks.size.should == 3
   end
 
   should "execute callback for event" do
@@ -44,6 +45,13 @@ shared "events" do
 
     @listener.receive_data("Content-Length: 22\n\nEvent-Name: SOME_EVENT\n\n")
     @listener.read_data.should == "something"
+  end
+
+  should "pass response duplicate as arg to hook block" do
+    @listener.receive_data("Content-Length: 25\n\nEvent-Name: HOOK_WITH_ARG\n\n")
+    reply = @listener.read_data
+    reply.should =~ /^got event arg: /
+    reply.should.not =~ /^got event arg: #{@listener.response.object_id}$/
   end
 
   should "expose response as event" do

@@ -17,6 +17,8 @@
   * Listener::Base#on_event is called with a duplicate of Base#response as
     argument.
 
+  * Event hooks are passed a duplicate of Base#response.
+
 = 0.1.1 / 2010-01-05
 
   * Released to fix Gemcutter weirdness.
