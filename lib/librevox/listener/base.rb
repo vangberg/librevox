@@ -42,6 +42,7 @@ module Librevox
       end
 
       attr_accessor :response
+      alias :event :response
 
       def post_init
         @command_delegate = CommandDelegate.new(self)
