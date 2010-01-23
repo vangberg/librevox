@@ -38,7 +38,7 @@ module Librevox
 
       def run_cmd(cmd, &block)
         send_data "#{cmd}\n\n"
-        @api_queue << (block || lambda {})
+        @command_queue << (block || lambda {})
       end
 
       attr_accessor :response
@@ -46,7 +46,7 @@ module Librevox
 
       def post_init
         @command_delegate = CommandDelegate.new(self)
-        @api_queue = []
+        @command_queue = []
       end
 
       def receive_request(header, content)
@@ -55,8 +55,8 @@ module Librevox
         if response.event?
           on_event
           invoke_event response.event
-        elsif response.api_response? && @api_queue.any?
-          invoke_api_queue
+        elsif response.api_response? && @command_queue.any?
+          invoke_command_queue
         end
       end
 
@@ -71,8 +71,8 @@ module Librevox
         end
       end
 
-      def invoke_api_queue
-        block = @api_queue.shift
+      def invoke_command_queue
+        block = @command_queue.shift
         block.call(response)
       end
     end

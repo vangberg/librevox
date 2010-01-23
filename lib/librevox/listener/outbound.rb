@@ -17,10 +17,10 @@ module Librevox
         @read_channel_var = params[:read_var]
 
         if @read_channel_var
-          @command_queue << lambda {update_session}
+          @application_queue << lambda {update_session}
         end
 
-        @command_queue << (block || lambda {})
+        @application_queue << (block || lambda {})
       end
 
       # This should probably be in Application#sendmsg instead.
@@ -37,13 +37,13 @@ module Librevox
       def post_init
         super
         @session = nil
-        @command_queue = []
+        @application_queue = []
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
-        @command_queue << lambda {}
+        @application_queue << lambda {}
         send_data "linger\n\n"
-        @command_queue << lambda {}
+        @application_queue << lambda {}
       end
 
       def receive_request(*args)
@@ -56,7 +56,7 @@ module Librevox
           @session = response.content
           resume_with_channel_var
         elsif response.command_reply? && !response.event?
-          @command_queue.shift.call if @command_queue.any?
+          @application_queue.shift.call if @application_queue.any?
         end
       end
 
@@ -64,7 +64,7 @@ module Librevox
         if @read_channel_var
           variable = "variable_#{@read_channel_var}".to_sym
           value = @session[variable]
-          @command_queue.shift.call(value) if @command_queue.any?
+          @application_queue.shift.call(value) if @application_queue.any?
         end
       end
 
