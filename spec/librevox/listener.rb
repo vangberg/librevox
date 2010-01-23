@@ -46,12 +46,6 @@ shared "events" do
     @listener.read_data.should == "something"
   end
 
-  should "expose response as event" do
-    @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
-    @listener.event.class.should == Librevox::Response
-    @listener.event.content[:event_name].should == "OTHER_EVENT"
-  end
-
   should "call on_event" do
     @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
     @listener.read_data.should =~ /^from on_event/

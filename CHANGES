@@ -17,6 +17,8 @@
   * Listener::Base#on_event is called with a duplicate of Base#response as
     argument.
 
+  * Listener::Base#event has been removed.
+
 = 0.1.1 / 2010-01-05
 
   * Released to fix Gemcutter weirdness.
