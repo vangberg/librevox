@@ -64,6 +64,8 @@ module Librevox
       def on_event
       end
 
+      alias :done :close_connection_after_writing
+
       private
       def invoke_event(event_name)
         self.class.hooks.each do |name,block| 

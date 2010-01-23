@@ -11,6 +11,9 @@
 
   * Add logger: Librevox.logger
 
+  * Listener::Base#done is an alias of
+    EventMachine::Connection#close_connection_after_writing
+
 = 0.1.1 / 2010-01-05
 
   * Released to fix Gemcutter weirdness.
