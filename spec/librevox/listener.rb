@@ -26,6 +26,10 @@ shared "events" do
     @class.event(:some_event) {send_data "something"}
     @class.event(:other_event) {send_data "something else"}
 
+    def @listener.on_event(e)
+      send_data "from on_event: #{e.object_id}"
+    end
+
     # Establish session
     @listener.receive_data("Content-Length: 0\nTest: Testing\n\n")
   end
@@ -47,6 +51,16 @@ shared "events" do
     @listener.event.class.should == Librevox::Response
     @listener.event.content[:event_name].should == "OTHER_EVENT"
   end
+
+  should "call on_event" do
+    @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
+    @listener.read_data.should =~ /^from on_event/
+  end
+
+  should "call on_event with response duplicate as argument" do
+    @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
+    @listener.read_data.should.not =~ /^from on_event: #{@listener.response.object_id}$/
+  end
 end
 
 module Librevox::Commands
@@ -66,6 +80,9 @@ shared "api commands" do
   describe "multiple api commands" do
     before do
       @listener.outgoing_data.clear
+
+      def @listener.on_event(e) end # Don't send anything, kthx.
+
       @class.event(:api_test) {
         api :sample_cmd, "foo" do
           api :sample_cmd, "foo", "bar baz"

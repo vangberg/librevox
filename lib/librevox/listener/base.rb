@@ -53,7 +53,7 @@ module Librevox
         @response = Librevox::Response.new(header, content)
 
         if response.event?
-          on_event
+          on_event response.dup
           invoke_event response.event
         elsif response.api_response? && @command_queue.any?
           invoke_command_queue
@@ -61,7 +61,7 @@ module Librevox
       end
 
       # override
-      def on_event
+      def on_event(event)
       end
 
       alias :done :close_connection_after_writing
