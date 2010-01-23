@@ -70,14 +70,16 @@ but it only receives events related to that given session.
 ### Dialplan
 
 When a call is made and Freeswitch connects to the outbound event listener,
-the `session` callback is executed. This is where you set up your dialplan:
+`session_initiated` is called. This is where you set up your dialplan:
 
-    session do
+    def session_initiated
       answer
       set "some_var", "some value"
       playback "path/to/file"
       hangup
     end
+
+All channel variables are available as a hash named `session`.
 
 When using applications that expect a reply, such as `play_and_get_digits`,
 you have to use callbacks to read the value, as the function itself returns
