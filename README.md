@@ -124,6 +124,36 @@ Multiple listeners can be started at once by passing a block to `Librevox.start`
       run OtherListener, :port => "8080"
     end
 
+## Closing connection
+
+After a session has finished, e.g. because the calling part hangs up, an
+outbound socket still has its connection to FreeSWITCH open, so we can get post-
+session events. Therefore it is important that you close the connection manually
+when you are done. Otherwise you will have 'hanging' sessions, cloggering up
+your system. This can safely be done with `close_connection_after_writing`,
+which will wait for all outgoing data to be send before closing the connection.
+It is aliased as `done` for convenience.
+
+Unless you are doing something specific, closing the connection on CHANNEL_HANGUP
+is most likely sufficient:
+    
+    class MyListener < Librevox::Listener::Outbound
+      event :channel_hangup do
+        done
+      end
+    end
+
+When you are doing a `bridge` the channel isn't hung up and the above will not
+work. You have to call `done` after the `bridge` application, as the bridge
+will not happen until the connection has been closed.
+    
+    class BridgeIt < Librevox::Listener::Outbound
+      def session_initiated
+        bridge 'sofia/user/miles'
+        done
+      end
+    end
+
 ## Using `Librevox::CommandSocket`
 
 Librevox also ships with a CommandSocket class, which allows you to connect
