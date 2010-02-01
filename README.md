@@ -143,17 +143,6 @@ is most likely sufficient:
       end
     end
 
-When you are doing a `bridge` the channel isn't hung up and the above will not
-work. You have to call `done` after the `bridge` application, as the bridge
-will not happen until the connection has been closed.
-    
-    class BridgeIt < Librevox::Listener::Outbound
-      def session_initiated
-        bridge 'sofia/user/miles'
-        done
-      end
-    end
-
 ## Using `Librevox::CommandSocket`
 
 Librevox also ships with a CommandSocket class, which allows you to connect
