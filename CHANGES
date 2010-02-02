@@ -1,5 +1,8 @@
 = master / unreleased
 
+  * Listener::Outbound#update_session takes a callback like other functions.
+
+  * Fix minor bug in parsing order: api/response comes before events.
 
 = 0.2 / 2010-01-26
 

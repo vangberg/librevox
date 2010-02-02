@@ -135,7 +135,7 @@ describe "Outbound listener with app reading data" do
 
   should "update session with new data" do
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
     @listener.session[:session_var].should == "Second"
   end
 
@@ -217,5 +217,27 @@ describe "Outbound listener with both apps and api calls" do
     @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
 
     @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: baz\n\n"
+  end
+end
+
+class OutboundListenerWithUpdateSessionCallback < Librevox::Listener::Outbound
+  def session_initiated
+    update_session do
+      send_data "yay, executed!"
+    end
+  end
+end
+
+describe "Outbound listener with update session callback" do
+  before do
+    @listener = OutboundListenerWithUpdateSessionCallback.new(nil)
+    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
+    receive_event_and_linger_replies
+    3.times {@listener.outgoing_data.shift}
+  end
+
+  should "execute callback" do
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
+    @listener.read_data.should == "yay, executed!"
   end
 end

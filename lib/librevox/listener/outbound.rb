@@ -68,8 +68,9 @@ module Librevox
         end
       end
 
-      def update_session
+      def update_session &block
         send_data("api uuid_dump #{session[:unique_id]}\n\n")
+        @command_queue << (block || lambda {})
       end
     end
   end
