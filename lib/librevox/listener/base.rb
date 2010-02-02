@@ -51,7 +51,10 @@ module Librevox
 
       def receive_request(header, content)
         @response = Librevox::Response.new(header, content)
+        handle_response
+      end
 
+      def handle_response
         if response.api_response? && @command_queue.any?
           invoke_command_queue
         elsif response.event?

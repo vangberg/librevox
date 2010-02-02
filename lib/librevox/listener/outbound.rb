@@ -46,9 +46,7 @@ module Librevox
         @application_queue << lambda {}
       end
 
-      def receive_request(*args)
-        super(*args)
-        
+      def handle_response
         if session.nil?
           @session = response.headers
           session_initiated
@@ -58,6 +56,8 @@ module Librevox
         elsif response.command_reply? && !response.event?
           @application_queue.shift.call if @application_queue.any?
         end
+
+        super
       end
 
       def resume_with_channel_var
