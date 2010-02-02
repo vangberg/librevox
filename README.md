@@ -149,7 +149,7 @@ Librevox also ships with a CommandSocket class, which allows you to connect
 to the FreeSWITCH management console, from which you can originate calls,
 restart FreeSWITCH etc.
 
-    >> require `librevox`
+    >> require `librevox/command_socket`
     => true
     
     >> socket = Librevox::CommandSocket.new
