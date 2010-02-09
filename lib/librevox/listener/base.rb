@@ -10,7 +10,7 @@ module Librevox
           @hooks ||= []
         end
 
-        def event(event, &block)
+        def event event, &block
           hooks << [event, block]
         end
       end
@@ -23,20 +23,20 @@ module Librevox
       class CommandDelegate
         include Librevox::Commands
 
-        def initialize(listener)
+        def initialize listener
           @listener = listener
         end
 
-        def run_cmd(*args, &block)
+        def run_cmd *args, &block
           @listener.run_cmd *args, &block
         end
       end
 
-      def api(cmd, *args, &block)
+      def api cmd, *args, &block
         @command_delegate.send(cmd, *args, &block)
       end
 
-      def run_cmd(cmd, &block)
+      def run_cmd cmd, &block
         send_data "#{cmd}\n\n"
         @command_queue << (block || lambda {})
       end
@@ -49,7 +49,7 @@ module Librevox
         @command_queue = []
       end
 
-      def receive_request(header, content)
+      def receive_request header, content
         @response = Librevox::Response.new(header, content)
         handle_response
       end
@@ -64,7 +64,7 @@ module Librevox
       end
 
       # override
-      def on_event(event)
+      def on_event event
       end
 
       alias :done :close_connection_after_writing
@@ -80,7 +80,7 @@ module Librevox
 
       def invoke_command_queue
         block = @command_queue.shift
-        block.call(response)
+        block.call response
       end
     end
   end

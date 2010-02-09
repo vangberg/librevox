@@ -6,7 +6,7 @@ module Librevox
     class Outbound < Base
       include Librevox::Applications
 
-      def execute_app(app, args="", params={}, &block)
+      def execute_app app, args="", params={}, &block
         msg = "sendmsg\n"
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
@@ -24,7 +24,7 @@ module Librevox
       end
 
       # This should probably be in Application#sendmsg instead.
-      def sendmsg(msg)
+      def sendmsg msg 
         send_data "sendmsg\n%s" % msg
       end
 
@@ -69,7 +69,7 @@ module Librevox
       end
 
       def update_session &block
-        send_data("api uuid_dump #{session[:unique_id]}\n\n")
+        send_data "api uuid_dump #{session[:unique_id]}\n\n"
         @command_queue << (block || lambda {})
       end
     end
