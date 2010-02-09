@@ -1,4 +1,4 @@
-= master / unreleased
+= 0.2.1 / 2010-02-09
 
   * Listener::Outbound#update_session takes a callback like other functions.
 
