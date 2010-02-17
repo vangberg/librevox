@@ -34,14 +34,14 @@ module Librevox
   #     run SomeListener
   #     run OtherListner
   #   end
-  def self.start(klass=nil, args={}, &block)
+  def self.start klass=nil, args={}, &block
     logger.info "Starting Librevox"
     EM.run {
       block_given? ? instance_eval(&block) : run(klass, args)
     }
   end
 
-  def self.run(klass, args={})
+  def self.run klass, args={}
     host = args.delete(:host) || "localhost"
     port = args.delete(:port)
 
