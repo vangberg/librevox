@@ -58,5 +58,21 @@ module Librevox
     def hupall cause=nil, &b
       execute_cmd "hupall", cause, &b
     end
+
+    # Park call.
+    # @example
+    #   socket.uuid_park "592567a2-1be4-11df-a036-19bfdab2092f"
+    # @see http://wiki.freeswitch.org/wiki/Mod_commands#uuid_park
+    def uuid_park uuid, &b
+      execute_cmd "uuid_park", uuid, &b
+    end
+
+    # Bridge two call legs together. At least one leg must be anwered.
+    # @example
+    #   socket.uuid_bridge "592567a2-1be4-11df-a036-19bfdab2092f", "58b39c3a-1be4-11df-a035-19bfdab2092f"
+    # @see http://wiki.freeswitch.org/wiki/Mod_commands#uuid_bridge
+    def uuid_bridge uuid1, uuid2, &b
+      execute_cmd "uuid_bridge", "#{uuid1} #{uuid2}", &b
+    end
   end
 end

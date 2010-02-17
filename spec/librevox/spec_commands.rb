@@ -85,4 +85,20 @@ describe Librevox::Commands do
       cmd[:args].should == "delete/firmafon/foo"
     end
   end
+
+  describe "uuid_park" do
+    should "park" do
+      cmd = C.uuid_park "1234-abcd"
+      cmd[:name].should == "uuid_park"
+      cmd[:args].should == "1234-abcd"
+    end
+  end
+
+  describe "uuid_bridge" do
+    should "bridge" do
+      cmd = C.uuid_bridge "1234-abcd", "9090-ffff"
+      cmd[:name].should == "uuid_bridge"
+      cmd[:args].should == "1234-abcd 9090-ffff"
+    end
+  end
 end

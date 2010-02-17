@@ -1,5 +1,7 @@
 = master / unreleased
 
+  * Add Commands#uuid_bridge/uuid_park
+
   * Add Commands#hash to interact with the FreeSWITCH hash map.
 
   * Trap INT / TERM and terminate gracefully.
