@@ -23,3 +23,5 @@
 
 - possibly catch all exceptions, so everything doesn't die? or should this be
   be the users responsibilty?
+
+- extension sugar (0.5)
