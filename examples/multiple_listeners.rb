@@ -1,5 +1,4 @@
-require 'fsr'
-require 'fsr/listener/outbound'
+require 'librevox'
 
 class SomeInbound < Librevox::Listener::Inbound
   def on_event e

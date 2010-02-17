@@ -1,5 +1,4 @@
-require 'fsr'
-require 'fsr/listener/inbound'
+require 'librevox'
  
 class MyInbound < Librevox::Listener::Inbound
   # `on_event` is called every time an event is received.
