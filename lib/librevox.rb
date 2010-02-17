@@ -36,9 +36,13 @@ module Librevox
   #   end
   def self.start klass=nil, args={}, &block
     logger.info "Starting Librevox"
-    EM.run {
+
+    EM.run do
+      trap("TERM") {stop}
+      trap("INT") {stop}
+
       block_given? ? instance_eval(&block) : run(klass, args)
-    }
+    end
   end
 
   def self.run klass, args={}
@@ -50,5 +54,10 @@ module Librevox
     elsif klass.ancestors.include? Librevox::Listener::Outbound
       EM.start_server host, port || "8084", klass, args
     end
+  end
+
+  def self.stop
+    logger.info "Terminating Librevox"
+    EM.stop
   end
 end
