@@ -1,5 +1,7 @@
 = master / unreleased
 
+  * Add Commands#hash to interact with the FreeSWITCH hash map.
+
   * Trap INT / TERM and terminate gracefully.
 
 = 0.2.1 / 2010-02-09

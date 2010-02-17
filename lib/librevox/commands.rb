@@ -10,15 +10,24 @@ module Librevox
     # @example
     #   socket.execute_cmd "fsctl", "hupall normal_clearing"
     # @see http://wiki.freeswitch.org/wiki/Mod_commands
-    def execute_cmd(name, args="", &block)
+    def execute_cmd name, args="", &block
       msg = "api #{name}"
       msg << " #{args}" unless args.empty?
 
-      run_cmd(msg, &block)
+      run_cmd msg, &block
     end
 
-    def status(&b)
+    def status &b
       execute_cmd "status", &b
+    end
+
+    # Access the hash table that comes with FreeSWITCH.
+    # @example
+    #   socket.hash :insert, :realm, :key, "value"
+    #   socket.hash :select, :realm, :key
+    #   socket.hash :delete, :realm, :key
+    def hash *args, &b
+      execute_cmd "hash", args.join("/"), &b
     end
 
     # Originate a new call.
@@ -26,7 +35,7 @@ module Librevox
     #   socket.originate 'sofia/user/coltrane', :extension => "1234"
     # @example With :dialplan and :context
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#originate
-    def originate(url, args={}, &b)
+    def originate url, args={}, &b
       extension = args.delete(:extension)
       dialplan  = args.delete(:dialplan)
       context   = args.delete(:context)
@@ -42,11 +51,11 @@ module Librevox
     # @example
     #   socket.fsctl :hupall, :normal_clearing
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#fsctl
-    def fsctl(*args, &b)
+    def fsctl *args, &b
       execute_cmd "fsctl", args.join(" "), &b
     end
 
-    def hupall(cause=nil, &b)
+    def hupall cause=nil, &b
       execute_cmd "hupall", cause, &b
     end
   end

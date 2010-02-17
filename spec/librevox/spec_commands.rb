@@ -65,4 +65,24 @@ describe Librevox::Commands do
     cmd[:name].should == "hupall"
     cmd[:args].should == "some_cause"
   end
+
+  describe "hash" do
+    should "insert" do
+      cmd = C.hash :insert, :firmafon, :foo, "some value or other"
+      cmd[:name].should == "hash"
+      cmd[:args].should == "insert/firmafon/foo/some value or other"
+    end
+
+    should "select" do
+      cmd = C.hash :select, :firmafon, :foo
+      cmd[:name].should == "hash"
+      cmd[:args].should == "select/firmafon/foo"
+    end
+
+    should "delete" do
+      cmd = C.hash :delete, :firmafon, :foo
+      cmd[:name].should == "hash"
+      cmd[:args].should == "delete/firmafon/foo"
+    end
+  end
 end
