@@ -15,9 +15,9 @@ module CommandTest
   end
 end
 
-describe Librevox::Commands do
-  C = CommandTest
+C = CommandTest
 
+describe Librevox::Commands do
   should "status" do
     cmd = C.status
     cmd[:name].should == "status"

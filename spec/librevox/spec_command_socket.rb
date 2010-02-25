@@ -10,8 +10,8 @@ end
 
 module Librevox
   module Commands
-    def sample_cmd(args="")
-    execute_cmd "sample_cmd", args
+    def sample_cmd args=""
+      execute_cmd "sample_cmd", args
     end
   end
 end
@@ -19,7 +19,7 @@ end
 describe Librevox::CommandSocket do
   before do
     @socket, @server = MockSocket.pipe
-    stub(TCPSocket).open(anything, anything).times(any_times) {@socket}
+    mock(TCPSocket).open(anything, anything).times(any_times) {@socket}
 
     @server.print "Content-Type: command/reply\nReply-Text: +OK\n\n"
   end

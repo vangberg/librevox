@@ -80,7 +80,11 @@ module Librevox
 
       def invoke_command_queue
         block = @command_queue.shift
-        block.call response
+        if block.arity == 0
+          block.call
+        else
+          block.call response
+        end
       end
     end
   end
