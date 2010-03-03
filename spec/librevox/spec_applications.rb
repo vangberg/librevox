@@ -203,6 +203,12 @@ describe Librevox::Applications do
     end
   end
 
+  should "respond with code" do
+    app = AppTest.respond 403
+    app[:name].should == "respond"
+    app[:args].should == "403"
+  end
+
   should "set" do
     app = AppTest.set("foo", "bar")
     app[:name].should == "set"

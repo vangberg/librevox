@@ -211,6 +211,14 @@ module Librevox
       execute_app "redirect", uri, &b
     end
 
+    # Send SIP session respond code.
+    # @example Send 403 Forbidden
+    #   respond 403
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_respond
+    def respond code, &b
+      execute_app "respond", code.to_s, &b
+    end
+
     # Sets a channel variable.
     # @example
     #   set "some_var", "some value"
