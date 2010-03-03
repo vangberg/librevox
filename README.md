@@ -18,6 +18,9 @@ outbound event sockets before proceeding. The
 [wiki page on mod_event_socket](http://wiki.freeswitch.org/wiki/Event_Socket) is
 a good place to start.
 
+Librevox is tested to work with Ruby 1.8.7 and 1.9.1. Librevox is not compatible
+with Ruby 1.8.6, and eventually 1.9.1 will be required.
+
 ## Inbound listener
 
 To create an inbound listener, you should subclass `Librevox::Listener::Inbound`
