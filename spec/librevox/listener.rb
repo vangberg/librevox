@@ -73,7 +73,7 @@ end
 
 module Librevox::Commands
   def sample_cmd(cmd, args="", &b)
-    execute_cmd cmd, args, &b
+    command cmd, args, &b
   end
 end
 

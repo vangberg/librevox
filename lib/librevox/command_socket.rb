@@ -17,11 +17,12 @@ module Librevox
 
     def connect
       @socket = TCPSocket.open(@server, @port)
-      run_cmd "auth #{@auth}"
+      @socket.print "auth #{@auth}\n\n"
+      read_response
     end
 
-    def run_cmd(cmd)
-      @socket.print "#{cmd}\n\n"
+    def command *args
+      @socket.print "#{super(*args)}\n\n"
       read_response
     end
 

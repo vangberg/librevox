@@ -11,7 +11,7 @@ end
 module Librevox
   module Commands
     def sample_cmd args=""
-      execute_cmd "sample_cmd", args
+      command "sample_cmd", args
     end
   end
 end
@@ -48,7 +48,7 @@ describe Librevox::CommandSocket do
 
     should "read header response" do
       @server.print "Content-Type: command/reply\nSome-Header: Some value\n\n"
-      reply = @cmd.run_cmd "foo"
+      reply = @cmd.command "foo"
 
       reply.class.should == Librevox::Response
       reply.headers[:some_header].should == "Some value"
@@ -58,7 +58,7 @@ describe Librevox::CommandSocket do
       @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
 
       @server.print "Content-Type: command/reply\nSome-Header: New data\n\n"
-      reply = @cmd.run_cmd "foo"
+      reply = @cmd.command "foo"
 
       reply.headers[:some_header].should == "New data"
     end
@@ -67,14 +67,14 @@ describe Librevox::CommandSocket do
       @server.print "Content-Type: api/log\nSome-Header: Old data\n\n"
 
       @server.print "Content-Type: api/response\nSome-Header: New data\n\n"
-      reply = @cmd.run_cmd "foo"
+      reply = @cmd.command "foo"
 
       reply.headers[:some_header].should == "New data"
     end
 
     should "read content if present" do
       @server.print "Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n"
-      reply = @cmd.run_cmd "foo"
+      reply = @cmd.command "foo"
 
       reply.content.should == "+OK"
     end

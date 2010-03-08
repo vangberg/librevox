@@ -27,8 +27,8 @@ module Librevox
           @listener = listener
         end
 
-        def run_cmd *args, &block
-          @listener.run_cmd *args, &block
+        def command *args, &block
+          @listener.command super(*args), &block
         end
       end
 
@@ -36,8 +36,8 @@ module Librevox
         @command_delegate.send(cmd, *args, &block)
       end
 
-      def run_cmd cmd, &block
-        send_data "#{cmd}\n\n"
+      def command msg, &block
+        send_data "#{msg}\n\n"
         @command_queue << (block || lambda {})
       end
 

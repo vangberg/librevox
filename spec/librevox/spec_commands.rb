@@ -6,7 +6,7 @@ module CommandTest
 
   extend self
 
-  def execute_cmd(name, args="", &block)
+  def command(name, args="", &block)
     {
       :name   => name,
       :args   => args,
