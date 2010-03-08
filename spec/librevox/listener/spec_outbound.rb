@@ -5,7 +5,7 @@ require 'librevox/listener/outbound'
 
 module Librevox::Applications
   def sample_app(name, *args, &b)
-    execute_app name, args.join(" "), &b
+    application name, args.join(" "), &b
   end
 end
 
@@ -101,7 +101,7 @@ end
 
 module Librevox::Applications
   def reader_app(&b)
-    execute_app 'reader_app', [], {:read_var => 'a_reader_var'}, &b
+    application 'reader_app', [], {:read_var => 'a_reader_var'}, &b
   end
 end
 

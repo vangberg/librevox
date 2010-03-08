@@ -1,5 +1,5 @@
 module Librevox
-  # All applications should call `execute_app` with the following parameters:
+  # All applications should call `application` with the following parameters:
   #
   #   `name` - name of the application
   #   `args` - arguments as a string (optional)
@@ -10,7 +10,7 @@ module Librevox
     # Answers an incoming call or session.
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_answer
     def answer &b
-      execute_app "answer", &b
+      application "answer", &b
     end
 
     # Make an attended transfer
@@ -19,7 +19,7 @@ module Librevox
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_att_xfer
     # @todo Add support for origination_cancel_key
     def att_xfer endpoint, &b
-      execute_app "att_xfer", endpoint, &b
+      application "att_xfer", endpoint, &b
     end
 
     # Binds an application to the specified call legs.
@@ -35,7 +35,7 @@ module Librevox
         args.values_at(:key, :listen_to, :respond_on, :application).join(" ")
       arg_string += "::#{args[:parameters]}" if args[:parameters]
 
-      execute_app "bind_meta_app", arg_string, &b
+      application "bind_meta_app", arg_string, &b
     end
 
 
@@ -71,7 +71,7 @@ module Librevox
                     args.join ","
                   end
 
-      execute_app "bridge", variables + endpoints, &b
+      application "bridge", variables + endpoints, &b
     end
 
     # Deflect a call by sending a REFER. Takes a SIP URI as argument, rerouting
@@ -85,7 +85,7 @@ module Librevox
     # @see #redirect
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_deflect
     def deflect uri, &b
-      execute_app "deflect", uri, &b
+      application "deflect", uri, &b
     end
 
     # Exports a channel variable from the A leg to the B leg. Variables and
@@ -102,7 +102,7 @@ module Librevox
     def export var, args={}, &b
       nolocal = args[:local] == false ? "nolocal:" : "" # ugly!!111
 
-      execute_app "export", "#{nolocal}#{var}", &b
+      application "export", "#{nolocal}#{var}", &b
     end
 
     # Generate TGML tones
@@ -112,7 +112,7 @@ module Librevox
     #   gentones "0800500005"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_gentones
     def gentones tgml, &b 
-      execute_app "gentones", tgml, &b
+      application "gentones", tgml, &b
     end
 
     # Hang up current channel
@@ -122,7 +122,7 @@ module Librevox
     #   hangup "USER_BUSY"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_hangup
     def hangup cause="", &b
-      execute_app "hangup", cause, &b
+      application "hangup", cause, &b
     end
 
     # Plays a sound file and reads DTMF presses.
@@ -149,7 +149,7 @@ module Librevox
 
       params = {:read_var => read_var}
 
-      execute_app "play_and_get_digits", args, params, &b
+      application "play_and_get_digits", args, params, &b
     end
 
     # Plays a sound file on the current channel.
@@ -157,7 +157,7 @@ module Librevox
     #   playback "/path/to/file.wav"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_playback
     def playback file, &b
-      execute_app "playback", file, &b
+      application "playback", file, &b
     end
 
     # Pre-answer establishes early media but does not answer.
@@ -165,7 +165,7 @@ module Librevox
     #   pre_anser
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_pre_answer
     def pre_answer &b
-      execute_app "pre_answer", &b
+      application "pre_answer", &b
     end
 
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_read
@@ -181,7 +181,7 @@ module Librevox
 
       params = {:read_var => read_var}
 
-      execute_app "read", arg_string, params, &b
+      application "read", arg_string, params, &b
     end
 
     # Records a message, with an optional limit on the maximum duration of the
@@ -193,7 +193,7 @@ module Librevox
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_record
     def record path, params={}, &b
       args = [path, params[:limit]].compact.join(" ")
-      execute_app "record", args, &b
+      application "record", args, &b
     end
 
     # Redirect a channel to another endpoint. You must take care to not
@@ -208,7 +208,7 @@ module Librevox
     # @see #{deflect}
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_redirect
     def redirect uri, &b
-      execute_app "redirect", uri, &b
+      application "redirect", uri, &b
     end
 
     # Send SIP session respond code.
@@ -216,7 +216,7 @@ module Librevox
     #   respond 403
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_respond
     def respond code, &b
-      execute_app "respond", code.to_s, &b
+      application "respond", code.to_s, &b
     end
 
     # Sets a channel variable.
@@ -224,7 +224,7 @@ module Librevox
     #   set "some_var", "some value"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_set
     def set variable, value, &b
-      execute_app "set", "#{variable}=#{value}", &b
+      application "set", "#{variable}=#{value}", &b
     end
 
     # Transfers the current channel to a new context.
@@ -232,7 +232,7 @@ module Librevox
     #   transfer "new_context"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_transfer
     def transfer context, &b
-      execute_app "transfer", context, &b
+      application "transfer", context, &b
     end
 
     # Unbinds a previously bound key with bind_meta_app
@@ -240,7 +240,7 @@ module Librevox
     #   unbind_meta_app 3
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_unbind_meta_app
     def unbind_meta_app key, &b
-      execute_app "unbind_meta_app", key.to_s, &b
+      application "unbind_meta_app", key.to_s, &b
     end
 
     # Unset a channel variable.
@@ -248,7 +248,7 @@ module Librevox
     #   unset "foo"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_unset
     def unset variable, &b
-      execute_app "unset", variable, &b
+      application "unset", variable, &b
     end
   end
 end

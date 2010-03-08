@@ -6,7 +6,7 @@ module AppTest
 
   extend self
 
-  def execute_app(name, args=[], params={}, &block)
+  def application(name, args=[], params={}, &block)
     {
       :name   => name,
       :args   => args,

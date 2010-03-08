@@ -6,7 +6,7 @@ module Librevox
     class Outbound < Base
       include Librevox::Applications
 
-      def execute_app app, args="", params={}, &block
+      def application app, args="", params={}, &block
         msg = "sendmsg\n"
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
