@@ -200,12 +200,12 @@ module Librevox
     # redirect incompatible channels, as that wont have the desired effect.
     # I.e. if you redirect to a SIP URI, it should be a SIP channel.
     #
-    # #{redirect} can only be used on non-established calls, i.e. calls that
-    # has not been answered with the #{answer} application yet. If the call has
-    # been answered, use #{deflect} instead.
+    # {#redirect} can only be used on non-established calls, i.e. calls that
+    # has not been answered with the {#answer} application yet. If the call has
+    # been answered, use {#deflect} instead.
     # @example
     #   redirect "sip:freddie@hubbard.org"
-    # @see #{deflect}
+    # @see #deflect
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_redirect
     def redirect uri, &b
       application "redirect", uri, &b
