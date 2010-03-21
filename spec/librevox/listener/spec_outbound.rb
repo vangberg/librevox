@@ -192,7 +192,7 @@ end
 class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
   def session_initiated
     sample_app "foo" do
-      api :sample_cmd, "bar" do
+      api.sample_cmd "bar" do
         sample_app "baz"
       end
     end

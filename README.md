@@ -99,11 +99,11 @@ immediately due to the async nature of EventMachine:
     end
 
 You can also use the commands defined in `Librevox::Command`, which, to avoid
-namespace clashes, are wrapped in the `api` command:
+namespace clashes, are accessed through the `api` object:
     
     session do
       answer
-      api :status
+      api.status
     end
 
 They can be used in conjunction with applications, and do also take a block,

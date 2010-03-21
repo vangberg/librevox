@@ -92,8 +92,8 @@ shared "api commands" do
       def @listener.on_event(e) end # Don't send anything, kthx.
 
       @class.event(:api_test) {
-        api :sample_cmd, "foo" do
-          api :sample_cmd, "foo", "bar baz"
+        api.sample_cmd "foo" do
+          api.sample_cmd "foo", "bar baz"
         end
       }
     end
@@ -113,9 +113,9 @@ shared "api commands" do
     before do
       @listener.outgoing_data.clear
       @class.event(:api_flat_test) {
-        api :sample_cmd, "foo"
-        api :sample_cmd, "bar" do
-          api :sample_cmd, "baz"
+        api.sample_cmd "foo"
+        api.sample_cmd "bar" do
+          api.sample_cmd "baz"
         end
       }
     end
@@ -139,7 +139,7 @@ shared "api commands" do
     before do
       @listener.outgoing_data.clear
       @class.event(:api_arg_test) {
-        api :sample_cmd, "foo" do |r|
+        api.sample_cmd "foo" do |r|
           send_data "response: #{r.content}"
         end
       }
