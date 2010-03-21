@@ -7,8 +7,7 @@ Librevox eventually came to life during a major rewrite of
 [Freeswitcher](http://code.rubyists.com/projects/fs/). Not everything would
 fit into the existing architecture, and I felt that a blank slate was needed.
 Librevox and Freeswitcher looks much alike on the outside, but Librevox tries
-to take a simpler approach on the inside. Eventually this is still beta
-software, and needs some real-life testing before seeing a regular release.
+to take a simpler approach on the inside.
 
 ## Prerequisites
 
