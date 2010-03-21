@@ -1,12 +1,14 @@
 = master / unreleased
 
-  * Add Commands#uuid_bridge/uuid_park.
+  * New commands: uuid_bridge, uuid_park, hash.
 
-  * Add Commands#hash to interact with the FreeSWITCH hash map.
+  * New applications: respond.
 
   * Trap INT / TERM and terminate gracefully.
 
-  * Add Applications#respond.
+  * You now have to do `api.status` instead of `api :status` when using
+    commands from a listener – this is easier on the eye, and makes for
+    a slighly simpler implementation.
 
 = 0.2.1 / 2010-02-09
 
