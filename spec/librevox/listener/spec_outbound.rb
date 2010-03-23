@@ -55,9 +55,8 @@ end
 
 class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
   def session_initiated
-    sample_app "foo" do
-      sample_app "bar"
-    end
+    sample_app "foo"
+    sample_app "bar"
   end
 end
 
@@ -100,16 +99,15 @@ describe "Outbound listener with apps" do
 end
 
 module Librevox::Applications
-  def reader_app(&b)
-    application 'reader_app', [], {:read_var => 'a_reader_var'}, &b
+  def reader_app
+    application 'reader_app', "", {:read_var => 'app_var'}
   end
 end
 
 class OutboundListenerWithReader < Librevox::Listener::Outbound
   def session_initiated
-    reader_app do |data|
-      send_data "read this: #{data}"
-    end
+    data = reader_app
+    application "send", data
   end
 end
 
@@ -139,10 +137,10 @@ describe "Outbound listener with app reading data" do
     @listener.session[:session_var].should == "Second"
   end
 
-  should "pass value of channel variable to block" do
+  should "return value of channel variable" do
     @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
-    @listener.read_data.should == "read this: some value"
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 50\n\nEvent-Name: CHANNEL_DATA\nvariable_app_var: Second\n\n")
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: send\nexecute-app-arg: Second\n\n"
   end
 end
 
@@ -150,9 +148,8 @@ class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
   attr_reader :queue
   def session_initiated
     sample_app "foo"
-    reader_app do |data|
-      send_data "the end: #{data}"
-    end
+    data = reader_app
+    application "send", "the end: #{data}"
   end
 end
 
@@ -177,9 +174,9 @@ describe "Outbound listener with non-nested apps" do
 
     # response to uuid_dump caused by reader_app
     @listener.read_data.should.not.match /the end/
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 59\n\nEvent-Name: CHANNEL_DATA\nvariable_a-reader-var: some value\n\n")
+    @listener.receive_data("Content-Type: api/response\nContent-Length: 50\n\nEvent-Name: CHANNEL_DATA\nvariable_app_var: Second\n\n")
 
-    @listener.read_data.should == "the end: some value"
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: send\nexecute-app-arg: the end: Second\n\n"
   end
 end
 
@@ -191,11 +188,9 @@ end
 
 class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
   def session_initiated
-    sample_app "foo" do
-      api.sample_cmd "bar" do
-        sample_app "baz"
-      end
-    end
+    sample_app "foo"
+    api.sample_cmd "bar"
+    sample_app "baz"
   end
 end
 
@@ -222,9 +217,8 @@ end
 
 class OutboundListenerWithUpdateSessionCallback < Librevox::Listener::Outbound
   def session_initiated
-    update_session do
-      send_data "yay, #{session[:session_var]}"
-    end
+    update_session
+    application "send", "yay, #{session[:session_var]}"
   end
 end
 
@@ -239,10 +233,10 @@ describe "Outbound listener with update session callback" do
   end
 
   should "execute callback" do
-    @listener.read_data.should =~ /^yay,/
+    @listener.read_data.should =~ /yay,/
   end
 
   should "update session before calling callback" do
-    @listener.read_data.should == "yay, Second"
+    @listener.read_data.should == "sendmsg\ncall-command: execute\nexecute-app-name: send\nexecute-app-arg: yay, Second\n\n"
   end
 end

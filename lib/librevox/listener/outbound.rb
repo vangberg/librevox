@@ -6,21 +6,26 @@ module Librevox
     class Outbound < Base
       include Librevox::Applications
 
-      def application app, args="", params={}, &block
+      def application app, args=nil, params={}, &block
         msg = "sendmsg\n"
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
-        msg << "execute-app-arg: #{args}\n" unless args.empty?
+        msg << "execute-app-arg: #{args}\n" if args && !args.empty?
 
         send_data "#{msg}\n"
 
         @read_channel_var = params[:read_var]
 
-        if @read_channel_var
-          @application_queue << lambda {update_session}
-        end
+        @application_queue << Fiber.current
 
-        @application_queue << (block || lambda {})
+        if params[:read_var]
+          Fiber.yield
+          update_session
+          variable = "variable_#{@read_channel_var}".to_sym
+          return session[variable]
+        else
+          return Fiber.yield
+        end
       end
 
       # This should probably be in Application#sendmsg instead.
@@ -41,36 +46,25 @@ module Librevox
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
-        @application_queue << lambda {}
+        @application_queue << Fiber.new {}
         send_data "linger\n\n"
-        @application_queue << lambda {}
+        @application_queue << Fiber.new {session_initiated}
       end
 
       def handle_response
         if session.nil?
           @session = response.headers
-          session_initiated
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response.content
-          resume_with_channel_var
         elsif response.command_reply? && !response.event?
-          @application_queue.shift.call if @application_queue.any?
+          @application_queue.shift.resume if @application_queue.any?
         end
 
         super
       end
 
-      def resume_with_channel_var
-        if @read_channel_var
-          variable = "variable_#{@read_channel_var}".to_sym
-          value = @session[variable]
-          @application_queue.shift.call(value) if @application_queue.any?
-        end
-      end
-
-      def update_session &block
-        send_data "api uuid_dump #{session[:unique_id]}\n\n"
-        @command_queue << (block || lambda {})
+      def update_session
+        api.command "uuid_dump", session[:unique_id]
       end
     end
   end

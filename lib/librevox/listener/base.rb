@@ -41,7 +41,7 @@ module Librevox
         @command_delegate ||= CommandDelegate.new(self)
       end
 
-      def command msg, &block
+      def command msg
         send_data "#{msg}\n\n"
 
         @command_queue << Fiber.current
