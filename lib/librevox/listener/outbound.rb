@@ -63,6 +63,10 @@ module Librevox
         super
       end
 
+      def variable name
+        session[:"variable_#{name}"]
+      end
+
       def update_session
         api.command "uuid_dump", session[:unique_id]
       end

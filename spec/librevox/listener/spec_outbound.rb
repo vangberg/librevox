@@ -23,7 +23,7 @@ end
 describe "Outbound listener" do
   before do
     @listener = OutboundTestListener.new(nil)
-    @listener.receive_data("Content-Type: command/reply\nCaller-Caller-ID-Number: 8675309\n\n")
+    @listener.receive_data("Content-Type: command/reply\nCaller-Caller-ID-Number: 8675309\nvariable_some_var: some value\n\n")
     receive_event_and_linger_replies
   end
 
@@ -41,8 +41,12 @@ describe "Outbound listener" do
     @listener.read_data.should.equal "session was initiated"
   end
 
-  should "make channel variables available through session" do
+  should "make headers available through session" do
     @listener.session[:caller_caller_id_number].should.equal "8675309"
+  end
+
+  should "make channel variables available through #variable" do
+    @listener.variable(:some_var).should == "some value"
   end
 
   behaves_like "events"
