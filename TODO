@@ -7,9 +7,6 @@
 
 - filter events
 
-- the execute_app/run_app business might be done better, simpler. e.g.
-  having to pass the block for every command becomes a bit tedious.
-
 - move test suite from bacon -> test/unit.
 
 - test how this works in async mode - I imagine that it might mess with
