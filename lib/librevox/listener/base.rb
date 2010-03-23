@@ -62,10 +62,11 @@ module Librevox
 
       def handle_response
         if response.api_response? && @command_queue.any?
-          #invoke_command_queue
           @command_queue.shift.resume response
-        elsif response.event?
-          on_event response.dup
+        end
+
+        if response.event?
+          Fiber.new {on_event response.dup}.resume
           invoke_event_hooks
         end
       end
@@ -85,15 +86,6 @@ module Librevox
             }.resume
           end
         }
-      end
-
-      def invoke_command_queue
-        block = @command_queue.shift
-        if block.arity == 0
-          block.call
-        else
-          block.call response
-        end
       end
     end
   end

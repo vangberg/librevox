@@ -104,7 +104,7 @@ end
 
 module Librevox::Applications
   def reader_app
-    application 'reader_app', "", {:read_var => 'app_var'}
+    application 'reader_app', "", {:variable => 'app_var'}
   end
 end
 

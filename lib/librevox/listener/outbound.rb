@@ -14,11 +14,11 @@ module Librevox
 
         send_data "#{msg}\n"
 
-        @read_channel_var = params[:read_var]
+        @read_channel_var = params[:variable]
 
         @application_queue << Fiber.current
 
-        if params[:read_var]
+        if params[:variable]
           Fiber.yield
           update_session
           return variable(@read_channel_var)

@@ -69,6 +69,20 @@ shared "events" do
     @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
     @listener.read_data.should.not =~ /^from on_event: #{@listener.response.object_id}$/
   end
+
+  should "call event hooks and on_event on CHANNEL_DATA" do
+    @listener.outgoing_data.clear
+
+    def @listener.on_event e
+      send_data "on_event: CHANNEL_DATA test"
+    end
+    @class.event(:channel_data) {send_data "event hook: CHANNEL_DATA test"}
+
+    @listener.receive_data("Content-Length: 24\n\nEvent-Name: CHANNEL_DATA\n\n")
+
+    @listener.outgoing_data.should.include "on_event: CHANNEL_DATA test"
+    @listener.outgoing_data.should.include "event hook: CHANNEL_DATA test"
+  end
 end
 
 module Librevox::Commands

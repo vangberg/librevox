@@ -1,6 +1,6 @@
 Gem::Specification.new do |s|
   s.name     = "librevox"
-  s.version  = "0.2.1"
+  s.version  = "0.3"
   s.date     = "2010-02-09"
   s.summary  = "Ruby library for interacting with FreeSWITCH."
   s.email    = "harry@vangberg.name"
@@ -27,7 +27,7 @@ open source telephony platform FreeSwitch."
     "spec/helper.rb",
     "spec/librevox/listener.rb",
     "spec/librevox/spec_applications.rb",
-    "spec/librevox/spec_command_socket.rb",
+    #"spec/librevox/spec_command_socket.rb",
     "spec/librevox/spec_commands.rb",
     "spec/librevox/spec_response.rb",
     "spec/librevox/listener/spec_inbound.rb",

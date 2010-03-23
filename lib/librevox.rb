@@ -5,7 +5,7 @@ require 'librevox/listener/inbound'
 require 'librevox/listener/outbound'
 
 module Librevox
-  VERSION = "0.2.1"
+  VERSION = "0.3"
 
   def self.options
     @options ||= {
