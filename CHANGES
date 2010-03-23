@@ -10,7 +10,23 @@
     commands from a listener – this is easier on the eye, and makes for
     a slighly simpler implementation.
 
-  * Fibers, 1.9-only
+  * Introduced, making Librevox Ruby 1.9-only. Support for the old
+    callback-style has been removed. This would have worked in < 0.3:
+    
+      def session_initiated
+        answer
+        play_and_get_digits 'some-file.mp3' do |digit|
+          ...
+        end
+      end
+
+    Now you can write your code in a seemingly blocking manner:
+
+      def session_initiated
+        answer
+        digit = play_and_get_digits 'some-file.mp3'
+        ...
+      end
 
   * Use `Listener::Outbound#variable(name)` to access channel variables.
     E.g. `variable("foo")` is a shortcut for `session["variable_foo"]`.
