@@ -7,11 +7,11 @@ module Librevox
     class Base < EventMachine::Protocols::HeaderAndContentProtocol
       class << self
         def hooks
-          @hooks ||= []
+          @hooks ||= Hash.new {|hash, key| hash[key] = []}
         end
 
         def event event, &block
-          hooks << [event, block]
+          hooks[event] << block
         end
       end
 
@@ -79,12 +79,11 @@ module Librevox
 
       private
       def invoke_event_hooks
-        self.class.hooks.each {|name,block| 
-          if name == response.event.downcase.to_sym
-            Fiber.new {
-              instance_exec response.dup, &block 
-            }.resume
-          end
+        event = response.event.downcase.to_sym
+        self.class.hooks[event].each {|block|
+          Fiber.new {
+            instance_exec response.dup, &block 
+          }.resume
         }
       end
     end

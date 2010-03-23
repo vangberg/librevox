@@ -37,6 +37,9 @@ shared "events" do
 
   should "add event hook" do
     @class.hooks.size.should == 3
+    @class.hooks.each do |event, hooks|
+      hooks.size.should == 1
+    end
   end
 
   should "execute callback for event" do
