@@ -43,7 +43,9 @@ module Librevox
 
       def command msg, &block
         send_data "#{msg}\n\n"
-        @command_queue << (block || lambda {})
+
+        @command_queue << Fiber.current
+        Fiber.yield
       end
 
       attr_accessor :response
@@ -60,7 +62,8 @@ module Librevox
 
       def handle_response
         if response.api_response? && @command_queue.any?
-          invoke_command_queue
+          #invoke_command_queue
+          @command_queue.shift.resume response
         elsif response.event?
           on_event response.dup
           invoke_event_hooks
@@ -77,7 +80,9 @@ module Librevox
       def invoke_event_hooks
         self.class.hooks.each {|name,block| 
           if name == response.event.downcase.to_sym
-            instance_exec response.dup, &block 
+            Fiber.new {
+              instance_exec response.dup, &block 
+            }.resume
           end
         }
       end

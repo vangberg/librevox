@@ -92,13 +92,13 @@ shared "api commands" do
       def @listener.on_event(e) end # Don't send anything, kthx.
 
       @class.event(:api_test) {
-        api.sample_cmd "foo" do
-          api.sample_cmd "foo", "bar baz"
-        end
+        api.sample_cmd "foo"
+        r = api.sample_cmd "foo", "bar baz"
+        command "response #{r.content}"
       }
     end
 
-    should "only send one command at a time" do
+    should "only send one command at a time, and return response for commands" do
       @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
       @listener.read_data.should == "api foo\n\n"
       @listener.read_data.should == nil
@@ -106,50 +106,9 @@ shared "api commands" do
       @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
       @listener.read_data.should == "api foo bar baz\n\n"
       @listener.read_data.should == nil
-    end
-  end
 
-  describe "flat api commands" do
-    before do
-      @listener.outgoing_data.clear
-      @class.event(:api_flat_test) {
-        api.sample_cmd "foo"
-        api.sample_cmd "bar" do
-          api.sample_cmd "baz"
-        end
-      }
-    end
-
-    should "wait for response before calling next proc" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 27\n\nEvent-Name: API_FLAT_TEST\n\n")
-
-      @listener.read_data.should.not == "api baz\n\n"
-
-      # response to "foo"
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
-      @listener.read_data.should.not == "api baz\n\n"
-
-      # response to "bar"
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
-      @listener.read_data.should == "api baz\n\n"
-    end
-  end
-
-  describe "api command with block argument" do
-    before do
-      @listener.outgoing_data.clear
-      @class.event(:api_arg_test) {
-        api.sample_cmd "foo" do |r|
-          send_data "response: #{r.content}"
-        end
-      }
-    end
-
-    should "pass response" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 26\n\nEvent-Name: API_ARG_TEST\n\n")
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
-
-      @listener.read_data.should == "response: +OK"
+      @listener.receive_data("Content-Type: api/response\nContent-Length: 4\n\n+YAY\n\n")
+      @listener.read_data.should == "response +YAY\n\n"
     end
   end
 end
