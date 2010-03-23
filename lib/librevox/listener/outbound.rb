@@ -21,8 +21,7 @@ module Librevox
         if params[:read_var]
           Fiber.yield
           update_session
-          variable = "variable_#{@read_channel_var}".to_sym
-          return session[variable]
+          return variable(@read_channel_var)
         else
           return Fiber.yield
         end

@@ -10,6 +10,11 @@
     commands from a listener – this is easier on the eye, and makes for
     a slighly simpler implementation.
 
+  * Fibers, 1.9-only
+
+  * Use `Listener::Outbound#variable(name)` to access channel variables.
+    E.g. `variable("foo")` is a shortcut for `session["variable_foo"]`.
+
 = 0.2.1 / 2010-02-09
 
   * Listener::Outbound#update_session takes a callback like other functions.
