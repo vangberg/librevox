@@ -6,7 +6,7 @@ module AppTest
 
   extend self
 
-  def application(name, args=[], params={}, &block)
+  def application(name, args="", params={}, &block)
     {
       :name   => name,
       :args   => args,
@@ -129,7 +129,7 @@ describe Librevox::Applications do
       app = AppTest.play_and_get_digits "please-enter", "wrong-try-again"
       app[:name].should == "play_and_get_digits"
       app[:args].should == "1 2 3 5000 # please-enter wrong-try-again read_digits_var \\d+"
-      app[:params][:read_var].should == "read_digits_var"
+      app[:params][:variable].should == "read_digits_var"
     end
 
     should "take params" do
@@ -139,11 +139,11 @@ describe Librevox::Applications do
         :tries        => 4,
         :terminators  => "0",
         :timeout      => 10000,
-        :read_var     => "other_var",
+        :variable     => "other_var",
         :regexp       => "[125]"
 
       app[:args].should == "2 3 4 10000 0 please-enter invalid-choice other_var [125]"
-      app[:params][:read_var].should == "other_var"
+      app[:params][:variable].should == "other_var"
     end
   end
 
@@ -165,7 +165,7 @@ describe Librevox::Applications do
       app = AppTest.read "please-enter.wav"
       app[:name].should == "read"
       app[:args].should == "1 2 please-enter.wav read_digits_var 5000 #"
-      app[:params][:read_var].should == "read_digits_var"
+      app[:params][:variable].should == "read_digits_var"
     end
 
     should "take params" do
@@ -174,10 +174,10 @@ describe Librevox::Applications do
         :max          => 3,
         :terminators  => "0",
         :timeout      => 10000,
-        :read_var     => "other_var"
+        :variable     => "other_var"
 
       app[:args].should == "2 3 please-enter.wav other_var 10000 0"
-      app[:params][:read_var].should == "other_var"
+      app[:params][:variable].should == "other_var"
     end
   end
 

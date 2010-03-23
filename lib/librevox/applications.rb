@@ -2,15 +2,14 @@ module Librevox
   # All applications should call `application` with the following parameters:
   #
   #   `name` - name of the application
-  #   `args` - arguments as a string (optional)
-  #   `params` - optional hash (optional)
+  #   `args` - arguments as a string to be sent to FreeSWITCH (optional)
+  #   `params` - parameters for tweaking the command (optional)
   #
-  # Applications *must* pass on any eventual block passed to them.
   module Applications
     # Answers an incoming call or session.
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_answer
     def answer &b
-      application "answer", &b
+      application "answer"
     end
 
     # Make an attended transfer
@@ -18,8 +17,8 @@ module Librevox
     #   att_xfer("user/davis")
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_att_xfer
     # @todo Add support for origination_cancel_key
-    def att_xfer endpoint, &b
-      application "att_xfer", endpoint, &b
+    def att_xfer endpoint
+      application "att_xfer", endpoint
     end
 
     # Binds an application to the specified call legs.
@@ -30,12 +29,12 @@ module Librevox
     #                 :application  => "execute_extension",
     #                 :parameters   => "dx XML features"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bind_meta_app
-    def bind_meta_app args={}, &b
+    def bind_meta_app args={}
       arg_string =
         args.values_at(:key, :listen_to, :respond_on, :application).join(" ")
       arg_string += "::#{args[:parameters]}" if args[:parameters]
 
-      application "bind_meta_app", arg_string, &b
+      application "bind_meta_app", arg_string
     end
 
 
@@ -54,7 +53,7 @@ module Librevox
     #   bridge ['user/coltrane', 'user/davis'], ['user/sun-ra', 'user/taylor']
     #   #=> user/coltrane,user/davis|user/sun-ra,user/taylor
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bridgecall
-    def bridge *args, &b
+    def bridge *args
       variables = if args.last.is_a? Hash
                     # We need to sort the key/value pairs to facilitate testing.
                     # This can be removed once 1.8-compat is dropped.
@@ -71,7 +70,7 @@ module Librevox
                     args.join ","
                   end
 
-      application "bridge", variables + endpoints, &b
+      application "bridge", variables + endpoints
     end
 
     # Deflect a call by sending a REFER. Takes a SIP URI as argument, rerouting
@@ -84,8 +83,8 @@ module Librevox
     #   deflect "sip:miles@davis.com"
     # @see #redirect
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_deflect
-    def deflect uri, &b
-      application "deflect", uri, &b
+    def deflect uri
+      application "deflect", uri
     end
 
     # Exports a channel variable from the A leg to the B leg. Variables and
@@ -99,10 +98,10 @@ module Librevox
     # @example Only export to B-leg
     #   export "some_var", :local => false
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_export
-    def export var, args={}, &b
+    def export var, args={}
       nolocal = args[:local] == false ? "nolocal:" : "" # ugly!!111
 
-      application "export", "#{nolocal}#{var}", &b
+      application "export", "#{nolocal}#{var}"
     end
 
     # Generate TGML tones
@@ -111,8 +110,8 @@ module Librevox
     # @example  Generate a DTMF string
     #   gentones "0800500005"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_gentones
-    def gentones tgml, &b 
-      application "gentones", tgml, &b
+    def gentones tgml 
+      application "gentones", tgml
     end
 
     # Hang up current channel
@@ -121,8 +120,8 @@ module Librevox
     # @example Hang up with a reason
     #   hangup "USER_BUSY"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_hangup
-    def hangup cause="", &b
-      application "hangup", cause, &b
+    def hangup cause=""
+      application "hangup", cause
     end
 
     # Plays a sound file and reads DTMF presses.
@@ -135,29 +134,29 @@ module Librevox
     #     :timeout      => 5000,
     #     :regexp       => '\d+'
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_play_and_get_digits
-    def play_and_get_digits file, invalid_file, args={}, &b
+    def play_and_get_digits file, invalid_file, args={}
       min         = args[:min]          || 1
       max         = args[:max]          || 2
       tries       = args[:tries]        || 3
       terminators = args[:terminators]  || "#"
       timeout     = args[:timeout]      || 5000
-      read_var    = args[:read_var]     || "read_digits_var"
+      variable    = args[:variable]     || "read_digits_var"
       regexp      = args[:regexp]       || "\\d+"
 
       args = [min, max, tries, timeout, terminators, file, invalid_file,
-        read_var, regexp].join " "
+        variable, regexp].join " "
 
-      params = {:read_var => read_var}
+      params = {:variable => variable}
 
-      application "play_and_get_digits", args, params, &b
+      application "play_and_get_digits", args, params
     end
 
     # Plays a sound file on the current channel.
     # @example
     #   playback "/path/to/file.wav"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_playback
-    def playback file, &b
-      application "playback", file, &b
+    def playback file
+      application "playback", file
     end
 
     # Pre-answer establishes early media but does not answer.
@@ -165,23 +164,23 @@ module Librevox
     #   pre_anser
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_pre_answer
     def pre_answer &b
-      application "pre_answer", &b
+      application "pre_answer"
     end
 
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_read
-    def read file, args={}, &b
+    def read file, args={}
       min         = args[:min]          || 1
       max         = args[:max]          || 2
       terminators = args[:terminators]  || "#"
       timeout     = args[:timeout]      || 5000
-      read_var    = args[:read_var]     || "read_digits_var"
+      variable    = args[:variable]     || "read_digits_var"
 
-      arg_string = "%s %s %s %s %s %s" % [min, max, file, read_var, timeout,
+      arg_string = "%s %s %s %s %s %s" % [min, max, file, variable, timeout,
         terminators]
 
-      params = {:read_var => read_var}
+      params = {:variable => variable}
 
-      application "read", arg_string, params, &b
+      application "read", arg_string, params
     end
 
     # Records a message, with an optional limit on the maximum duration of the
@@ -191,9 +190,9 @@ module Librevox
     # @example With 20 second limit
     #   record "/path/to/new/file.wac", :limit => 20
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_record
-    def record path, params={}, &b
+    def record path, params={}
       args = [path, params[:limit]].compact.join(" ")
-      application "record", args, &b
+      application "record", args
     end
 
     # Redirect a channel to another endpoint. You must take care to not
@@ -207,48 +206,48 @@ module Librevox
     #   redirect "sip:freddie@hubbard.org"
     # @see #deflect
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_redirect
-    def redirect uri, &b
-      application "redirect", uri, &b
+    def redirect uri
+      application "redirect", uri
     end
 
     # Send SIP session respond code.
     # @example Send 403 Forbidden
     #   respond 403
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_respond
-    def respond code, &b
-      application "respond", code.to_s, &b
+    def respond code
+      application "respond", code.to_s
     end
 
     # Sets a channel variable.
     # @example
     #   set "some_var", "some value"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_set
-    def set variable, value, &b
-      application "set", "#{variable}=#{value}", &b
+    def set variable, value
+      application "set", "#{variable}=#{value}"
     end
 
     # Transfers the current channel to a new context.
     # @example
     #   transfer "new_context"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_transfer
-    def transfer context, &b
-      application "transfer", context, &b
+    def transfer context
+      application "transfer", context
     end
 
     # Unbinds a previously bound key with bind_meta_app
     # @example
     #   unbind_meta_app 3
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_unbind_meta_app
-    def unbind_meta_app key, &b
-      application "unbind_meta_app", key.to_s, &b
+    def unbind_meta_app key
+      application "unbind_meta_app", key.to_s
     end
 
     # Unset a channel variable.
     # @example
     #   unset "foo"
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_unset
-    def unset variable, &b
-      application "unset", variable, &b
+    def unset variable
+      application "unset", variable
     end
   end
 end

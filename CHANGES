@@ -31,6 +31,10 @@
   * Use `Listener::Outbound#variable(name)` to access channel variables.
     E.g. `variable("foo")` is a shortcut for `session["variable_foo"]`.
 
+  * `Applications#play_and_get_digits/#read` uses the parameter key
+    `:variable` to determine which channel variable to read the result
+    from. Before it was `:read_var`.
+
 = 0.2.1 / 2010-02-09
 
   * Listener::Outbound#update_session takes a callback like other functions.
