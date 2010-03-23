@@ -6,12 +6,11 @@ module AppTest
 
   extend self
 
-  def application(name, args="", params={}, &block)
+  def application name, args="", params={}
     {
       :name   => name,
       :args   => args,
-      :params => params,
-      :block  => block
+      :params => params
     }
   end
 end

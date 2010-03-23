@@ -6,11 +6,10 @@ module CommandTest
 
   extend self
 
-  def command(name, args="", &block)
+  def command name, args=""
     {
       :name   => name,
-      :args   => args,
-      :block  => block
+      :args   => args
     }
   end
 end

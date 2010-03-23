@@ -4,8 +4,8 @@ require 'spec/librevox/listener'
 require 'librevox/listener/outbound'
 
 module Librevox::Applications
-  def sample_app(name, *args, &b)
-    application name, args.join(" "), &b
+  def sample_app name, *args
+    application name, args.join(" ")
   end
 end
 
@@ -185,8 +185,8 @@ describe "Outbound listener with non-nested apps" do
 end
 
 module Librevox::Commands
-  def sample_cmd(cmd, *args, &b)
-    command cmd, *args, &b
+  def sample_cmd cmd, *args
+    command cmd, *args
   end
 end
 

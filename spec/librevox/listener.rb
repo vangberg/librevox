@@ -86,8 +86,8 @@ shared "events" do
 end
 
 module Librevox::Commands
-  def sample_cmd(cmd, args="", &b)
-    command cmd, args, &b
+  def sample_cmd cmd, args=""
+    command cmd, args
   end
 end
 

@@ -8,7 +8,7 @@ module Librevox
   module Applications
     # Answers an incoming call or session.
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_answer
-    def answer &b
+    def answer
       application "answer"
     end
 
@@ -163,7 +163,7 @@ module Librevox
     # @example
     #   pre_anser
     # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_pre_answer
-    def pre_answer &b
+    def pre_answer
       application "pre_answer"
     end
 
