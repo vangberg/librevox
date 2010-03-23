@@ -3,7 +3,7 @@ require 'librevox/listener/base'
 module Librevox
   module Listener
     class Inbound < Base
-      def initialize(args={})
+      def initialize args={}
         super
 
         @auth = args[:auth] || "ClueCon"

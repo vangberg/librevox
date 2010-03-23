@@ -9,17 +9,17 @@ module Librevox
   class Response
     attr_accessor :headers, :content
 
-    def initialize(headers="", content="")
+    def initialize headers="", content=""
       self.headers = headers
       self.content = content
     end
 
-    def headers=(headers)
+    def headers= headers
       @headers = headers_2_hash(headers)
       @headers.each {|k,v| v.chomp! if v.is_a?(String)}
     end
 
-    def content=(content)
+    def content= content
       @content = content.match(/:/) ? headers_2_hash(content) : content
       @content.each {|k,v| v.chomp! if v.is_a?(String)}
     end
@@ -41,7 +41,7 @@ module Librevox
     end
 
     private
-    def headers_2_hash(*args)
+    def headers_2_hash *args
       EM::Protocols::HeaderAndContentProtocol.headers_2_hash *args
     end
   end
