@@ -27,6 +27,7 @@ describe "Outbound listener" do
     @listener = OutboundTestListener.new(nil)
     command_reply(
       "Caller-Caller-Id-Number" => "8675309",
+      "Unique-ID"               => "1234",
       "variable_some_var"       => "some value"
     )
     event_and_linger_replies
@@ -71,7 +72,8 @@ describe "Outbound listener with apps" do
   before do
     @listener = OutboundListenerWithNestedApps.new(nil)
 
-    command_reply "Establish-Session" => "OK"
+    command_reply "Establish-Session" => "OK",
+                  "Unique-ID"         => "1234"
     event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
@@ -81,6 +83,8 @@ describe "Outbound listener with apps" do
     @listener.should send_nothing
 
     command_reply "Reply-Text" => "+OK"
+    @listener.should update_session
+    channel_data
 
     @listener.should send_application "bar"
     @listener.should send_nothing
@@ -197,9 +201,11 @@ describe "Outbound listener with non-nested apps" do
     3.times {@listener.outgoing_data.shift}
   end
 
-  should "wait for response before calling next proc" do
+  should "wait for response before calling next app" do
     @listener.should send_application "foo"
     command_reply :body => "+OK"
+    @listener.should update_session
+    channel_data "Unique-ID" => "1234"
 
     @listener.should send_application "reader_app"
     command_reply :body => "+OK"
@@ -243,6 +249,8 @@ describe "Outbound listener with both apps and api calls" do
   should "wait for response before calling next app/cmd" do
     @listener.should send_application "foo"
     command_reply :body => "+OK"
+    @listener.should update_session
+    channel_data
 
     @listener.should send_command "api bar"
     api_response :body => "+OK"

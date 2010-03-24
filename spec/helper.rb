@@ -36,7 +36,7 @@ execute-app-name: #{app}
         }
       else
         lambda {|obj|
-          obj.outgoing_data.shift.should.match /^api uuid_dump /
+          obj.outgoing_data.shift.should.match /^api uuid_dump \d+/
         }
       end
     end
@@ -51,6 +51,13 @@ execute-app-name: #{app}
     def api_response args={}
       args["Content-Type"] = "api/response"
       response args
+    end
+
+    def channel_data args={}
+      api_response :body => {
+        "Event-Name"  => "CHANNEL_DATA",
+        "Session-Var" => "Second"
+      }.merge(args)
     end
 
     def response args={}

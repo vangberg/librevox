@@ -35,6 +35,10 @@
     `:variable` to determine which channel variable to read the result
     from. Before it was `:read_var`.
 
+  * Applications automatically calls `update_session`, which means that
+    `Outbound#session` always will be up to date. Before you had to call
+    it explicitly.
+
 = 0.2.1 / 2010-02-09
 
   * Listener::Outbound#update_session takes a callback like other functions.

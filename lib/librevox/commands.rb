@@ -12,7 +12,7 @@ module Librevox
     # @see http://wiki.freeswitch.org/wiki/Mod_commands
     def command name, args=""
       msg = "api #{name}"
-      msg << " #{args}" unless args.empty?
+      msg << " #{args}" if args && !args.empty?
       msg
     end
 

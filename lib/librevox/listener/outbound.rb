@@ -16,13 +16,10 @@ module Librevox
 
         @application_queue << Fiber.current
 
-        if params[:variable]
-          Fiber.yield
-          update_session
-          variable params[:variable]
-        else
-          return Fiber.yield
-        end
+        Fiber.yield
+        update_session
+
+        params[:variable] ? variable(params[:variable]) : nil
       end
 
       # This should probably be in Application#sendmsg instead.
