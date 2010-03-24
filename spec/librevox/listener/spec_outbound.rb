@@ -15,9 +15,35 @@ class OutboundTestListener < Librevox::Listener::Outbound
   end
 end
 
-def receive_event_and_linger_replies
-  @listener.command_reply "Reply-Text" => "+OK Events Enabled"
-  @listener.command_reply "Reply-Text" => "+OK will linger"
+def event_and_linger_replies
+  command_reply "Reply-Text" => "+OK Events Enabled"
+  command_reply "Reply-Text" => "+OK will linger"
+end
+
+def command_reply args={}
+  args["Content-Type"] = "command/reply"
+  response args
+end
+
+def api_response args={}
+  args["Content-Type"] = "api/response"
+  response args
+end
+
+def response args={}
+  body    = args.delete :body
+  headers = args
+
+  if body.is_a? Hash
+    body = body.map {|k,v| "#{k}: #{v}"}.join "\n"
+  end
+
+  headers["Content-Length"] = body.size if body
+  msg = headers.map {|k, v| "#{k}: #{v}"}.join "\n"
+
+  msg << "\n\n" + body if body
+
+  @listener.receive_data msg + "\n\n"
 end
 
 describe "Outbound listener" do
@@ -25,8 +51,11 @@ describe "Outbound listener" do
 
   before do
     @listener = OutboundTestListener.new(nil)
-    @listener.receive_data("Content-Type: command/reply\nCaller-Caller-ID-Number: 8675309\nvariable_some_var: some value\n\n")
-    receive_event_and_linger_replies
+    command_reply(
+      "Caller-Caller-Id-Number" => "8675309",
+      "variable_some_var"       => "some value"
+    )
+    event_and_linger_replies
   end
 
   should "connect to freeswitch and subscribe to events" do
@@ -68,9 +97,8 @@ describe "Outbound listener with apps" do
   before do
     @listener = OutboundListenerWithNestedApps.new(nil)
 
-    # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Type: command/reply\nEstablish-Session: OK\n\n")
-    receive_event_and_linger_replies
+    command_reply "Establish-Session" => "OK"
+    event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
@@ -78,7 +106,7 @@ describe "Outbound listener with apps" do
     @listener.should send_application "foo"
     @listener.should send_nothing
 
-    @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK\n\n")
+    command_reply "Reply-Text" => "+OK"
 
     @listener.should send_application "bar"
     @listener.should send_nothing
@@ -86,19 +114,29 @@ describe "Outbound listener with apps" do
 
   should "not be driven forward by events" do
     @listener.should send_application "foo"
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 45\n\nEvent-Name: CHANNEL_EXECUTE\nSession-Var: Some\n\n")
+
+    command_reply :body => {
+      "Event-Name"  => "CHANNEL_EXECUTE",
+      "Session-Var" => "Some"
+    }
+
     @listener.should send_nothing
   end
 
   should "not be driven forward by api responses" do
     @listener.should send_application "foo"
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\nFoo")
+
+    api_response :body => "Foo"
+
     @listener.should send_nothing
   end
 
   should "not be driven forward by disconnect notifications" do
     @listener.should send_application "foo"
-    @listener.receive_data("Content-Type: text/disconnect-notice\nContent-Length: 9\n\nLingering")
+
+    response "Content-Type" => "text/disconnect-notice",
+             :body          => "Lingering"
+
     @listener.should send_nothing
   end
 end
@@ -122,9 +160,9 @@ describe "Outbound listener with app reading data" do
   before do
     @listener = OutboundListenerWithReader.new(nil)
 
-    # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
-    receive_event_and_linger_replies
+    command_reply "Session-Var" => "First",
+                  "Unique-ID"   => "1234"
+    event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
 
     @listener.should send_application "reader_app"
@@ -135,21 +173,31 @@ describe "Outbound listener with app reading data" do
   end
 
   should "send uuid_dump to get channel var, after getting response" do
-    @listener.receive_data("Content-Type: command/reply\nReply-Text: +OK\n\n")
+    command_reply "Reply-Text" => "+OK"
     @listener.should update_session 1234
   end
 
   should "update session with new data" do
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    command_reply :body => "+OK"
+
     @listener.should update_session 1234
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
+    api_response :body => {
+      "Event-Name"  => "CHANNEL_DATA",
+      "Session-Var" => "Second"
+    }
+
     @listener.session[:session_var].should == "Second"
   end
 
   should "return value of channel variable" do
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    command_reply :body => "+OK"
+
     @listener.should update_session 1234
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 50\n\nEvent-Name: CHANNEL_DATA\nvariable_app_var: Second\n\n")
+    api_response :body => {
+      "Event-Name"       => "CHANNEL_DATA",
+      "variable_app_var" => "Second"
+    }
+
     @listener.should send_application "send", "Second"
   end
 end
@@ -169,21 +217,24 @@ describe "Outbound listener with non-nested apps" do
   before do
     @listener = OutboundListenerWithNonNestedApps.new(nil)
 
-    # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
-    receive_event_and_linger_replies
+    command_reply "Session-Var" => "First",
+                  "Unique-ID"   => "1234"
+    event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
   should "wait for response before calling next proc" do
     @listener.should send_application "foo"
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    command_reply :body => "+OK"
 
     @listener.should send_application "reader_app"
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    command_reply :body => "+OK"
 
     @listener.should update_session
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 50\n\nEvent-Name: CHANNEL_DATA\nvariable_app_var: Second\n\n")
+    api_response :body => {
+      "Event-Name"       => "CHANNEL_DATA",
+      "variable_app_var" => "Second"
+    }
 
     @listener.should send_application "send", "the end: Second"
   end
@@ -209,18 +260,18 @@ describe "Outbound listener with both apps and api calls" do
   before do
     @listener = OutboundListenerWithAppsAndApi.new(nil)
 
-    # Establish session and get rid of connect-string
-    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
-    receive_event_and_linger_replies
+    command_reply "Session-Var" => "First",
+                  "Unique-ID"   => "1234"
+    event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
   end
 
-  should "wait for response before calling next proc" do
+  should "wait for response before calling next app/cmd" do
     @listener.should send_application "foo"
-    @listener.receive_data("Content-Type: command/reply\nContent-Length: 3\n\n+OK\n\n")
+    command_reply :body => "+OK"
 
     @listener.should send_command "api bar"
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 3\n\n+OK\n\n")
+    api_response :body => "+OK"
 
     @listener.should send_application "baz"
   end
@@ -238,16 +289,20 @@ describe "Outbound listener with update session callback" do
 
   before do
     @listener = OutboundListenerWithUpdateSessionCallback.new(nil)
-    @listener.receive_data("Content-Type: command/reply\nSession-Var: First\nUnique-ID: 1234\n\n")
-    receive_event_and_linger_replies
+    command_reply "Session-Var" => "First",
+                  "Unique-ID"   => "1234"
+    event_and_linger_replies
     3.times {@listener.outgoing_data.shift}
 
     @listener.should update_session
-    @listener.receive_data("Content-Type: api/response\nContent-Length: 44\n\nEvent-Name: CHANNEL_DATA\nSession-Var: Second\n\n")
+    api_response :body => {
+      "Event-Name"  => "CHANNEL_DATA",
+      "Session-Var" => "Second"
+    }
   end
 
   should "execute callback" do
-    @listener.read_data.should =~ /yay,/
+    @listener.outgoing_data.shift.should =~ /yay,/
   end
 
   should "update session before calling callback" do

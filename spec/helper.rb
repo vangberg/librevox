@@ -4,13 +4,6 @@ require 'bacon'
 require 'librevox'
 
 class Librevox::Listener::Outbound
-  def command_reply headers={}
-    msg = "Content-Type: command/reply\n"
-    headers.each {|key, value|
-      msg << "#{key}: #{value}\n"
-    }
-    receive_data msg + "\n"
-  end
 end
 
 module Librevox::Matchers
