@@ -17,8 +17,8 @@ outbound event sockets before proceeding. The
 [wiki page on mod_event_socket](http://wiki.freeswitch.org/wiki/Event_Socket) is
 a good place to start.
 
-Librevox is tested to work with Ruby 1.8.7 and 1.9.1. Librevox is not compatible
-with Ruby 1.8.6, and eventually 1.9.1 will be required.
+Librevox doesn't work with Ruby versions below 1.9.1, and probably never will.
+This is because Librevox uses 1.9-only features such as fibers.
 
 ## Inbound listener
 
@@ -87,20 +87,19 @@ When using applications that expect a reply, such as `play_and_get_digits`,
 you have to use callbacks to read the value, as the function itself returns
 immediately due to the async nature of EventMachine:
 
-    session do
+    def session_initiated
       answer
 
-      play_and_get_digits "enter-number.wav", "error.wav" do |digit|
-        puts "User pressed #{digit}"
-        playback "thanks-for-the-input.wav"
-        hangup
-      end
+      digit = play_and_get_digits "enter-number.wav", "error.wav"
+      puts "User pressed #{digit}"
+      playback "thanks-for-the-input.wav"
+      hangup
     end
 
 You can also use the commands defined in `Librevox::Command`, which, to avoid
 namespace clashes, are accessed through the `api` object:
     
-    session do
+    def session_initiated
       answer
       api.status
     end
