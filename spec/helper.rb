@@ -3,20 +3,17 @@ $:.unshift 'lib'
 require 'bacon'
 require 'librevox'
 
-class Librevox::Listener::Outbound
-end
-
-module Librevox::Matchers
-  module Listener
+module Librevox::Test
+  module Matchers
     def send_command command
       lambda {|obj|
         obj.outgoing_data.shift.should == "#{command}\n\n"
       }
     end
-  end
 
-  module Outbound
-    include Listener
+    def send_nothing
+      lambda {|obj| obj.outgoing_data.shift.should == nil}
+    end
 
     def send_application app, args=nil
       lambda {|obj|
@@ -43,9 +40,40 @@ execute-app-name: #{app}
         }
       end
     end
+  end
 
-    def send_nothing
-      lambda {|obj| obj.outgoing_data.shift.should == nil}
+  module ListenerHelpers
+    def command_reply args={}
+      args["Content-Type"] = "command/reply"
+      response args
+    end
+
+    def api_response args={}
+      args["Content-Type"] = "api/response"
+      response args
+    end
+
+    def response args={}
+      body    = args.delete :body
+      headers = args
+
+      if body.is_a? Hash
+        body = body.map {|k,v| "#{k}: #{v}"}.join "\n"
+      end
+
+      headers["Content-Length"] = body.size if body
+      msg = headers.map {|k, v| "#{k}: #{v}"}.join "\n"
+
+      msg << "\n\n" + body if body
+
+      @listener.receive_data msg + "\n\n"
+    end
+
+    def event name
+      body    = "Event-Name: #{name}"
+      headers = "Content-Length: #{body.size}"
+
+      @listener.receive_data "#{headers}\n\n#{body}\n\n"
     end
   end
 end

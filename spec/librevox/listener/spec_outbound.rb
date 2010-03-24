@@ -20,34 +20,8 @@ def event_and_linger_replies
   command_reply "Reply-Text" => "+OK will linger"
 end
 
-def command_reply args={}
-  args["Content-Type"] = "command/reply"
-  response args
-end
-
-def api_response args={}
-  args["Content-Type"] = "api/response"
-  response args
-end
-
-def response args={}
-  body    = args.delete :body
-  headers = args
-
-  if body.is_a? Hash
-    body = body.map {|k,v| "#{k}: #{v}"}.join "\n"
-  end
-
-  headers["Content-Length"] = body.size if body
-  msg = headers.map {|k, v| "#{k}: #{v}"}.join "\n"
-
-  msg << "\n\n" + body if body
-
-  @listener.receive_data msg + "\n\n"
-end
-
 describe "Outbound listener" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundTestListener.new(nil)
@@ -92,7 +66,7 @@ class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
 end
 
 describe "Outbound listener with apps" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundListenerWithNestedApps.new(nil)
@@ -155,7 +129,7 @@ class OutboundListenerWithReader < Librevox::Listener::Outbound
 end
 
 describe "Outbound listener with app reading data" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundListenerWithReader.new(nil)
@@ -212,7 +186,7 @@ class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
 end
 
 describe "Outbound listener with non-nested apps" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundListenerWithNonNestedApps.new(nil)
@@ -255,7 +229,7 @@ class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
 end
 
 describe "Outbound listener with both apps and api calls" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundListenerWithAppsAndApi.new(nil)
@@ -285,7 +259,7 @@ class OutboundListenerWithUpdateSessionCallback < Librevox::Listener::Outbound
 end
 
 describe "Outbound listener with update session callback" do
-  extend Librevox::Matchers::Outbound
+  extend Librevox::Test::Matchers
 
   before do
     @listener = OutboundListenerWithUpdateSessionCallback.new(nil)

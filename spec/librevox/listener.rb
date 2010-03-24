@@ -1,6 +1,7 @@
 require 'spec/helper'
-
 require 'librevox/listener/base'
+
+include Librevox::Test::ListenerHelpers
 
 class Librevox::Listener::Base
   attr_accessor :outgoing_data
@@ -19,6 +20,8 @@ class Librevox::Listener::Base
   end
 end
 
+# These tests are a bit fragile, as they depend on event hooks being
+# executed before on_event.
 shared "events" do
   before do
     @class = @listener.class
@@ -43,33 +46,37 @@ shared "events" do
   end
 
   should "execute callback for event" do
-    @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
+    event "OTHER_EVENT"
     @listener.read_data.should == "something else"
 
-    @listener.receive_data("Content-Length: 22\n\nEvent-Name: SOME_EVENT\n\n")
+    event "SOME_EVENT"
     @listener.read_data.should == "something"
   end
 
   should "pass response duplicate as arg to hook block" do
-    @listener.receive_data("Content-Length: 25\n\nEvent-Name: HOOK_WITH_ARG\n\n")
+    event "HOOK_WITH_ARG"
+
     reply = @listener.read_data
     reply.should =~ /^got event arg: /
     reply.should.not =~ /^got event arg: #{@listener.response.object_id}$/
   end
 
   should "expose response as event" do
-    @listener.receive_data("Content-Length: 23\n\nEvent-Name: OTHER_EVENT\n\n")
+    event "OTHER_EVENT"
+
     @listener.event.class.should == Librevox::Response
     @listener.event.content[:event_name].should == "OTHER_EVENT"
   end
 
   should "call on_event" do
-    @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
+    event "THIRD_EVENT"
+
     @listener.read_data.should =~ /^from on_event/
   end
 
   should "call on_event with response duplicate as argument" do
-    @listener.receive_data("Content-Length: 23\n\nEvent-Name: THIRD_EVENT\n\n")
+    event "THIRD_EVENT"
+
     @listener.read_data.should.not =~ /^from on_event: #{@listener.response.object_id}$/
   end
 
@@ -81,7 +88,7 @@ shared "events" do
     end
     @class.event(:channel_data) {send_data "event hook: CHANNEL_DATA test"}
 
-    @listener.receive_data("Content-Length: 24\n\nEvent-Name: CHANNEL_DATA\n\n")
+    event "CHANNEL_DATA"
 
     @listener.outgoing_data.should.include "on_event: CHANNEL_DATA test"
     @listener.outgoing_data.should.include "event hook: CHANNEL_DATA test"
@@ -99,10 +106,12 @@ shared "api commands" do
     @class = @listener.class
 
     # Establish session
-    @listener.receive_data("Content-Type: command/reply\nTest: Testing\n\n")
+    command_reply "Test" => "Testing"
   end
 
   describe "multiple api commands" do
+    extend Librevox::Test::Matchers
+
     before do
       @listener.outgoing_data.clear
 
@@ -116,16 +125,16 @@ shared "api commands" do
     end
 
     should "only send one command at a time, and return response for commands" do
-      @listener.receive_data("Content-Type: command/reply\nContent-Length: 22\n\nEvent-Name: API_TEST\n\n")
-      @listener.read_data.should == "api foo\n\n"
-      @listener.read_data.should == nil
+      command_reply :body => {"Event-Name" => "API_TEST"}
+      @listener.should send_command "api foo"
+      @listener.should send_nothing
 
-      @listener.receive_data("Content-Type: api/response\nReply-Text: +OK\n\n")
-      @listener.read_data.should == "api foo bar baz\n\n"
-      @listener.read_data.should == nil
+      api_response "Reply-Text" => "+OK"
+      @listener.should send_command "api foo bar baz"
+      @listener.should send_nothing
 
-      @listener.receive_data("Content-Type: api/response\nContent-Length: 4\n\n+YAY\n\n")
-      @listener.read_data.should == "response +YAY\n\n"
+      api_response :body => "+YAY"
+      @listener.should send_command "response +YAY"
     end
   end
 end
