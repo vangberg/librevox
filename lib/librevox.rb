@@ -3,6 +3,7 @@ require 'fiber'
 require 'eventmachine'
 require 'librevox/listener/inbound'
 require 'librevox/listener/outbound'
+require 'librevox/command_socket'
 
 module Librevox
   VERSION = "0.3"
