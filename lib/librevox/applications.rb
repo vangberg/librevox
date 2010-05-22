@@ -52,7 +52,7 @@ module Librevox
     # @example With failover
     #   bridge ['user/coltrane', 'user/davis'], ['user/sun-ra', 'user/taylor']
     #   #=> user/coltrane,user/davis|user/sun-ra,user/taylor
-    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bridgecall
+    # @see http://wiki.freeswitch.org/wiki/Misc._Dialplan_Tools_bridge
     def bridge *args
       variables = if args.last.is_a? Hash
                     # We need to sort the key/value pairs to facilitate testing.
