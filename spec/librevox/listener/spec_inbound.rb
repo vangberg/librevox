@@ -1,5 +1,5 @@
-require 'spec/helper'
-require 'spec/librevox/listener'
+require './spec/helper'
+require './spec/librevox/listener'
 
 require 'librevox/listener/inbound'
 

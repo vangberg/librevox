@@ -1,5 +1,3 @@
-$:.unshift 'lib'
-
 require 'bacon'
 require 'librevox'
 

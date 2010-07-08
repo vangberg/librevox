@@ -1,4 +1,4 @@
-require 'spec/helper'
+require './spec/helper'
 require 'librevox/listener/base'
 
 include Librevox::Test::ListenerHelpers
