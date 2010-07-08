@@ -9,11 +9,11 @@ Gem::Specification.new do |s|
 open source telephony platform FreeSwitch."
   s.authors  = ["Harry Vangberg"]
   s.files    = [
-    "README.md", 
+    "README.md",
     "LICENSE",
     "TODO",
     "Rakefile",
-		"librevox.gemspec", 
+		"librevox.gemspec",
 		"lib/librevox.rb",
     "lib/librevox/applications.rb",
     "lib/librevox/command_socket.rb",
@@ -33,5 +33,6 @@ open source telephony platform FreeSwitch."
     "spec/librevox/listener/spec_inbound.rb",
     "spec/librevox/listener/spec_outbound.rb"
   ]
+  s.add_dependency "eventmachine", ">= 0.12.10"
 end
 
