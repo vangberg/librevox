@@ -19,3 +19,5 @@
 - maybe let commands handle the response, so something useful could be returned?
 
 - extension sugar (0.5)
+
+- graceful shutdown
