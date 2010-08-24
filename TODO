@@ -21,3 +21,5 @@
 - extension sugar (0.5)
 
 - graceful shutdown
+
+- handle disconnects
