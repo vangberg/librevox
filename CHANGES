@@ -1,4 +1,4 @@
-= master / unreleased
+= 0.3 / 2010-09-30
 
   * New commands: uuid_bridge, uuid_park, hash.
 
