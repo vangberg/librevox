@@ -10,8 +10,8 @@
     commands from a listener – this is easier on the eye, and makes for
     a slighly simpler implementation.
 
-  * Introduced, making Librevox Ruby 1.9-only. Support for the old
-    callback-style has been removed. This would have worked in < 0.3:
+  * Introduced fibers, making Librevox Ruby 1.9-only. Support for the
+    old callback-style has been removed. This would have worked in < 0.3:
     
       def session_initiated
         answer
