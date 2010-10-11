@@ -23,3 +23,7 @@
 - graceful shutdown
 
 - handle disconnects
+
+- failure hooks, for hoptoad and so on.
+
+- log raw data in case of parse failure.
