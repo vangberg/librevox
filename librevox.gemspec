@@ -4,7 +4,7 @@ Gem::Specification.new do |s|
   s.date     = "2010-09-30"
   s.summary  = "Ruby library for interacting with FreeSWITCH."
   s.email    = "harry@vangberg.name"
-  s.homepage = "http://github.com/ichverstehe/librevox"
+  s.homepage = "http://github.com/vangberg/librevox"
   s.description = "EventMachine-based Ruby library for interacting with the
 open source telephony platform FreeSwitch."
   s.authors  = ["Harry Vangberg"]

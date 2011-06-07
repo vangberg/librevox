@@ -171,8 +171,8 @@ the `Librevox::Commands` and `Librevox::Applications` modules.
 
 ## Extras
 
-* Source: [http://github.com/ichverstehe/librevox](http://github.com/ichverstehe/librevox)
-* API docs: [http://rdoc.info/projects/ichverstehe/librevox](http://rdoc.info/projects/ichverstehe/librevox)
+* Source: [http://github.com/vangberg/librevox](http://github.com/vangberg/librevox)
+* API docs: [http://rdoc.info/projects/vangberg/librevox](http://rdoc.info/projects/vangberg/librevox)
 * Mailing list: librevox@librelist.com
 * IRC: #librevox @ irc.freenode.net
 
