@@ -37,4 +37,3 @@ open source telephony platform FreeSwitch."
   s.add_development_dependency "bacon", "~> 1.1"
   s.add_development_dependency "rr", "~> 1"
 end
-
