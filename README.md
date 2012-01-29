@@ -17,8 +17,7 @@ outbound event sockets before proceeding. The
 [wiki page on mod_event_socket](http://wiki.freeswitch.org/wiki/Event_Socket) is
 a good place to start.
 
-Librevox doesn't work with Ruby versions below 1.9.1, and probably never will.
-This is because Librevox uses 1.9-only features such as fibers.
+Librevox is Ruby 1.9-only.
 
 ## Inbound listener
 
@@ -75,10 +74,13 @@ When a call is made and Freeswitch connects to the outbound event listener,
 `session_initiated` is called. This is where you set up your dialplan:
 
     def session_initiated
-      answer
-      set "some_var", "some value"
-      playback "path/to/file"
-      hangup
+      answer do
+        set "some_var", "some value" do
+          playback "path/to/file" do
+            hangup
+          end
+        end
+      end
     end
 
 All channel variables are available as a hash named `session`.
@@ -88,20 +90,23 @@ you have to use callbacks to read the value, as the function itself returns
 immediately due to the async nature of EventMachine:
 
     def session_initiated
-      answer
-
-      digit = play_and_get_digits "enter-number.wav", "error.wav"
-      puts "User pressed #{digit}"
-      playback "thanks-for-the-input.wav"
-      hangup
+      answer do
+        play_and_get_digits "enter-number.wav", "error.wav" do |digit|
+          puts "User pressed #{digit}"
+          playback "thanks-for-the-input.wav" do
+            hangup
+          end
+        end
+      end
     end
 
 You can also use the commands defined in `Librevox::Command`, which, to avoid
 namespace clashes, are accessed through the `api` object:
     
     def session_initiated
-      answer
-      api.status
+      answer do
+        api.status
+      end
     end
 
 They can be used in conjunction with applications, and do also take a block,
@@ -179,7 +184,7 @@ the `Librevox::Commands` and `Librevox::Applications` modules.
 ## License
 
 (c) 2009, 2010, 2011 Harry Vangberg <harry@vangberg.name>
-(c) 2011 Firmafon ApS <info@firmafon.dk>
+(c) 2011, 2012 Firmafon ApS <info@firmafon.dk>
 
 Librevox was inspired by and uses code from Freeswitcher, which is distributed
 under the MIT license and (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel,
