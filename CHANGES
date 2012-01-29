@@ -1,3 +1,19 @@
+= Unreleased
+
+  * Removing fibers and reintroducing callback passing style:
+        
+      def session_initiated
+        answer do
+          play_and_get_digits 'some-file.mp3' do |digit|
+            ...
+          end
+        end
+      end
+
+    Fibers have proven to be hard to understand and prune to intro-
+    ducing subtle bugs, whereas callback passing style is easier to
+    manage.
+
 = 0.3 / 2010-09-30
 
   * New commands: uuid_bridge, uuid_park, hash.
