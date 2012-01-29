@@ -6,7 +6,7 @@ module Librevox
     class Outbound < Base
       include Librevox::Applications
 
-      def application app, args=nil, params={}
+      def application app, args=nil, params={}, &block
         msg = "sendmsg\n"
         msg << "call-command: execute\n"
         msg << "execute-app-name: #{app}\n"
@@ -14,12 +14,12 @@ module Librevox
 
         send_data "#{msg}\n"
 
-        @application_queue << Fiber.current
-
-        Fiber.yield
-        update_session
-
-        params[:variable] ? variable(params[:variable]) : nil
+        @application_queue.push(proc {
+          update_session do
+            arg = params[:variable] ? variable(params[:variable]) : nil
+            block.call(arg) if block
+          end
+        })
       end
 
       # This should probably be in Application#sendmsg instead.
@@ -40,9 +40,9 @@ module Librevox
 
         send_data "connect\n\n"
         send_data "myevents\n\n"
-        @application_queue << Fiber.new {}
+        @application_queue << proc {}
         send_data "linger\n\n"
-        @application_queue << Fiber.new {session_initiated}
+        @application_queue << proc {session_initiated}
       end
 
       def handle_response
@@ -51,7 +51,7 @@ module Librevox
         elsif response.event? && response.event == "CHANNEL_DATA"
           @session = response.content
         elsif response.command_reply? && !response.event?
-          @application_queue.shift.resume if @application_queue.any?
+          @application_queue.shift.call(response) if @application_queue.any?
         end
 
         super
@@ -61,8 +61,8 @@ module Librevox
         session[:"variable_#{name}"]
       end
 
-      def update_session
-        api.command "uuid_dump", session[:unique_id]
+      def update_session &block
+        api.command "uuid_dump", session[:unique_id], &block
       end
     end
   end

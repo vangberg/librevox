@@ -4,8 +4,8 @@ require './spec/librevox/listener'
 require 'librevox/listener/outbound'
 
 module Librevox::Applications
-  def sample_app name, *args
-    application name, args.join(" ")
+  def sample_app name, *args, &block
+    application name, args.join(" "), &block
   end
 end
 
@@ -61,8 +61,9 @@ end
 
 class OutboundListenerWithNestedApps < Librevox::Listener::Outbound
   def session_initiated
-    sample_app "foo"
-    sample_app "bar"
+    sample_app "foo" do
+      sample_app "bar"
+    end
   end
 end
 

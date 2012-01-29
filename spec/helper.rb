@@ -4,17 +4,17 @@ require 'librevox'
 module Librevox::Test
   module Matchers
     def send_command command
-      lambda {|obj|
+      proc {|obj|
         obj.outgoing_data.shift.should == "#{command}\n\n"
       }
     end
 
     def send_nothing
-      lambda {|obj| obj.outgoing_data.shift.should == nil}
+      proc {|obj| obj.outgoing_data.shift.should == nil}
     end
 
     def send_application app, args=nil
-      lambda {|obj|
+      proc {|obj|
         msg = <<-EOM
 sendmsg
 call-command: execute
@@ -29,11 +29,11 @@ execute-app-name: #{app}
 
     def update_session session_id=nil
       if session_id
-        lambda {|obj|
+        proc {|obj|
           obj.outgoing_data.shift.should == "api uuid_dump #{session_id}\n\n"
         }
       else
-        lambda {|obj|
+        proc {|obj|
           obj.outgoing_data.shift.should.match /^api uuid_dump \d+/
         }
       end
