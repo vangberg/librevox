@@ -120,15 +120,16 @@ describe "Outbound listener with apps" do
 end
 
 module Librevox::Applications
-  def reader_app
-    application 'reader_app', "", {:variable => 'app_var'}
+  def reader_app &block
+    application 'reader_app', "", {:variable => 'app_var'}, &block
   end
 end
 
 class OutboundListenerWithReader < Librevox::Listener::Outbound
   def session_initiated
-    data = reader_app
-    application "send", data
+    reader_app do |data|
+      application "send", data
+    end
   end
 end
 
@@ -183,9 +184,11 @@ end
 class OutboundListenerWithNonNestedApps < Librevox::Listener::Outbound
   attr_reader :queue
   def session_initiated
-    sample_app "foo"
-    data = reader_app
-    application "send", "the end: #{data}"
+    sample_app "foo" do
+      reader_app do |data|
+        application "send", "the end: #{data}"
+      end
+    end
   end
 end
 
@@ -221,16 +224,18 @@ describe "Outbound listener with non-nested apps" do
 end
 
 module Librevox::Commands
-  def sample_cmd cmd, *args
-    command cmd, *args
+  def sample_cmd cmd, *args, &block
+    command cmd, *args, &block
   end
 end
 
 class OutboundListenerWithAppsAndApi < Librevox::Listener::Outbound
   def session_initiated
-    sample_app "foo"
-    api.sample_cmd "bar"
-    sample_app "baz"
+    sample_app "foo" do
+      api.sample_cmd "bar" do
+        sample_app "baz"
+      end
+    end
   end
 end
 
@@ -261,8 +266,9 @@ end
 
 class OutboundListenerWithUpdateSessionCallback < Librevox::Listener::Outbound
   def session_initiated
-    update_session
-    application "send", "yay, #{session[:session_var]}"
+    update_session do
+      application "send", "yay, #{session[:session_var]}"
+    end
   end
 end
 
