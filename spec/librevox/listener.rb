@@ -96,8 +96,8 @@ shared "events" do
 end
 
 module Librevox::Commands
-  def sample_cmd cmd, args=""
-    command cmd, args
+  def sample_cmd cmd, args="", &block
+    command cmd, args, &block
   end
 end
 
@@ -118,9 +118,11 @@ shared "api commands" do
       def @listener.on_event(e) end # Don't send anything, kthx.
 
       @class.event(:api_test) {
-        api.sample_cmd "foo"
-        r = api.sample_cmd "foo", "bar baz"
-        command "response #{r.content}"
+        api.sample_cmd "foo" do
+          api.sample_cmd "foo", "bar baz" do |r|
+            command "response #{r.content}"
+          end
+        end
       }
     end
 

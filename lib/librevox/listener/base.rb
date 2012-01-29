@@ -41,11 +41,10 @@ module Librevox
         @command_delegate ||= CommandDelegate.new(self)
       end
 
-      def command msg
+      def command msg, &block
         send_data "#{msg}\n\n"
 
-        @command_queue << Fiber.current
-        Fiber.yield
+        @command_queue.push(block)
       end
 
       attr_accessor :response
@@ -62,11 +61,11 @@ module Librevox
 
       def handle_response
         if response.api_response? && @command_queue.any?
-          @command_queue.shift.resume response
+          @command_queue.shift.call(response)
         end
 
         if response.event?
-          Fiber.new {on_event response.dup}.resume
+          on_event(response.dup)
           invoke_event_hooks
         end
       end
@@ -81,9 +80,7 @@ module Librevox
       def invoke_event_hooks
         event = response.event.downcase.to_sym
         self.class.hooks[event].each {|block|
-          Fiber.new {
-            instance_exec response.dup, &block 
-          }.resume
+          instance_exec(response.dup, &block)
         }
       end
     end
