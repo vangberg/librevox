@@ -16,8 +16,8 @@ module Librevox
       msg
     end
 
-    def status
-      command "status"
+    def status &block
+      command "status", &block
     end
 
     # Access the hash table that comes with FreeSWITCH.
@@ -25,8 +25,8 @@ module Librevox
     #   socket.hash :insert, :realm, :key, "value"
     #   socket.hash :select, :realm, :key
     #   socket.hash :delete, :realm, :key
-    def hash *args
-      command "hash", args.join("/")
+    def hash *args, &block
+      command "hash", args.join("/"), &block
     end
 
     # Originate a new call.
@@ -34,7 +34,7 @@ module Librevox
     #   socket.originate 'sofia/user/coltrane', :extension => "1234"
     # @example With :dialplan and :context
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#originate
-    def originate url, args={}
+    def originate url, args={}, &block
       extension = args.delete(:extension)
       dialplan  = args.delete(:dialplan)
       context   = args.delete(:context)
@@ -43,35 +43,35 @@ module Librevox
 
       arg_string = "{#{vars}}" + 
         [url, extension, dialplan, context].compact.join(" ")
-      command "originate", arg_string
+      command "originate", arg_string, &block
     end
 
     # FreeSWITCH control messages.
     # @example
     #   socket.fsctl :hupall, :normal_clearing
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#fsctl
-    def fsctl *args
-      command "fsctl", args.join(" ")
+    def fsctl *args, &block
+      command "fsctl", args.join(" "), &block
     end
 
-    def hupall cause=nil
-      command "hupall", cause
+    def hupall cause=nil, &block
+      command "hupall", cause, &block
     end
 
     # Park call.
     # @example
     #   socket.uuid_park "592567a2-1be4-11df-a036-19bfdab2092f"
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#uuid_park
-    def uuid_park uuid
-      command "uuid_park", uuid
+    def uuid_park uuid, &block
+      command "uuid_park", uuid, &block
     end
 
     # Bridge two call legs together. At least one leg must be anwered.
     # @example
     #   socket.uuid_bridge "592567a2-1be4-11df-a036-19bfdab2092f", "58b39c3a-1be4-11df-a035-19bfdab2092f"
     # @see http://wiki.freeswitch.org/wiki/Mod_commands#uuid_bridge
-    def uuid_bridge uuid1, uuid2
-      command "uuid_bridge", "#{uuid1} #{uuid2}"
+    def uuid_bridge uuid1, uuid2, &block
+      command "uuid_bridge", "#{uuid1} #{uuid2}", &block
     end
   end
 end
