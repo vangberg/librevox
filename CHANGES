@@ -1,5 +1,10 @@
 = Unreleased
 
+  * Allow setting a response's content from a hash:
+      
+      response = Librevox::Response.new
+      response.content = {:key => 'value'}
+
   * Removing fibers and reintroducing callback passing style:
         
       def session_initiated
