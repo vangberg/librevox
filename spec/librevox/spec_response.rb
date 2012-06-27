@@ -29,6 +29,12 @@ describe Response do
     response.content.should.equal "OK."
   end
 
+  should "allow setting content from a hash" do
+    response = Response.new
+    response.content = {:key => 'value'}
+    response.content.should.equal({:key => 'value'})
+  end
+
   should "check for event" do
     response = Response.new("Content-Type: command/reply", "Event-Name: Hangup")
     response.event?.should.be.true
