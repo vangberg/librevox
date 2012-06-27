@@ -1,4 +1,4 @@
-= Unreleased
+= 0.5 / 2012-06-27
 
   * Allow setting a response's content from a hash:
       
