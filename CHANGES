@@ -5,6 +5,8 @@
       response = Librevox::Response.new
       response.content = {:key => 'value'}
 
+    [Ben Langfeld]
+
   * Removing fibers and reintroducing callback passing style:
         
       def session_initiated
