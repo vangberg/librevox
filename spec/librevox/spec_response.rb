@@ -59,4 +59,9 @@ describe Response do
     response = Response.new("Content-Type: api/response", "Foo-Bar: Baz")
     response.command_reply?.should.be.false
   end
+
+  should "parse body from command reply" do
+    response = Response.new("Content-Type: command/reply", "Foo-Bar: Baz\n\nMessage body")
+    response.content[:body].should.equal "Message body"
+  end
 end
