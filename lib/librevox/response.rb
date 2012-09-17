@@ -20,7 +20,11 @@ module Librevox
     end
 
     def content= content
-      @content = content.respond_to?(:match) && content.match(/:/) ? headers_2_hash(content).merge(:body => content.split("\n\n",2)[1].to_s) : content
+      @content = if content.respond_to?(:match) && content.match(/:/)
+                   headers_2_hash(content).merge(:body => content.split("\n\n", 2)[1].to_s)
+                 else
+                   content
+                 end
       @content.each {|k,v| v.chomp! if v.is_a?(String)}
     end
 
