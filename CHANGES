@@ -1,3 +1,13 @@
+= 0.6 / 2013-01-21
+
+  * Less strict EventMachine dependency [Phil Pirozhkov <pirjsuka@gmail.com>]
+  
+  * Parse body from command reply:
+      
+      response.content[:body]
+
+    [Phil Pirozhkov <pirjsuka@gmail.com>]
+
 = 0.5 / 2012-06-27
 
   * Allow setting a response's content from a hash:

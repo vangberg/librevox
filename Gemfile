@@ -1,6 +1,6 @@
 source :rubygems
 
-gem "eventmachine", "~> 0.12.10"
+gemspec
 
 group :test do
   gem "rake"
