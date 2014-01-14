@@ -1,6 +1,9 @@
 = Unreloeased
 
   * Update EventMachine to 1.0
+  
+  * Inbound event listener automatically tries to reconnect if connection
+    is lost.
 
 = 0.6 / 2013-01-21
 

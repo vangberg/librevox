@@ -48,13 +48,14 @@ module Librevox
   end
 
   def self.run klass, args={}
-    host = args.delete(:host) || "localhost"
-    port = args.delete(:port)
+    args[:host] ||= "localhost"
 
     if klass.ancestors.include? Librevox::Listener::Inbound
-      EM.connect host, port || "8021", klass, args
+      args[:port] ||= 8021
+      EM.connect args[:host], args[:port], klass, args
     elsif klass.ancestors.include? Librevox::Listener::Outbound
-      EM.start_server host, port || "8084", klass, args
+      args[:port] ||= 8084
+      EM.start_server host, args[:port], klass, args
     end
   end
 

@@ -15,6 +15,7 @@ describe "Inbound listener" do
   behaves_like "api commands"
 
   should "authorize and subscribe to events" do
+    @listener.connection_completed
     @listener.outgoing_data.shift.should == "auth ClueCon\n\n"
     @listener.outgoing_data.shift.should == "event plain ALL\n\n"
   end
