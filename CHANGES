@@ -5,6 +5,8 @@
   * Inbound event listener automatically tries to reconnect if connection
     is lost.
 
+  * Sending `SIGHUP` reopens log file. Useful in combination with logrotate(1).
+
 = 0.6 / 2013-01-21
 
   * Less strict EventMachine dependency [Phil Pirozhkov <pirjsuka@gmail.com>]

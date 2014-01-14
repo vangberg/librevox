@@ -25,6 +25,10 @@ module Librevox
     logger
   end
 
+  def self.reopen_log
+    @logger = logger!
+  end
+
   # When called without a block, it will start the listener that is passed as
   # first argument:
   #   
@@ -42,6 +46,7 @@ module Librevox
     EM.run do
       trap("TERM") {stop}
       trap("INT") {stop}
+      trap("HUP") {reopen_log}
 
       block_given? ? instance_eval(&block) : run(klass, args)
     end
