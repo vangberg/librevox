@@ -183,8 +183,8 @@ the `Librevox::Commands` and `Librevox::Applications` modules.
 
 ## License
 
-(c) 2009, 2010, 2011 Harry Vangberg <harry@vangberg.name>
-(c) 2011, 2012 Firmafon ApS <info@firmafon.dk>
+(c) 2009-2014 Harry Vangberg <harry@vangberg.name>
+(c) 2011-2014 Firmafon ApS <info@firmafon.dk>
 
 Librevox was inspired by and uses code from Freeswitcher, which is distributed
 under the MIT license and (c) 2009 The Rubyists (Jayson Vaughn, Tj Vanderpoel,
