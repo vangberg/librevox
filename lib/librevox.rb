@@ -6,8 +6,6 @@ require 'librevox/listener/outbound'
 require 'librevox/command_socket'
 
 module Librevox
-  VERSION = "0.5"
-
   def self.options
     @options ||= {
       :log_file   => STDOUT,

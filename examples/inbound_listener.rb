@@ -17,4 +17,5 @@ class MyInbound < Librevox::Listener::Inbound
   end
 end
 
+Librevox.options[:log_file] = "foo.log"
 Librevox.start MyInbound
