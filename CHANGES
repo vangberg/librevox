@@ -1,4 +1,4 @@
-= Unreloeased
+= 0.7 / 2014-01-15
 
   * Update EventMachine to 1.0
   
@@ -6,6 +6,8 @@
     is lost.
 
   * Sending `SIGHUP` reopens log file. Useful in combination with logrotate(1).
+
+  * Remove `VERSION` constant.
 
 = 0.6 / 2013-01-21
 
