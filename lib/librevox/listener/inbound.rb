@@ -8,7 +8,8 @@ module Librevox
 
         @auth = args[:auth] || "ClueCon"
         @host, @port = args.values_at(:host, :port)
-
+        @filters = args[:filters] || []
+        
         EventMachine.add_shutdown_hook {@shutdown = true}
       end
 
@@ -17,6 +18,7 @@ module Librevox
         super
         send_data "auth #{@auth}\n\n"
         send_data "event plain ALL\n\n"
+        @filters.each { |f| send_data "filter #{f}\n\n" }
       end
 
       def unbind

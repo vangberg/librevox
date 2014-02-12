@@ -122,6 +122,10 @@ port is quite simple:
 it takes an optional hash with arguments:
 
     Librevox.start SomeListener, :host => "1.2.3.4", :port => "8087", :auth => "pwd"
+    
+filters can be applied to a listerner with the filters argument
+  
+    Librevox.start SomeListener, :filters = ["Event-Name CHANNEL_EXECUTE", "Event-NAME HEARTBEAT"]
 
 Multiple listeners can be started at once by passing a block to `Librevox.start`:
 
@@ -129,6 +133,7 @@ Multiple listeners can be started at once by passing a block to `Librevox.start`
       run SomeListener
       run OtherListener, :port => "8080"
     end
+    
 
 ## Closing connection
 
