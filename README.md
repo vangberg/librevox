@@ -125,7 +125,7 @@ it takes an optional hash with arguments:
     
 filters can be applied to a listerner with the filters argument
   
-    Librevox.start SomeListener, :filters = ["Event-Name CHANNEL_EXECUTE", "Event-NAME HEARTBEAT"]
+    Librevox.start SomeListener, :filters => ["Event-Name CHANNEL_EXECUTE", "Event-NAME HEARTBEAT"]
 
 Multiple listeners can be started at once by passing a block to `Librevox.start`:
 
