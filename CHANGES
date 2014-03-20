@@ -1,4 +1,4 @@
-= 0.8 / 2014-01-15
+= 0.8 / 2014-03-20
 
   * Bug fix: `Librevox.run` failed on outbound listeners.
 
