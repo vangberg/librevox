@@ -33,5 +33,5 @@ open source telephony platform FreeSwitch."
     "spec/librevox/listener/spec_inbound.rb",
     "spec/librevox/listener/spec_outbound.rb"
   ]
-  s.add_dependency "eventmachine", ">= 1.0.0"
+  s.add_dependency "eventmachine", "~> 1.0"
 end
