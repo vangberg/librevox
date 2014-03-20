@@ -1,3 +1,7 @@
+= 0.8 / 2014-01-15
+
+  * Bug fix: `Librevox.run` failed on outbound listeners.
+
 = 0.7 / 2014-01-15
 
   * Update EventMachine to 1.0

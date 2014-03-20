@@ -58,7 +58,7 @@ module Librevox
       EM.connect args[:host], args[:port], klass, args
     elsif klass.ancestors.include? Librevox::Listener::Outbound
       args[:port] ||= 8084
-      EM.start_server host, args[:port], klass, args
+      EM.start_server args[:host], args[:port], klass, args
     end
   end
 
