@@ -149,6 +149,20 @@ is most likely sufficient:
       end
     end
 
+## Configuration
+
+By default Librevox uses the `Logger` class from the Ruby standard library. You
+can configure the path to the log file and the log level through `Librevox.options`:
+
+    Librevox.options[:log_file] = "my_log_file.log"
+    Librevox.options[:log_level] = Logger::DEBUG
+
+## Rotating logs
+
+If you start Librevox with `Librevox.start`, the log file will be reopened if you
+send `SIGHUP` to the Librevox process. This makes it easy to rotate logs with the
+standard `logrotate(1)`.
+
 ## Using `Librevox::CommandSocket`
 
 Librevox also ships with a CommandSocket class, which allows you to connect
