@@ -17,6 +17,10 @@ module Librevox
     @logger ||= logger!
   end
 
+  def self.logger= logger
+    @logger = logger
+  end
+
   def self.logger!
     logger = Logger.new(options[:log_file])
     logger.level = options[:log_level]

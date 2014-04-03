@@ -1,3 +1,7 @@
+= 0.9 / 2014-04-03
+
+  * Add `Librevox.logger=` to enable custom loggers.
+
 = 0.8 / 2014-03-20
 
   * Bug fix: `Librevox.run` failed on outbound listeners.
