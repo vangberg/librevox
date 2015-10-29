@@ -29,6 +29,16 @@ describe Response do
     response.content.should.equal "this just has a : in it"
   end
 
+  should "parse CSV content to array of hashes" do
+    response = Response.new("Header1: some value", "a,b\nw,x\ny,z\n\n2 total.\n")
+
+    response.headers.should.include :header1
+    response.headers[:header1].should.equal "some value"
+
+    response.content.class.should.equal Array
+    response.content.should.equal [{a: "w", b: "x"}, {a: "y", b: "z"}]
+  end
+
   should "not parse regular content" do
     response = Response.new("", "OK.")
 
