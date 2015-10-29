@@ -20,7 +20,7 @@ module Librevox
     end
 
     def content= content
-      @content = if content.respond_to?(:match) && content.match(/:/)
+      @content = if content.respond_to?(:match) && content.match(/\A[\w\-]+:/)
                    headers_2_hash(content).merge(:body => content.split("\n\n", 2)[1].to_s)
                  else
                    content

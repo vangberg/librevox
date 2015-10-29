@@ -22,6 +22,13 @@ describe Response do
     response.content[:other_key].should.equal "other value"
   end
 
+  should "parse non-key-value content with colons to string" do
+    response = Response.new("", "this just has a : in it")
+
+    response.content.class.should.equal String
+    response.content.should.equal "this just has a : in it"
+  end
+
   should "not parse regular content" do
     response = Response.new("", "OK.")
 
