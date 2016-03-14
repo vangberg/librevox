@@ -249,5 +249,12 @@ module Librevox
     def unset variable, &block
       application "unset", variable, &block
     end
+    # Create/Push the caller to a conference
+    # @example
+    #   conference "foo"
+    # @see https://freeswitch.org/confluence/display/FREESWITCH/mod_conference
+    def conference variable, &block
+      application "conference", variable, &block
+    end
   end
 end
