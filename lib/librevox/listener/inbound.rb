@@ -12,11 +12,29 @@ module Librevox
         EventMachine.add_shutdown_hook {@shutdown = true}
       end
 
+      @@filters = {}
+      def self.filters(filters)
+        @@filters = filters
+      end
+
+      @@events = ['ALL']
+      def self.events(events)
+        @@events = [*events]
+      end
+
       def connection_completed
         Librevox.logger.info "Connected."
         super
+
         send_data "auth #{@auth}\n\n"
-        send_data "event plain ALL\n\n"
+
+        send_data "event plain #{@@events.join(' ')}\n\n"
+
+        @@filters.each do |header, filters|
+          [*filters].each do |filter|
+            send_data "filter #{header} #{filter}\n\n"
+          end
+        end
       end
 
       def unbind

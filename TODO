@@ -5,8 +5,6 @@
 
 - check command/application input and raise ArgumentError, possibly.
 
-- filter events
-
 - move test suite from bacon -> test/unit.
 
 - test how this works in async mode - I imagine that it might mess with

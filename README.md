@@ -39,6 +39,12 @@ techniques:
 require 'librevox'
 
 class MyInbound < Librevox::Listener::Inbound
+  # Events to listen to (default is ALL")
+  events ['CHANNEL_EXECUTE', 'CUSTOM foo']
+
+  # Filters to apply (optional)
+  filters 'Caller-Context' => ['default']
+
   def on_event e
     puts "Got event: #{e.content[:event_name]}"
   end
