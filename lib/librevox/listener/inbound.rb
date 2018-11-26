@@ -4,23 +4,15 @@ module Librevox
   module Listener
     class Inbound < Base
       class << self
+        attr_reader :subscribe_events
+        attr_reader :subscribe_filters
 
-        def filters
-          @filters ||= {}
+        def events(events)
+          @subscribe_events = events
         end
 
-        def filter(header, values)
-          @filters ||= {}
-          @filters[header] = [*values]
-        end
-
-        def events
-          @events || ['ALL']
-        end
-
-        def event(event)
-          @events ||= []
-          @events << event
+        def filters(filters)
+          @subscribe_filters = filters
         end
       end
 
@@ -39,10 +31,12 @@ module Librevox
 
         send_data "auth #{@auth}\n\n"
 
-        send_data "event plain #{self.class.events.join(' ')}\n\n"
+        events = self.class.subscribe_events || ['ALL']
+        send_data "event plain #{events.join(' ')}\n\n"
 
-        self.class.filters.each do |header, values|
-          values.each do |value|
+        filters = self.class.subscribe_filters || {}
+        filters.each do |header, values|
+          [*values].each do |value|
             send_data "filter #{header} #{value}\n\n"
           end
         end
