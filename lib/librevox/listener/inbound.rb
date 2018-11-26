@@ -3,6 +3,27 @@ require 'librevox/listener/base'
 module Librevox
   module Listener
     class Inbound < Base
+      class << self
+
+        def filters
+          @filters ||= {}
+        end
+
+        def filter(header, values)
+          @filters ||= {}
+          @filters[header] = [*values]
+        end
+
+        def events
+          @events || ['ALL']
+        end
+
+        def event(event)
+          @events ||= []
+          @events << event
+        end
+      end
+
       def initialize args={}
         super
 
@@ -12,27 +33,17 @@ module Librevox
         EventMachine.add_shutdown_hook {@shutdown = true}
       end
 
-      @@filters = {}
-      def self.filters(filters)
-        @@filters = filters
-      end
-
-      @@events = ['ALL']
-      def self.events(events)
-        @@events = [*events]
-      end
-
       def connection_completed
         Librevox.logger.info "Connected."
         super
 
         send_data "auth #{@auth}\n\n"
 
-        send_data "event plain #{@@events.join(' ')}\n\n"
+        send_data "event plain #{self.class.events.join(' ')}\n\n"
 
-        @@filters.each do |header, filters|
-          [*filters].each do |filter|
-            send_data "filter #{header} #{filter}\n\n"
+        self.class.filters.each do |header, values|
+          values.each do |value|
+            send_data "filter #{header} #{value}\n\n"
           end
         end
       end
