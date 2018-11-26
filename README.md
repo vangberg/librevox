@@ -39,18 +39,16 @@ techniques:
 require 'librevox'
 
 class MyInbound < Librevox::Listener::Inbound
-  # Events to listen for (default is ALL")
-  event 'CHANNEL_EXECUTE'
-  event 'CUSTOM foo'
+  # Events to listen for (default is ALL)
+  events ['CHANNEL_EXECUTE', 'CUSTOM foo']
 
   # Filters to apply (optional)
-  filter 'Caller-Privacy-Hide-Name', 'no'
-  filter 'Caller-Context', ['default', 'example']
+  filter 'Caller-Context' => ['default', 'example'], 'Caller-Privacy-Hide-Name' => 'no'
 
   def on_event e
     puts "Got event: #{e.content[:event_name]}"
   end
- 
+
   # You can add a hook for a certain event:
   event :channel_hangup do
     # It is instance_eval'ed, so you can use your instance methods etc:
@@ -62,7 +60,7 @@ class MyInbound < Librevox::Listener::Inbound
   event :channel_bridge do |e|
     ...
   end
- 
+
   def do_something
     ...
   end
